@@ -1,0 +1,5 @@
+[external "ara"]
+	path = subprojects/ara
+	url = git@scm.sra.uni-hannover.de:research/ara.git
+	branch = soso
+	vcs = git
