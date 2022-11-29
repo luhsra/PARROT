@@ -1,7 +1,7 @@
 [external "ara"]
 	path = subprojects/ara
 	url = git@scm.sra.uni-hannover.de:research/ara.git
-	branch = soso
+	branch = subproject_split
 	vcs = git
 	
 [external "musl-libc"]
@@ -22,3 +22,14 @@
  	branch = master
  	vcs = git
 
+[external "ara-link"]
+	path = subprojects/ara-link
+	url = https://scm.sra.uni-hannover.de/published/ara-link.git
+	branch = master
+	vcs = git
+
+[external "sparsedata"]
+	path = subprojects/sparsedata
+	url = https://scm.sra.uni-hannover.de/published/SparseData.git
+	branch = master
+	vcs = git
