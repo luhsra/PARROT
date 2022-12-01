@@ -3,5 +3,78 @@ project('parrot', 'cpp',
                        'cpp_std=c++17',
                        'buildtype=debugoptimized'])
 
+## llvm dependencies
+llvm_version = ['>=14', '<16']
+llvm_dep = dependency('llvm', method: 'config-tool', version: llvm_version, include_type: 'system')
+
+llvm_bindir = llvm_dep.get_variable(configtool: 'bindir')
+clang = find_program(llvm_bindir / 'clang', version: llvm_version)
+llc = find_program(llvm_bindir / 'llc', version: llvm_version)
+llvm_opt = find_program(llvm_bindir / 'opt', version: llvm_version)
+
+## ara-link
+ara_link = find_program('ara-link', version: llvm_version, required: false)
+if not ara_link.found()
+    ara_link_proj = subproject('ara-link')
+    ara_link = ara_link_proj.get_variable('ara_link')
+    message('Using ara-link from subproject.')
+endif
+
+## sparsedata
+sparsedata = subproject('sparsedata')
+sparse_rle2 = sparsedata.get_variable('libsparserle2')
+
+# tools
+st_flash = find_program('st-flash', required: false, disabler: true)
+
+## arch specific build tools
+if get_option('arch') == 'i386'
+    target_triple='x86_64-linux-gnu'
+elif get_option('arch') == 'arm'
+    target_triple = 'arm-none-eabi'
+else
+    error('unknown arch ' + get_option('arch'))
+endif
+
+if not get_option('execute_ara') and get_option('enable_generator_tests')
+  error('execute_ara has to be true to set enable_generator_tests')
+endif
+
+arch_error = 'Do you have an @0@ toolchain? Otherwise consider to switch to another architecture. See the "arch" config option for that.'
+
+foreach prog_name : ['objcopy', 'size', 'nm']
+    full_prog_name = target_triple + '-' + prog_name
+    prog = find_program(full_prog_name, required: false)
+    if not prog.found()
+        error(arch_error.format(get_option('arch').to_upper()))
+    endif
+    set_variable(prog_name, prog)
+endforeach
+
+subdir('settings')
+subdir('tools')
+subdir('experiments')
+
+# Submodules
 ara_proj = subproject('ara')
-ara = ara_proj.get_variable('ara_py')
+ara_py = ara_proj.get_variable('ara_py')
+py3_inst = ara_proj.get_variable('py3_inst')
+settings_dir = ara_proj.get_variable('settings_dir')
+python_path = ara_proj.get_variable('python_path')
+
+gpslogger_proj = subproject('gpslogger', required: get_option('build_gpslogger'))
+if gpslogger_proj.found()
+    #libplatform_proj = subproject('lib-platform')
+    #default_linkerscript = libplatform_proj.get_variable('default_linkerscript')
+    freertos_src_list = gpslogger_proj.get_variable('freertos_src_list')
+    libfreertos_src_dir = gpslogger_proj.get_variable('libfreertos_src_dir')
+    libfreertos_src_dir_for_port_c = gpslogger_proj.get_variable('libfreertos_src_dir_for_port_c')
+    libsra_ar = gpslogger_proj.get_variable('libsra_ar')
+    gpslogger_includes = gpslogger_proj.get_variable('gpslogger_includes')
+    gpslogger_cflags = gpslogger_proj.get_variable('gpslogger_cflags')
+    gpslogger_application = gpslogger_proj.get_variable('gpslogger_application')
+    gpslogger_runtarget = gpslogger_proj.get_variable('gpslogger_runtarget')
+    gpslogger_ldflags = gpslogger_proj.get_variable('gpslogger_ldflags')
+    default_linkerscript = gpslogger_proj.get_variable('default_linkerscript')
+    subdir('GPSLogger')
+endif
