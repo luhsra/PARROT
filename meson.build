@@ -24,8 +24,16 @@ endif
 sparsedata = subproject('sparsedata')
 sparse_rle2 = sparsedata.get_variable('libsparserle2')
 
+# Python
+py3_mod = import('python')
+py3_inst = py3_mod.find_installation('python3', modules: [])
+if py3_inst.language_version().version_compare('<3.9')
+    error('At least Python 3.9 is required.')
+endif
+
 # tools
 st_flash = find_program('st-flash', required: false, disabler: true)
+fs = import('fs')
 
 ## arch specific build tools
 if get_option('arch') == 'i386'
@@ -42,7 +50,7 @@ endif
 
 arch_error = 'Do you have an @0@ toolchain? Otherwise consider to switch to another architecture. See the "arch" config option for that.'
 
-foreach prog_name : ['objcopy', 'size', 'nm']
+foreach prog_name : ['objcopy', 'size', 'nm', 'ld']
     full_prog_name = target_triple + '-' + prog_name
     prog = find_program(full_prog_name, required: false)
     if not prog.found()
@@ -51,8 +59,8 @@ foreach prog_name : ['objcopy', 'size', 'nm']
     set_variable(prog_name, prog)
 endforeach
 
-subdir('settings')
 subdir('tools')
+subdir('settings')
 subdir('experiments')
 
 # Submodules
