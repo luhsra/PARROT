@@ -1,5 +1,6 @@
 # Parrot options
 option('build_gpslogger', type: 'feature', value: 'auto')
+option('build_librepilot', type: 'feature', value: 'auto')
 
 # ARA options
 option('arch', type: 'combo', choices: ['arm', 'i386'], value: 'arm',

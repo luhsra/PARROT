@@ -86,3 +86,16 @@ if gpslogger_proj.found()
     default_linkerscript = gpslogger_proj.get_variable('default_linkerscript')
     subdir('GPSLogger')
 endif
+
+librepilot_proj = subproject('librepilot', required: get_option('build_librepilot'))
+if librepilot_proj.found()
+    librepilot_mock_ll = librepilot_proj.get_variable('librepilot_mock_ll')
+    librepilot_includes = librepilot_proj.get_variable('librepilot_includes')
+    librepilot_cflags = librepilot_proj.get_variable('librepilot_cflags')
+    librepilot_startup_stm32f10x_md = librepilot_proj.get_variable('librepilot_startup_stm32f10x_md')
+    librepilot_stm_link_files = librepilot_proj.get_variable('librepilot_stm_link_files')
+    librepilot_ldflags = librepilot_proj.get_variable('librepilot_ldflags')
+    librepilot_manual_corrections = librepilot_proj.get_variable('librepilot_manual_corrections')
+    librepilot_extra_settings = librepilot_proj.get_variable('librepilot_extra_settings')
+    subdir('Librepilot')
+endif
