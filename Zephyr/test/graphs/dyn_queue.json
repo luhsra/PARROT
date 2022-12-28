@@ -45,7 +45,7 @@
     "after_scheduler": 1,
     "unique": 1,
     "is_control": 0,
-    "file": "../appl/Zephyr/dyn_queue/src/main.c",
+    "file": "../../zephyr/appl/dyn_queue/src/main.c",
     "line": 35,
     "specialization_level": "",
     "type": "instance"
@@ -60,7 +60,7 @@
     "after_scheduler": 1,
     "unique": 1,
     "is_control": 0,
-    "file": "../appl/Zephyr/dyn_queue/src/main.c",
+    "file": "../../zephyr/appl/dyn_queue/src/main.c",
     "line": 34,
     "specialization_level": "",
     "type": "instance"
@@ -75,7 +75,7 @@
     "after_scheduler": 1,
     "unique": 1,
     "is_control": 1,
-    "file": "../appl/Zephyr/dyn_queue/src/main.c",
+    "file": "../../zephyr/appl/dyn_queue/src/main.c",
     "line": 31,
     "specialization_level": "",
     "type": "instance",
