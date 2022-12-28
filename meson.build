@@ -69,6 +69,7 @@ ara_py = ara_proj.get_variable('ara_py')
 py3_inst = ara_proj.get_variable('py3_inst')
 settings_dir = ara_proj.get_variable('settings_dir')
 python_path = ara_proj.get_variable('python_path')
+instance_graph_test = ara_proj.get_variable('instance_graph_test')
 
 gpslogger_proj = subproject('gpslogger', required: get_option('build_gpslogger'))
 if gpslogger_proj.found()
@@ -84,6 +85,7 @@ if gpslogger_proj.found()
     gpslogger_runtarget = gpslogger_proj.get_variable('gpslogger_runtarget')
     gpslogger_ldflags = gpslogger_proj.get_variable('gpslogger_ldflags')
     default_linkerscript = gpslogger_proj.get_variable('default_linkerscript')
+    subdir('FreeRTOS')
     subdir('GPSLogger')
 endif
 
@@ -97,5 +99,6 @@ if librepilot_proj.found()
     librepilot_ldflags = librepilot_proj.get_variable('librepilot_ldflags')
     librepilot_manual_corrections = librepilot_proj.get_variable('librepilot_manual_corrections')
     librepilot_extra_settings = librepilot_proj.get_variable('librepilot_extra_settings')
+    subdir('FreeRTOS')
     subdir('Librepilot')
 endif
