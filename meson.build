@@ -102,3 +102,9 @@ if librepilot_proj.found()
     subdir('FreeRTOS')
     subdir('Librepilot')
 endif
+
+zephyr_proj = subproject('zephyr', required: get_option('build_zephyr'))
+if zephyr_proj.found()
+    zephyr_apps_dict = zephyr_proj.get_variable('zephyr_apps_dict')
+    subdir('Zephyr')
+endif

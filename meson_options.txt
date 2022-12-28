@@ -1,6 +1,7 @@
 # Parrot options
 option('build_gpslogger', type: 'feature', value: 'auto')
 option('build_librepilot', type: 'feature', value: 'auto')
+option('build_zephyr', type: 'feature', value: 'auto')
 
 # ARA options
 option('arch', type: 'combo', choices: ['arm', 'i386'], value: 'arm',
@@ -24,7 +25,7 @@ option('execute_ara', type: 'boolean', value: true,
 option('enable_appl_graph_tests', type: 'boolean', value: true,
     description: 'instance graph tests for common applications.')
     
-option('enable_zephyr_tests', type: 'boolean', value: false,
+option('enable_zephyr_tests', type: 'boolean', value: true,
     description: 'All Zephyr tests are located in test/zephyr_test. The enable_step_tests option will be ignored for Zephyr tests. Only activate these tests if you have a zephyr_project directory in build dir. This directory will be generated via init_zephyr.sh script')
 option('enable_posix_tests', type: 'boolean', value: true,
     description: 'All POSIX tests are located in test/posix_test. The enable_step_tests option will be ignored for POSIX tests.')
