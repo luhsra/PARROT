@@ -108,3 +108,31 @@ if zephyr_proj.found()
     zephyr_apps_dict = zephyr_proj.get_variable('zephyr_apps_dict')
     subdir('Zephyr')
 endif
+
+
+# Create convenience ara.py script
+fake_script_py_content = '''#!@0@
+#Call @1@ program
+import os
+import sys
+os.execve('@2@', sys.argv, os.environ)
+'''
+
+fake_ara_py = custom_target('fake-ara-py',
+    input: [],
+    output: 'ara.py',
+    depends: [ara_py],
+    command: [py3_inst, dump_cmds, '@OUTPUT@', '0o755', fake_script_py_content.format(py3_inst.path(), 'ara.py', ara_py.full_path())],
+    build_by_default: true
+)
+
+if get_option('enable_gui')
+    gui_py = ara_proj.get_variable('gui_py')
+    fake_gui_py = custom_target('fake-gui-py',
+        input: [],
+        output: 'gui.py',
+        depends: [gui_py],
+        command: [py3_inst, dump_cmds, '@OUTPUT@', '0o755', fake_script_py_content.format(py3_inst.path(), 'gui.py', gui_py.full_path())],
+        build_by_default: true
+    )
+endif
