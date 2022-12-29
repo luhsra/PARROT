@@ -3,24 +3,6 @@
 	url = git@scm.sra.uni-hannover.de:research/ara.git
 	branch = subproject_split
 	vcs = git
-	
-[external "musl-libc"]
- 	path = subprojects/musl-libc
- 	url = https://scm.sra.uni-hannover.de/source/musl.git
- 	branch = posix
- 	vcs = git
-
-[external "libmicrohttpd"]
- 	path = subprojects/libmicrohttpd
- 	url = https://scm.sra.uni-hannover.de/source/libmicrohttpd.git
- 	branch = posix
- 	vcs = git
-
-[external "libmicrohttpd-orig"]
- 	path = subprojects/libmicrohttpd_orig
- 	url = https://scm.sra.uni-hannover.de/source/libmicrohttpd.git
- 	branch = master
- 	vcs = git
 
 [external "ara-link"]
 	path = subprojects/ara-link
