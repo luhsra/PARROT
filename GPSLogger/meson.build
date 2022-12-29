@@ -1,11 +1,3 @@
-foreach src : freertos_src_list
-  if src == 'port'
-    set_variable('libfreertos_src_vanilla_'+src, files(join_paths(libfreertos_src_dir_for_port_c, src+'.c')))
-  else
-    set_variable('libfreertos_src_vanilla_'+src, files(join_paths(libfreertos_src_dir, src+'.c')))
-  endif
-endforeach
-
 named_elf_targets = []
 elf_targets = []
 profiles_list = []
@@ -20,7 +12,7 @@ foreach target : ara_gen_freertos_targets
                                       name_prefix + '-modifiedapp.ll',
                                       name_prefix + '-os.cc.freertos_overrides.h',
                                      ],
-                             command: get_variable('ara_gen_cmd_' + target)
+                             command: ara_gen_freertos_cmds.get(target)
                             )
   os_target = [ara_target[0], ara_target[1]]
   app_aramodified_ll = ara_target[2]
@@ -30,7 +22,7 @@ foreach target : ara_gen_freertos_targets
   freertos_ll_targets = []
   foreach src: freertos_src_list
     ll_target = custom_target(name_prefix + '-freertos_' + src,
-                              input: get_variable('libfreertos_src_vanilla_' +src),
+                              input: libfreertos_src_vanilla.get(src),
                               output: name_prefix + '-freertos_' +src + '.c.ll',
                               depfile: name_prefix + '-freertos_' +src + '.dep',
                               depends: ara_target,

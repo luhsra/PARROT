@@ -21,7 +21,7 @@ foreach application_prefix: ['librepilot_mock']
                                          ],
                                  depend_files: librepilot_manual_corrections,
                                  depends: librepilot_extra_settings,
-                                 command: get_variable('ara_gen_cmd_' + target) +
+                                 command: ara_gen_freertos_cmds.get(target) +
                                           ['--step-settings', librepilot_extra_settings] +
                                           ['--manual-corrections', librepilot_manual_corrections]
                                 )
@@ -37,7 +37,7 @@ foreach application_prefix: ['librepilot_mock']
     freertos_ll_targets = []
     foreach src: freertos_src_list
       ll_target = custom_target(name_prefix + '-freertos_' + src,
-                                input: get_variable('libfreertos_src_vanilla_' +src),
+                                input: libfreertos_src_vanilla.get(src),
                                 output: name_prefix + '-freertos_' +src + '.c.ll',
                                 depfile: name_prefix + '-freertos_' +src + '.dep',
                                 depends: ara_target,
