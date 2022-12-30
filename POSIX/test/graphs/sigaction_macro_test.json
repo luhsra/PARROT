@@ -30,7 +30,7 @@
     "after_scheduler": 1,
     "unique": 1,
     "is_control": 1,
-    "file": "../appl/POSIX/test_appl/sigaction_macro_test.c",
+    "file": "../../posix/appl/test_appl/sigaction_macro_test.c",
     "line": 21,
     "specialization_level": "",
     "type": "instance",

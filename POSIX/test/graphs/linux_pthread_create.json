@@ -30,7 +30,7 @@
     "after_scheduler": 1,
     "unique": 1,
     "is_control": 1,
-    "file": "../appl/POSIX/test_appl/pthread_create.c",
+    "file": "../../posix/appl/test_appl/pthread_create.c",
     "line": 14,
     "specialization_level": "",
     "type": "instance",

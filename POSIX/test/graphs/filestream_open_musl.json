@@ -30,7 +30,7 @@
     "after_scheduler": 1,
     "unique": 0,
     "is_control": 0,
-    "file": "../subprojects/musl-libc/src/stdio/fopen.c",
+    "file": "../../posix/subprojects/musl-libc/musl-libc/src/stdio/fopen.c",
     "line": 21,
     "specialization_level": "",
     "type": "instance",
