@@ -71,6 +71,10 @@ ara_gen_freertos_targets = ara_proj.get_variable('ara_gen_freertos_targets')
 ara_gen_freertos_cmds = ara_proj.get_variable('ara_gen_freertos_cmds')
 python_path = ara_proj.get_variable('python_path')
 instance_graph_test = ara_proj.get_variable('instance_graph_test')
+instance_graph_stats = ara_proj.get_variable('instance_graph_stats')
+if get_option('enable_step_tests')
+    run_test_cstep = ara_proj.get_variable('run_test_cstep')
+endif
 
 gpslogger_proj = subproject('gpslogger', required: get_option('build_gpslogger'))
 librepilot_proj = subproject('librepilot', required: get_option('build_librepilot'))
@@ -112,6 +116,12 @@ zephyr_proj = subproject('zephyr', required: get_option('build_zephyr'))
 if zephyr_proj.found()
     zephyr_apps_dict = zephyr_proj.get_variable('zephyr_apps_dict')
     subdir('Zephyr')
+endif
+
+posix_proj = subproject('posix', required: get_option('build_posix'))
+if posix_proj.found()
+    posix_apps_dict = posix_proj.get_variable('posix_apps_dict')
+    subdir('POSIX')
 endif
 
 
