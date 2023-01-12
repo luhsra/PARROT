@@ -76,7 +76,7 @@ if get_option('enable_step_tests')
     run_test_cstep = ara_proj.get_variable('run_test_cstep')
 endif
 
-gpslogger_proj = subproject('gpslogger', required: get_option('build_gpslogger'))
+gpslogger_proj = subproject('GPSLogger', required: get_option('build_gpslogger'))
 librepilot_proj = subproject('librepilot', required: get_option('build_librepilot'))
 
 if gpslogger_proj.found()
@@ -112,13 +112,13 @@ if librepilot_proj.found()
     subdir('Librepilot')
 endif
 
-zephyr_proj = subproject('zephyr', required: get_option('build_zephyr'))
+zephyr_proj = subproject('ara-zephyr-apps', required: get_option('build_zephyr'))
 if zephyr_proj.found()
     zephyr_apps_dict = zephyr_proj.get_variable('zephyr_apps_dict')
     subdir('Zephyr')
 endif
 
-posix_proj = subproject('posix', required: get_option('build_posix'))
+posix_proj = subproject('ara-posix-apps', required: get_option('build_posix'))
 if posix_proj.found()
     posix_apps_dict = posix_proj.get_variable('posix_apps_dict')
     subdir('POSIX')
