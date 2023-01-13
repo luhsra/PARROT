@@ -112,10 +112,13 @@ if librepilot_proj.found()
     subdir('Librepilot')
 endif
 
+subdir('Zephyr/toolchain')
 zephyr_proj = subproject('ara-zephyr-apps', required: get_option('build_zephyr'))
 if zephyr_proj.found()
     zephyr_apps_dict = zephyr_proj.get_variable('zephyr_apps_dict')
-    subdir('Zephyr')
+    if get_option('enable_zephyr_tests')
+        subdir('Zephyr/test')
+    endif
 endif
 
 posix_proj = subproject('ara-posix-apps', required: get_option('build_posix'))
