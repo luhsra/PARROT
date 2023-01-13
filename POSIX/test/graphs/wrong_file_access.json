@@ -30,7 +30,7 @@
     "after_scheduler": 1,
     "unique": 1,
     "is_control": 0,
-    "file": "../../posix/appl/test_appl/wrong_file_access.c",
+    "file": "../../ara-posix-apps/appl/test_appl/wrong_file_access.c",
     "line": 6,
     "specialization_level": "",
     "type": "instance",

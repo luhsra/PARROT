@@ -30,7 +30,7 @@
     "after_scheduler": 1,
     "unique": 1,
     "is_control": 0,
-    "file": "../../posix/appl/test_appl/no_musl_linkage/linux_syscalls.c",
+    "file": "../../ara-posix-apps/appl/test_appl/no_musl_linkage/linux_syscalls.c",
     "line": 26,
     "specialization_level": "",
     "type": "instance",

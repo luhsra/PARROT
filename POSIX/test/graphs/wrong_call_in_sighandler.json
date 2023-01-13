@@ -30,7 +30,7 @@
     "after_scheduler": 1,
     "unique": 1,
     "is_control": 1,
-    "file": "../../posix/appl/test_appl/wrong_call_in_sighandler.c",
+    "file": "../../ara-posix-apps/appl/test_appl/wrong_call_in_sighandler.c",
     "line": 19,
     "specialization_level": "",
     "type": "instance",

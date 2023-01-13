@@ -30,7 +30,7 @@
     "after_scheduler": 1,
     "unique": 1,
     "is_control": 1,
-    "file": "../../posix/appl/test_appl/signal_handler_siginfo.c",
+    "file": "../../ara-posix-apps/appl/test_appl/signal_handler_siginfo.c",
     "line": 18,
     "specialization_level": "",
     "type": "instance",
