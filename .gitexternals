@@ -12,19 +12,19 @@
 
 [external "ara-posix-apps"]
 	path = subprojects/ara-posix-apps
-	url = https://scm.sra.uni-hannover.de/research/ara-posix-apps
+	url = git@scm.sra.uni-hannover.de:research/ara-posix-apps.git
 	branch = main
 	vcs = git
 
 [external "ara-zephyr-apps"]
 	path = subprojects/ara-zephyr-apps
-	url = https://scm.sra.uni-hannover.de/research/ara-zephyr-apps
+	url = git@scm.sra.uni-hannover.de:research/ara-zephyr-apps.git
 	branch = main
 	vcs = git
 
 [external "GPSLogger"]
 	path = subprojects/GPSLogger
-	url = https://scm.sra.uni-hannover.de/research/GPSLogger
+	url = git@scm.sra.uni-hannover.de:research/GPSLogger.git
 	branch = main
 	vcs = git
 
@@ -42,7 +42,7 @@
 
 [external "librepilot"]
 	path = subprojects/librepilot
-	url = https://scm.sra.uni-hannover.de/research/librepilot
+	url = git@scm.sra.uni-hannover.de:research/librepilot.git
 	branch = main
 	vcs = git
 
