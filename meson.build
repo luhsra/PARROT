@@ -33,6 +33,7 @@ endif
 
 # tools
 st_flash = find_program('st-flash', required: false, disabler: true)
+nop = find_program('true')
 fs = import('fs')
 
 ## arch specific build tools
@@ -127,6 +128,14 @@ if posix_proj.found()
     subdir('POSIX')
 endif
 
+subdir('IronOS')
+subdir('IronOS/toolchain')
+ironos_proj = subproject('IronOS', required: get_option('build_ironos'))
+if ironos_proj.found()
+    ironos_src_dir = ironos_proj.get_variable('src_dir')
+    ironos_hexfiles_dir = ironos_proj.get_variable('hexfiles_dir')
+    subdir('IronOS/synthesis')
+endif
 
 # Create convenience ara.py script
 fake_script_py_content = '''#!@0@
