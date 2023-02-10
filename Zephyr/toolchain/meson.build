@@ -8,6 +8,6 @@ if pip.found() and git.found()
         command: [zephyr_toolchain_install_script, get_option('zephyr_toolchain_dir'),
                   py3_inst.path(), pip.full_path(), git.full_path()])
 else
-    message('''could not find pip or git. run target init_zephyr_toolchain not available.
+    message('''could not find pip or git. run target init_zephyr_toolchain is not available.
 You can run ./init_zephyr_toolchain.sh by your own''')
 endif
