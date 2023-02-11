@@ -23,7 +23,8 @@ readonly CLONE_IN_DIR=${4:-~/riscv-gnu-toolchain}
 git clone --recursive https://github.com/riscv-collab/riscv-gnu-toolchain.git ${CLONE_IN_DIR}
 cd ${CLONE_IN_DIR}
 git submodule update --init --recursive
-./configure --prefix=${RISCV_TOOLCHAIN} --with-arch=rv32imac --with-abi=ilp32
+mkdir -p ${INSTALL_DIR}
+./configure --prefix=${INSTALL_DIR} --with-arch=rv32imac --with-abi=ilp32
 make linux -j$(nproc)
 
 # build newlib because IronOS Makefile requires it

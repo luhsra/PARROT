@@ -44,5 +44,5 @@ option('arm_gcc_dir', type: 'string', value: '/usr/lib/gcc/arm-none-eabi/@0@/thu
 # Toolchain directories
 option('zephyr_toolchain_dir', type: 'string', value: 'zephyrproject',
     description: 'The path where the zephyr toolchain (zephyrproject) should be located. Run the target init_zephyr_toolchain to generate this dir. Relative paths start from home directory $HOME')
-option('riscv_toolchain_dir', type: 'string', value: 'riscv-gnu-toolchain',
+option('riscv_toolchain_dir', type: 'string', value: 'riscv-toolchain-install',
     description: 'The path where the riscv gnu toolchain should be located. Run the target init_riscv_toolchain to generate this dir. Relative paths start from home directory $HOME')
