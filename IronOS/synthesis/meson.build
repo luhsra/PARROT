@@ -21,6 +21,6 @@ if fs.is_dir(riscv_toolchain)
                       depends: [ironos_ara_firmware_EN])
 else
     message('''riscv_toolchain_dir is not a directory.
-Run init_riscv_toolchain target to generate the toolchain.
+Run init_riscv_toolchain target to generate the toolchain required for IronOS targets.
 ''')
 endif
