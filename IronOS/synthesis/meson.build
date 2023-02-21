@@ -6,7 +6,7 @@ if fs.is_dir(riscv_toolchain)
     ironos_ara_firmware_EN = custom_target('ironos_ara_firmware_EN',
         output:['a'],
         depends: ara_py,
-        command: [make.full_path(), '-C', ironos_src_dir, 'ara-firmware-EN', '--debug'],
+        command: [make.full_path(), '-C', ironos_src_dir, 'ara-firmware-EN'],
         build_by_default: true,
             env: {'ARA': ara_py.full_path(),
                   'TOOLCHAIN_DIR': riscv_toolchain,
