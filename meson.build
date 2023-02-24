@@ -136,6 +136,9 @@ if ironos_proj.found()
     subdir('IronOS/synthesis')
 endif
 
+subdir('InfiniTime')
+subdir('InfiniTime/toolchain')
+
 # Create convenience ara.py script
 fake_script_py_content = '''#!@0@
 #Call @1@ program
