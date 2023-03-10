@@ -40,6 +40,7 @@ endif
 # tools
 st_flash = find_program('st-flash', required: false, disabler: true)
 nop = find_program('true')
+ln = find_program('ln')
 fs = import('fs')
 
 ## arch specific build tools
@@ -150,19 +151,12 @@ if infinitime_proj.found()
     subdir('InfiniTime/analysis')
 endif
 
-# Create convenience ara.py script
-fake_script_py_content = '''#!@0@
-#Call @1@ program
-import os
-import sys
-os.execve('@2@', sys.argv, os.environ)
-'''
-
+# Create convenience ara.py and gui.py link
 fake_ara_py = custom_target('fake-ara-py',
     input: [],
     output: 'ara.py',
     depends: [ara_py],
-    command: [py3_inst, dump_cmds, '@OUTPUT@', '0o755', fake_script_py_content.format(py3_inst.path(), 'ara.py', ara_py.full_path())],
+    command: [ln.full_path(), '-s', ara_py.full_path(), 'ara.py'],
     build_by_default: true
 )
 
@@ -172,7 +166,7 @@ if get_option('enable_gui')
         input: [],
         output: 'gui.py',
         depends: [gui_py],
-        command: [py3_inst, dump_cmds, '@OUTPUT@', '0o755', fake_script_py_content.format(py3_inst.path(), 'gui.py', gui_py.full_path())],
+        command: [ln.full_path(), '-s', gui_py.full_path(), 'gui.py'],
         build_by_default: true
     )
 endif

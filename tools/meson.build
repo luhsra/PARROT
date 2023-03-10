@@ -1,5 +1,4 @@
 
-dump_cmds = files('dump_cmds.py')
 compare_nm = files('compare_nm.py')
 compare_time = files('compare_time.py')
 gdb_hw_script = files('gdb_stm32.sh')
