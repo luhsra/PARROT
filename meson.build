@@ -156,7 +156,7 @@ fake_ara_py = custom_target('fake-ara-py',
     input: [],
     output: 'ara.py',
     depends: [ara_py],
-    command: [ln.full_path(), '-s', ara_py.full_path(), 'ara.py'],
+    command: [ln.full_path(), '-sf', ara_py.full_path(), 'ara.py'],
     build_by_default: true
 )
 
@@ -166,7 +166,7 @@ if get_option('enable_gui')
         input: [],
         output: 'gui.py',
         depends: [gui_py],
-        command: [ln.full_path(), '-s', gui_py.full_path(), 'gui.py'],
+        command: [ln.full_path(), '-sf', gui_py.full_path(), 'gui.py'],
         build_by_default: true
     )
 endif
