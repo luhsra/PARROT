@@ -138,6 +138,12 @@ endif
 
 subdir('InfiniTime')
 subdir('InfiniTime/toolchain')
+infinitime_proj = subproject('InfiniTime', required: get_option('build_infinitime'))
+if infinitime_proj.found()
+    pinetime_app = infinitime_proj.get_variable('pinetime_app')
+    pinetime_app_bitcode = infinitime_proj.get_variable('pinetime_app_bitcode')
+    subdir('InfiniTime/analysis')
+endif
 
 # Create convenience ara.py script
 fake_script_py_content = '''#!@0@

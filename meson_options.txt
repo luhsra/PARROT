@@ -4,6 +4,7 @@ option('build_librepilot', type: 'feature', value: 'auto')
 option('build_zephyr', type: 'feature', value: 'auto')
 option('build_posix', type: 'feature', value: 'auto')
 option('build_ironos', type: 'feature', value: 'auto')
+option('build_infinitime', type: 'feature', value: 'auto')
 
 # ARA options
 option('arch', type: 'combo', choices: ['arm', 'i386'], value: 'arm',

@@ -1,0 +1,13 @@
+{
+    "steps" : [
+        "SIA" 
+    ],
+
+    "SVFAnalyses" : {
+        "dump" : false
+    },
+
+    "SIA" : {
+        "dump" : true
+    }
+}

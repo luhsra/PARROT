@@ -31,7 +31,7 @@
 [external "InfiniTime"]
 	path = subprojects/InfiniTime
 	url = git@scm.sra.uni-hannover.de:misc/InfiniTime.git
-	branch = develop
+	branch = ara
 	vcs = git
 
 [external "IronOS"]
