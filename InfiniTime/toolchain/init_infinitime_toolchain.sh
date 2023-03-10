@@ -74,7 +74,7 @@ ${GIT} apply --reject --whitespace=fix ../nrf5-llvm/error_handler.patch
 ${GIT} apply --reject --whitespace=fix ../nrf5-llvm/isr_vector.patch
 ${GIT} apply --reject --whitespace=fix ../nrf5-llvm/vmsr.patch
 # This patch is not working:
-${GIT} apply --reject --whitespace=fix ../nrf5-llvm/stack_ptr.patch
+#${GIT} apply --reject --whitespace=fix ../nrf5-llvm/stack_ptr.patch
 ${GIT} add *
 ${GIT} commit -m "apply patches of https://github.com/eblot/nrf5-llvm"
 cd ../nrf5-llvm
