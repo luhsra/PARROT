@@ -16,7 +16,7 @@ if fs.is_dir(riscv_toolchain)
                   'CPP': clang.full_path(),
                   'AS': clang.full_path(),
                   'LLVM_LINK': llvm_link.full_path()})
-    examples = run_target('ironos_example',
+    ironos_example = run_target('ironos_example',
                       command: nop,
                       depends: [ironos_ara_firmware_EN])
 else

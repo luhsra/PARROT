@@ -25,8 +25,14 @@ sparsedata = subproject('sparsedata')
 sparse_rle2 = sparsedata.get_variable('libsparserle2')
 
 # Python
+ironos_proj = subproject('IronOS', required: get_option('build_ironos'))
+if ironos_proj.found()
+    python_modules = ['bdflib']
+else
+    python_modules = []
+endif
 py3_mod = import('python')
-py3_inst = py3_mod.find_installation('python3', modules: [])
+py3_inst = py3_mod.find_installation('python3', modules: python_modules)
 if py3_inst.language_version().version_compare('<3.9')
     error('At least Python 3.9 is required.')
 endif
@@ -130,7 +136,6 @@ endif
 
 subdir('IronOS')
 subdir('IronOS/toolchain')
-ironos_proj = subproject('IronOS', required: get_option('build_ironos'))
 if ironos_proj.found()
     ironos_src_dir = ironos_proj.get_variable('src_dir')
     subdir('IronOS/synthesis')
