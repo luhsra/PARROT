@@ -3,7 +3,7 @@
 pinetime_app_analysis = custom_target('pinetime_app_analysis',
     output: ['pinetime-app.ara.bc'],
     depends: [ara_py, pinetime_app],
-    command: [py3_inst, ara_py, '-o', 'pinetime-app.ara.bc', '--step-settings',
+    command: [py3_inst, ara_py, '-o', meson.current_build_dir() / 'pinetime-app.ara.bc', '--step-settings',
               files('araconfig.json'), '--os', 'FreeRTOS', pinetime_app_bitcode],
     )
 
