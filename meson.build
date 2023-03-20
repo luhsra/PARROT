@@ -151,7 +151,7 @@ if infinitime_proj.found()
     subdir('InfiniTime/analysis')
 endif
 
-# Create convenience ara.py and gui.py link
+# Create convenience ara.py and ara-gui.py link
 fake_ara_py = custom_target('fake-ara-py',
     input: [],
     output: 'ara.py',
@@ -160,13 +160,11 @@ fake_ara_py = custom_target('fake-ara-py',
     build_by_default: true
 )
 
-if get_option('enable_gui')
-    gui_py = ara_proj.get_variable('gui_py')
-    fake_gui_py = custom_target('fake-gui-py',
-        input: [],
-        output: 'gui.py',
-        depends: [gui_py],
-        command: [ln.full_path(), '-sf', gui_py.full_path(), 'gui.py'],
-        build_by_default: true
-    )
-endif
+ara_gui_py = ara_proj.get_variable('ara_gui_py')
+fake_gui_py = custom_target('fake-ara-gui-py',
+    input: [],
+    output: 'ara-gui.py',
+    depends: [ara_gui_py],
+    command: [ln.full_path(), '-sf', ara_gui_py.full_path(), 'ara-gui.py'],
+    build_by_default: true
+)

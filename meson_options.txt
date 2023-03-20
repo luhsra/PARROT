@@ -9,7 +9,8 @@ option('build_infinitime', type: 'feature', value: 'auto')
 # ARA options
 option('arch', type: 'combo', choices: ['arm', 'i386'], value: 'arm',
     description: 'Set the architecture for which the test applications are built.')
-option('enable_gui', type: 'boolean', value: false)
+option('gui_required', type: 'boolean', value: false,
+    description: 'Set all dependencies of ara gui to required if this option is true')
 
 option('enable_qemu_tests', type: 'boolean', value: true)
 option('enable_step_tests', type: 'boolean', value: true,
