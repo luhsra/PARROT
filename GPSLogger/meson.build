@@ -118,7 +118,7 @@ foreach target : ara_gen_freertos_targets
                   'gpslogger',
                   lto_elf,
                  ],
-           env: [python_path],
+           env: [test_env],
            workdir: meson.current_source_dir(),
            suite: 'gpslogger',
            is_parallel: false,

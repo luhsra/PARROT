@@ -3,6 +3,9 @@ project('parrot', 'cpp',
                        'cpp_std=c++17',
                        'buildtype=debugoptimized'])
 
+# There is no way to check this in a meson script:
+warning('installation of parrot is not supported. Do not invoke "meson install" or "ninja install".')
+
 ## llvm dependencies
 llvm_version = ['>=14', '<16']
 llvm_dep = dependency('llvm', method: 'config-tool', version: llvm_version, include_type: 'system')
@@ -25,11 +28,14 @@ sparsedata = subproject('sparsedata')
 sparse_rle2 = sparsedata.get_variable('libsparserle2')
 
 # Python
+ara_py_orig = find_program('ara', required: false)
 ironos_proj = subproject('IronOS', required: get_option('build_ironos'))
+python_modules = []
+if ara_py_orig.found()
+    python_modules += ['ara']
+endif
 if ironos_proj.found()
-    python_modules = ['bdflib']
-else
-    python_modules = []
+    python_modules += ['bdflib']
 endif
 py3_mod = import('python')
 py3_inst = py3_mod.find_installation('python3', modules: python_modules)
@@ -72,14 +78,75 @@ subdir('settings')
 subdir('experiments')
 
 # Submodules
+
+# ARA
 ara_proj = subproject('ara')
-ara_py = ara_proj.get_variable('ara_py')
+if ara_py_orig.found()
+    message('use installed ARA at ' + ara_py_orig.full_path())
+    use_installed_ara = true
+    ara_gui_py_orig = find_program('ara-gui', required: false)
+    if not ara_gui_py_orig.found()
+        error('installed "ara" found but no installed "ara-gui" (is ARA only partially installed?)')
+    endif
+    test_env = 'ARA_TEST_USE_INSTALLED_ARA="True"'
+
+    # Create start-ara.py and ara-gui.py link.
+    # Links to installed version of ARA (e.g. /usr/bin/ara.py)
+    #
+    # All test cases need these fake custom targets
+    # to make them depend on ARA in case ARA is built from subproject
+    ara_py = custom_target('fake-ara-py',
+        input: [],
+        # name ara.py is not allowed because then py3_mod.find_installation()
+        # will not find the ara package in the system.
+        output: 'start-ara.py',
+        command: [ln.full_path(), '-sf', ara_py_orig.full_path(), 'start-ara.py'],
+        build_by_default: true
+    )
+    ara_gui_py = custom_target('fake-ara-gui-py',
+        input: [],
+        output: 'ara-gui.py',
+        command: [ln.full_path(), '-sf', ara_gui_py_orig.full_path(), 'ara-gui.py'],
+        build_by_default: true
+    )
+else
+    message('no installed ARA found. Use ARA from subproject "ara".')
+    use_installed_ara = false
+    ara_py_orig = ara_proj.get_variable('ara_py')
+    ara_gui_py_orig = ara_proj.get_variable('ara_gui_py')
+    test_env = ara_proj.get_variable('python_path')
+
+    # Create start-ara.py and ara-gui.py link.
+    # Links to subprojects/ara/ara.py
+    ara_py = custom_target('fake-ara-py',
+        input: [],
+        # name ara.py is not allowed because then py3_mod.find_installation()
+        # will not find the ara package in the system.
+        output: 'start-ara.py',
+        depends: [ara_py_orig],
+        command: [ln.full_path(), '-sf', ara_py_orig.full_path(), 'start-ara.py'],
+        build_by_default: true
+    )
+
+    ara_gui_py = custom_target('fake-ara-gui-py',
+        input: [],
+        output: 'ara-gui.py',
+        depends: [ara_gui_py_orig],
+        command: [ln.full_path(), '-sf', ara_gui_py_orig.full_path(), 'ara-gui.py'],
+        build_by_default: true
+    )
+endif
 py3_inst = ara_proj.get_variable('py3_inst')
 ara_gen_freertos_targets = ara_proj.get_variable('ara_gen_freertos_targets')
 ara_gen_freertos_cmds = ara_proj.get_variable('ara_gen_freertos_cmds')
-python_path = ara_proj.get_variable('python_path')
 instance_graph_test = ara_proj.get_variable('instance_graph_test')
 instance_graph_stats = ara_proj.get_variable('instance_graph_stats')
+posix_class_py = ara_proj.get_variable('posix_class_py')
+remove_sysfunc_body_data = ara_proj.get_variable('remove_sysfunc_body_data')
+remove_sysfunc_body_py = ara_proj.get_variable('remove_sysfunc_body_py')
+remove_sysfunc_body_json = ara_proj.get_variable('remove_sysfunc_body_json')
+remove_sysfunc_body_drop_llvm_json = ara_proj.get_variable('remove_sysfunc_body_drop_llvm_json')
+test_dir = ara_proj.get_variable('test_dir')
 if get_option('enable_step_tests')
     run_test_cstep = ara_proj.get_variable('run_test_cstep')
 endif
@@ -150,21 +217,3 @@ if infinitime_proj.found()
     pinetime_app_bitcode = infinitime_proj.get_variable('pinetime_app_bitcode')
     subdir('InfiniTime/analysis')
 endif
-
-# Create convenience ara.py and ara-gui.py link
-fake_ara_py = custom_target('fake-ara-py',
-    input: [],
-    output: 'ara.py',
-    depends: [ara_py],
-    command: [ln.full_path(), '-sf', ara_py.full_path(), 'ara.py'],
-    build_by_default: true
-)
-
-ara_gui_py = ara_proj.get_variable('ara_gui_py')
-fake_gui_py = custom_target('fake-ara-gui-py',
-    input: [],
-    output: 'ara-gui.py',
-    depends: [ara_gui_py],
-    command: [ln.full_path(), '-sf', ara_gui_py.full_path(), 'ara-gui.py'],
-    build_by_default: true
-)

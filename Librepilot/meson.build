@@ -141,7 +141,7 @@ foreach application_prefix: ['librepilot_mock']
                   'librepilot',
                   test_elf,
                  ],
-           env: [python_path],
+           env: [test_env],
            workdir: meson.current_source_dir(),
            suite: 'librepilot',
            is_parallel: false,
