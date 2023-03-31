@@ -151,6 +151,22 @@ if get_option('enable_step_tests')
     run_test_cstep = ara_proj.get_variable('run_test_cstep')
 endif
 
+# build test_env_with_test_module (required for tests in subdirs of test module in ara subproject)
+if use_installed_ara
+    current_python_path_cmd = run_command([py3_inst.path(), get_environment_var, 'PYTHONPATH'],
+                                          capture: true,
+                                          check: true)
+    current_python_path = current_python_path_cmd.stdout()
+    if current_python_path == '' or current_python_path == ' ' or current_python_path == '\n' or current_python_path == ' \n'
+        current_python_path = ''
+    else
+        current_python_path = current_python_path + ':'
+    endif
+    test_env_with_test_module = [test_env, 'PYTHONPATH=' + current_python_path +  test_dir]
+else
+    test_env_with_test_module = test_env + ':' + test_dir
+endif
+
 gpslogger_proj = subproject('GPSLogger', required: get_option('build_gpslogger'))
 librepilot_proj = subproject('librepilot', required: get_option('build_librepilot'))
 
@@ -167,6 +183,7 @@ if gpslogger_proj.found()
     gpslogger_runtarget = gpslogger_proj.get_variable('gpslogger_runtarget')
     gpslogger_ldflags = gpslogger_proj.get_variable('gpslogger_ldflags')
     subdir('GPSLogger')
+    subdir('GPSLogger' / 'test')
 elif librepilot_proj.found()
     # libs
     freertos_src_list = librepilot_proj.get_variable('freertos_src_list')

@@ -1,21 +1,5 @@
 # This file describes all testcases of the POSIX test suite.
 
-# build test_env_with_test_module (required for tests in subdirs of test module in ara subproject)
-if use_installed_ara
-    current_python_path_cmd = run_command([py3_inst.path(), get_environment_var, 'PYTHONPATH'],
-                                          capture: true,
-                                          check: true)
-    current_python_path = current_python_path_cmd.stdout()
-    if current_python_path == '' or current_python_path == ' ' or current_python_path == '\n' or current_python_path == ' \n'
-        current_python_path = ''
-    else
-        current_python_path = current_python_path + ':'
-    endif
-    test_env_with_test_module = [test_env, 'PYTHONPATH=' + current_python_path +  test_dir]
-else
-    test_env_with_test_module = test_env + ':' + test_dir
-endif
-
 test('posix_class',
     py3_inst,
     args: posix_class_py,
