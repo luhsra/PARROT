@@ -187,12 +187,12 @@ if librepilot_proj.found()
     subdir('Librepilot')
 endif
 
-subdir('Zephyr/toolchain')
+subdir('Zephyr' / 'toolchain')
 zephyr_proj = subproject('ara-zephyr-apps', required: get_option('build_zephyr'))
 if zephyr_proj.found()
     zephyr_apps_dict = zephyr_proj.get_variable('zephyr_apps_dict')
     if get_option('enable_zephyr_tests')
-        subdir('Zephyr/test')
+        subdir('Zephyr' / 'test')
     endif
 endif
 
@@ -203,17 +203,17 @@ if posix_proj.found()
 endif
 
 subdir('IronOS')
-subdir('IronOS/toolchain')
+subdir('IronOS' / 'toolchain')
 if ironos_proj.found()
     ironos_src_dir = ironos_proj.get_variable('src_dir')
     subdir('IronOS/synthesis')
 endif
 
 subdir('InfiniTime')
-subdir('InfiniTime/toolchain')
+subdir('InfiniTime' / 'toolchain')
 infinitime_proj = subproject('InfiniTime', required: get_option('build_infinitime'))
 if infinitime_proj.found()
     pinetime_app = infinitime_proj.get_variable('pinetime_app')
     pinetime_app_bitcode = infinitime_proj.get_variable('pinetime_app_bitcode')
-    subdir('InfiniTime/analysis')
+    subdir('InfiniTime' / 'analysis')
 endif
