@@ -3,5 +3,6 @@
 ara-libplatforms.wrap
 ara-libsra.wrap
 freertos.wrap
+musl-libc.wrap
 pyllco.wrap
 svf.wrap
