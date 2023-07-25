@@ -3,7 +3,7 @@
 
 This is a meta repository for all that is needed for ARA
 
-ZEPHRY Toolchain installation
+ZEPHYR Toolchain installation
 =============================
 
 The meson option zephyr_toolchain_dir must point to a valid zephyr toolchain.
