@@ -1,1 +1,7 @@
 */
+
+ara-libplatforms.wrap
+ara-libsra.wrap
+freertos.wrap
+pyllco.wrap
+svf.wrap
