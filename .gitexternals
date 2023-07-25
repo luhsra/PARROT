@@ -1,7 +1,7 @@
 [external "ara"]
 	path = subprojects/ara
 	url = git@scm.sra.uni-hannover.de:research/ara.git
-	branch = subproject_split
+	branch = soso
 	vcs = git
 
 [external "ara-link"]
