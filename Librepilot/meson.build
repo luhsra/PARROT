@@ -22,6 +22,8 @@ foreach application_prefix: ['librepilot_mock']
                                  depend_files: librepilot_manual_corrections,
                                  depends: librepilot_extra_settings,
                                  command: ara_gen_freertos_cmds.get(target) +
+                                          ['--dependency_file', '@DEPFILE@' ] +
+                                          ['--generator_output', '@OUTPUT0@' ] +
                                           ['--step-settings', librepilot_extra_settings] +
                                           ['--manual-corrections', librepilot_manual_corrections]
                                 )
