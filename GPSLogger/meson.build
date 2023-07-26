@@ -156,3 +156,17 @@ run_target('show_old-timing_result-gpslogger.dref',
              profiles_list,
              '--title', 'gpslogger',],
           )
+
+run_target('sia-gpslogger',
+  command: [
+    py3_inst, ara_py, gpslogger_application,
+    '--os', 'FreeRTOS',
+    '--log-level', 'info',
+    '--step-settings', files('sia_gpslogger.json')])
+
+run_target('ina-gpslogger',
+  command: [
+    py3_inst, ara_py, gpslogger_application,
+         '--os', 'FreeRTOS',
+         '--log-level', 'info',
+         '--step-settings', files('ina_gpslogger.json')])

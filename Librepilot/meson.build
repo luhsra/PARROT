@@ -184,3 +184,27 @@ foreach application_prefix: ['librepilot_mock']
              '--title', application_prefix,],
             )
 endforeach
+
+translation_map = librepilot_proj.get_variable('translation_map')
+conf_data = configuration_data()
+conf_data.set('translation_map', translation_map)
+sia_settings = configure_file(input : 'sia_librepilot.json.in',
+                              output : 'sia_librepilot.json',
+                              configuration : conf_data)
+ina_settings = configure_file(input : 'ina_librepilot.json.in',
+                              output : 'ina_librepilot.json',
+                              configuration : conf_data)
+
+run_target('sia-librepilot',
+  command: [
+    py3_inst, ara_py, librepilot_mock_ll,
+    '--os', 'FreeRTOS',
+    '--log-level', 'info',
+    '--step-settings', sia_settings])
+
+run_target('ina-librepilot',
+  command: [
+    py3_inst, ara_py, librepilot_mock_ll,
+    '--os', 'FreeRTOS',
+    '--log-level', 'info',
+    '--step-settings', ina_settings])
