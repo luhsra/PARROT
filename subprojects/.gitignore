@@ -1,8 +1,11 @@
 */
 
+InfiniTime.wrap
 ara-libplatforms.wrap
 ara-libsra.wrap
 freertos.wrap
 musl-libc.wrap
+nrf5-llvm.wrap
+nrf5-sdk.wrap
 pyllco.wrap
 svf.wrap

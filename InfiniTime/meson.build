@@ -1,6 +1,10 @@
-# expand toolchain path to $HOME if relative
-if fs.is_absolute(get_option('infinitime_toolchain_dir'))
-    infinitime_toolchain = get_option('infinitime_toolchain_dir')
-else
-    infinitime_toolchain = fs.expanduser('~/' + get_option('infinitime_toolchain_dir'))
-endif
+# edit araconfig.json to what you want to do with the LLVM IR
+
+infinitime_gllvm = subproject('infinitime-gllvm')
+pinetime_app = infinitime_gllvm.get_variable('pinetime_app')
+
+sia_infinitime = run_target('sia-infinitime',
+  command: [
+    py3_inst, ara_py, '--step-settings', files('araconfig.json'), '--os', 'FreeRTOS', pinetime_app
+  ],
+)
