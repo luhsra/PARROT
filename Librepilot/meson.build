@@ -6,7 +6,7 @@ foreach application_prefix: ['librepilot_mock']
   named_plain_elf_targets = []
   named_lto_elf_targets = []
   profiles_list = []
-  foreach target : ara_gen_freertos_targets
+  foreach target : ['instances_full_initialized'] #ara_gen_freertos_targets
     application_ll = get_variable(application_prefix + '_ll')
     name_prefix = application_prefix + '-' + target
 
@@ -68,7 +68,7 @@ foreach application_prefix: ['librepilot_mock']
                            output: name_prefix + '-os_app.ll',
                            command: llvm_link_cmd)
 
-    foreach lto_version : ['none', 'standard', 'rle2']
+    foreach lto_version : ['standard', 'none'] #, 'standard', 'rle2']
       lto_prefix = name_prefix + '-' + lto_version
       lto_app_os = custom_target(lto_prefix + '-app_os.ll',
                                  input: app_os,

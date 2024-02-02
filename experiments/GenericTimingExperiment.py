@@ -117,8 +117,11 @@ class GenericTimingExperiment(Experiment):
     def count_successful_blocks(content):
         # Skip those blocks printed before system-setup point is reached
         end_markers = content.count(b"$$$")
+        print(f"{end_markers=}")
         if b'done_taskCreate' in content:
-            return end_markers - content.count(b'done_taskCreate: 0')
+            foo = end_markers - content.count(b'done_taskCreate: 0')
+            print(f"{foo=}")
+            return foo
         return end_markers
 
     def get_time(self, profile):
@@ -128,8 +131,12 @@ class GenericTimingExperiment(Experiment):
         with serial.Serial(self.inputs.serial_device.value, 115200 * 8,
                            timeout=0.3*reset_count) as ser:
             content = b""
+            print(f"{reset_count=}")
             while self.count_successful_blocks(content) < reset_count:
+                print("Read from serial")
+                # print(content)
                 content += ser.read(10)
+            print(content)
         p.join()
         blocks = content.decode('utf-8').split('###\r\n')
 
