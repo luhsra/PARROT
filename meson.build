@@ -195,10 +195,94 @@ subdir('experiments')
 #   default_linkerscript = ara_libsra.get_variable('default_linkerscript')
 # endif
 
+arm_freertos_apps = []
+sia_targets = []
+ina_targets = []
 
+# collect apps
 if build_gpslogger
-  subdir('GPSLogger')
+  gpslogger_proj = subproject('GPSLogger')
+  gpslogger = {
+    'name': 'GPSLogger',
+    'll': gpslogger_proj.get_variable('gpslogger_application'),
+    'cflags': gpslogger_proj.get_variable('gpslogger_cflags'),
+    'sia_settings': files('settings' / 'sia_gpslogger.json')[0],
+    'ina_settings': files('settings' / 'ina_gpslogger.json')[0],
+  }
+  arm_freertos_apps += [gpslogger]
+  sia_targets += [gpslogger]
+  ina_targets += [gpslogger]
 endif
+
+if build_librepilot
+  librepilot_proj = subproject('librepilot')
+  librepilot_translation_map = librepilot_proj.get_variable('translation_map')
+  librepilot_corrections = librepilot_proj.get_variable('instance_corrections')
+  if meson.version().version_compare('>=1.4.0')
+    error('Please remove the horrible hack below and use the "librepilot_translation_map.full_path()" directly.')
+  endif
+  librepilot_translation_map_fixed = fs.copyfile(librepilot_translation_map, 'librepilot_translation_map.json')
+
+  conf_data = configuration_data()
+  conf_data.set('translation_map', librepilot_translation_map_fixed.full_path())
+  sia_settings = configure_file(input : files('settings' / 'sia_librepilot.json.in'),
+                                output : 'sia_librepilot.json',
+                                configuration : conf_data)
+  ina_settings = configure_file(input : files('settings' / 'ina_librepilot.json.in'),
+                                output : 'ina_librepilot.json',
+                                configuration : conf_data)
+  librepilot = {
+    'name': 'LibrePilot',
+    'll': librepilot_proj.get_variable('librepilot_mock_application'),
+    'cflags': librepilot_proj.get_variable('librepilot_cflags'),
+    'sia_settings': sia_settings,
+    'ina_settings': ina_settings,
+  }
+  arm_freertos_apps += [librepilot]
+  sia_targets += [librepilot]
+  ina_targets += [librepilot]
+endif
+
+if build_infinitime
+  infinitime_gllvm = subproject('infinitime-gllvm')
+  pinetime_app = infinitime_gllvm.get_variable('pinetime_app')
+  infinitime = {
+    'name': 'InfiniTime',
+    'll': infinitime_gllvm.get_variable('pinetime_app'),
+    'sia_settings': files('settings' / 'sia_infinitime.json')[0],
+  }
+  sia_targets += [infinitime]
+endif
+
+
+# actual processing
+if arm_freertos_apps.length() > 0
+  subdir('arm_freertos_synthesis')
+endif
+
+# sia targets
+foreach app : sia_targets
+  run_sia = 'sia-' + app['name'].to_lower()
+  run_target(run_sia,
+    command: [
+      py3_inst, ara, app['ll'],
+      '--os', 'FreeRTOS',
+      '--log-level', 'info',
+      '--step-settings', app['sia_settings']])
+  summary('Run SIA on ' + app['name'], 'meson compile ' + run_sia, section: app['name'])
+endforeach
+
+# ina targets
+foreach app : ina_targets
+  run_ina = 'ina-' + app['name'].to_lower()
+  run_target(run_ina,
+    command: [
+      py3_inst, ara, app['ll'],
+      '--os', 'FreeRTOS',
+      '--log-level', 'info',
+      '--step-settings', app['ina_settings']])
+  summary('Run INA on ' + app['name'], 'meson compile ' + run_ina, section: app['name'])
+endforeach
 
 # if build_librepilot
 #   librepilot_proj = subproject('librepilot', required: get_option('build_librepilot'))
@@ -235,8 +319,5 @@ endif
 #   ironos_src_dir = ironos_proj.get_variable('src_dir')
 #   subdir('IronOS/synthesis')
 # endif
-if build_infinitime
-  subdir('InfiniTime')
-endif
 
 # subdir('experiments')

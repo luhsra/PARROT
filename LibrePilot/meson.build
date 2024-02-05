@@ -1,3 +1,4 @@
+librepilot_proj = subproject('librepilot')
 #foreach application_prefix: ['librepilot', 'librepilot_mock']
 # use only the mock-ed version as the 'standard' version is not compilable without settings for external flash
 foreach application_prefix: ['librepilot_mock']

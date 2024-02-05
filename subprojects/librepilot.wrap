@@ -1,4 +1,4 @@
 [wrap-git]
 url = git@scm.sra.uni-hannover.de:research/librepilot.git
-revision = main
+revision = ara
 depth = 1
