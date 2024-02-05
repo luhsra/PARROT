@@ -1,7 +1,6 @@
 */
 
 InfiniTime.wrap
-ara-libsra.wrap
 musl-libc.wrap
 nRF5_SDK_15.3.0_59ac345.wrap
 nrf5-llvm.wrap
