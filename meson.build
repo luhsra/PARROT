@@ -208,6 +208,7 @@ if build_gpslogger
     'cflags': gpslogger_proj.get_variable('gpslogger_cflags'),
     'sia_settings': files('settings' / 'sia_gpslogger.json')[0],
     'ina_settings': files('settings' / 'ina_gpslogger.json')[0],
+    'freertos_config': gpslogger_proj.get_variable('freertos_config')
   }
   arm_freertos_apps += [gpslogger]
   sia_targets += [gpslogger]
@@ -237,6 +238,7 @@ if build_librepilot
     'cflags': librepilot_proj.get_variable('librepilot_cflags'),
     'sia_settings': sia_settings,
     'ina_settings': ina_settings,
+    'freertos_config': gpslogger_proj.get_variable('freertos_config')
   }
   arm_freertos_apps += [librepilot]
   sia_targets += [librepilot]
@@ -250,6 +252,7 @@ if build_infinitime
     'name': 'InfiniTime',
     'll': infinitime_gllvm.get_variable('pinetime_app'),
     'sia_settings': files('settings' / 'sia_infinitime.json')[0],
+    'freertos_config': infinitime_gllvm.get_variable('freertos_config')
   }
   sia_targets += [infinitime]
 endif

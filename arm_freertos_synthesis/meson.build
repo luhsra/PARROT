@@ -62,8 +62,10 @@ foreach app : arm_freertos_apps
   elf_targets = []
   profiles_list = []
 
+  freertos_includes += ['-I', fs.parent(app['freertos_config'].full_path())]
+
   foreach target : ara_freertos_generator_targets
-    name_prefix = '@0@ - @1@'.format(app_name, target['name']).to_lower()
+    name_prefix = '@0@-@1@'.format(app_name, target['name']).to_lower()
 
     summary('ARA config of @0@ target @1@'.format(app_name, target['name']), target['settings'].full_path(), bool_yn: true, section: app_name)
     ara_target = custom_target(name_prefix + '-os',
