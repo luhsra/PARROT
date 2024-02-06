@@ -232,12 +232,17 @@ if build_librepilot
   ina_settings = configure_file(input : files('settings' / 'ina_librepilot.json.in'),
                                 output : 'ina_librepilot.json',
                                 configuration : conf_data)
+  extra_settings = configure_file(input : files('settings' / 'synthesis_librepilot.json.in'),
+                                  output : 'synthesis_librepilot.json',
+                                  configuration : conf_data)
   librepilot = {
     'name': 'LibrePilot',
     'll': librepilot_proj.get_variable('librepilot_mock_application'),
     'cflags': librepilot_proj.get_variable('librepilot_cflags'),
     'sia_settings': sia_settings,
     'ina_settings': ina_settings,
+    'corrections': librepilot_proj.get_variable('instance_corrections'),
+    'extra_settings': extra_settings,
     'freertos_config': gpslogger_proj.get_variable('freertos_config')
   }
   arm_freertos_apps += [librepilot]

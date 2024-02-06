@@ -1,0 +1,7 @@
+{
+	"ResolveFunctionPointer": {
+		"block_list": "[ \"main\" ]",
+		"translation_map": "@translation_map@",
+		"use_only_translation_map": true
+	}
+}

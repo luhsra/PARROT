@@ -67,6 +67,13 @@ foreach app : arm_freertos_apps
   profiles_list = []
 
   freertos_includes += ['-I', fs.parent(app['freertos_config'].full_path())]
+  ara_settings = []
+  if app.has_key('corrections')
+    ara_settings += ['--manual-corrections', app['corrections']]
+  endif
+  if app.has_key('extra_settings')
+    ara_settings += ['--step-settings', app['extra_settings']]
+  endif
 
   foreach target : ara_freertos_generator_targets
     name_prefix = '@0@-@1@'.format(app_name, target['name']).to_lower()
@@ -86,7 +93,7 @@ foreach app : arm_freertos_apps
                                          '--dependency_file', '@DEPFILE@',
                                          '--os', 'FreeRTOS',
                                          '--step-settings', target['settings']
-                                        ]
+                                        ] + ara_settings
                               )
     os_target = [ara_target[0], ara_target[1]]
     app_aramodified_ll = ara_target[2]
