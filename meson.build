@@ -219,13 +219,9 @@ if build_librepilot
   librepilot_proj = subproject('librepilot')
   librepilot_translation_map = librepilot_proj.get_variable('translation_map')
   librepilot_corrections = librepilot_proj.get_variable('instance_corrections')
-  if meson.version().version_compare('>=1.4.0')
-    error('Please remove the horrible hack below and use the "librepilot_translation_map.full_path()" directly.')
-  endif
-  librepilot_translation_map_fixed = fs.copyfile(librepilot_translation_map, 'librepilot_translation_map.json')
 
   conf_data = configuration_data()
-  conf_data.set('translation_map', librepilot_translation_map_fixed.full_path())
+  conf_data.set('translation_map', librepilot_translation_map)
   sia_settings = configure_file(input : files('settings' / 'sia_librepilot.json.in'),
                                 output : 'sia_librepilot.json',
                                 configuration : conf_data)
