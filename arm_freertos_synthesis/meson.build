@@ -44,6 +44,10 @@ arm_nm = toolchains.get_variable('arm_nm')
 ## libsra
 ara_libsra = subproject('ara-libsra')
 libsra_ar = ara_libsra.get_variable('libsra_ar')
+libsra_includes = []
+foreach dir : ara_libsra.get_variable('libsra_include_directories')
+  libsra_includes += ['-I', dir]
+endforeach
 
 st_flash = find_program('st-flash', required: false, disabler: true)
 
@@ -102,6 +106,7 @@ foreach app : arm_freertos_apps
                                 depends: ara_target,
                                 command: clang_c +
                                          freertos_includes +
+                                         libsra_includes +
                                          ['-DFREERTOS_OVERRIDES="@0@"'.format(freertos_overrides.full_path())] +
                                          combined_cflags)
       freertos_ll_targets += ll_target
@@ -113,6 +118,7 @@ foreach app : arm_freertos_apps
                                  depfile : name_prefix + '-os.cc.ll.dep',
                                  command : clang_cpp +
                                            freertos_includes +
+                                           libsra_includes +
                                            combined_cflags)
 
     app_os = custom_target(name_prefix + '-app_os.ll',
