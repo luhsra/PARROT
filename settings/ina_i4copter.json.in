@@ -1,0 +1,16 @@
+{
+	"steps": [
+		"InteractionAnalysis",
+		"DumpInstances"
+	],
+
+	"LoadOIL": {
+		"oilfile": "@oil_file@"
+	},
+
+	"logger": {
+		"StepManager": "info",
+		"FreeRTOS": "info",
+		"ara": "info"
+	}
+}

@@ -5,6 +5,7 @@ option('build_zephyr', type: 'boolean', value: true)
 option('build_posix', type: 'boolean', value: true)
 option('build_ironos', type: 'boolean', value: true)
 option('build_infinitime', type: 'boolean', value: true)
+option('build_i4copter', type: 'boolean', value: true)
 
 # ARA options
 option('arch', type: 'combo', choices: ['arm', 'i386'], value: 'arm',

@@ -32,9 +32,9 @@ toolchains = subproject('toolchains')
 arm_enabled = toolchains.get_variable('arm_enabled')
 
 # ara
+ara_proj = subproject('ara')
 ara = find_program('ara', required: false)
 if not ara.found()
-  ara_proj = subproject('ara')
   ara = ara_proj.get_variable('ara_py')
 endif
 
@@ -42,11 +42,13 @@ endif
 build_librepilot = get_option('build_librepilot')
 build_gpslogger = get_option('build_gpslogger')
 build_infinitime = get_option('build_infinitime')
+build_i4copter = get_option('build_i4copter')
 
 summary({
   'LibrePilot (build_librepilot)': build_librepilot,
   'GPSLogger (build_gpslogger)': build_gpslogger,
   'InfiniTime (build_infinitime)': build_infinitime,
+  'i4copter (build_i4copter)': build_i4copter,
 }, bool_yn: true, section: 'Wanted applications')
 
 subdir('tools')
@@ -204,6 +206,7 @@ if build_gpslogger
   gpslogger_proj = subproject('GPSLogger')
   gpslogger = {
     'name': 'GPSLogger',
+    'os': 'FreeRTOS',
     'll': gpslogger_proj.get_variable('gpslogger_application'),
     'cflags': gpslogger_proj.get_variable('gpslogger_cflags'),
     'sia_settings': files('settings' / 'sia_gpslogger.json')[0],
@@ -233,6 +236,7 @@ if build_librepilot
                                   configuration : conf_data)
   librepilot = {
     'name': 'LibrePilot',
+    'os': 'FreeRTOS',
     'll': librepilot_proj.get_variable('librepilot_mock_application'),
     'cflags': librepilot_proj.get_variable('librepilot_cflags'),
     'sia_settings': sia_settings,
@@ -251,6 +255,7 @@ if build_infinitime
   pinetime_app = infinitime_gllvm.get_variable('pinetime_app')
   infinitime = {
     'name': 'InfiniTime',
+    'os': 'FreeRTOS',
     'll': infinitime_gllvm.get_variable('pinetime_app'),
     'sia_settings': files('settings' / 'sia_infinitime.json')[0],
     'freertos_config': infinitime_gllvm.get_variable('freertos_config')
@@ -258,6 +263,39 @@ if build_infinitime
   sia_targets += [infinitime]
 endif
 
+if build_i4copter
+  i4copter_code = ara_proj.get_variable('autosar_singlecore_complex_isorc')
+
+  if meson.version().version_compare('>=1.4.0')
+    error('Please remove the horrible hack below and use the "i4copter_code[\'oil\'].full_path()" directly.')
+  endif
+  oilfile = fs.copyfile(i4copter_code['oil'], 'copter.oil.json')
+  conf_data = configuration_data()
+  conf_data.set('oil_file', oilfile.full_path())
+  ina_settings = configure_file(input : files('settings' / 'ina_i4copter.json.in'),
+                                output : 'ina_i4copter.json',
+                                configuration : conf_data)
+  sse_settings = configure_file(input : files('settings' / 'sse_i4copter.json.in'),
+                                output : 'sse_i4copter.json',
+                                configuration : conf_data)
+  i4copter = {
+    'name': 'i4copter',
+    'os': 'AUTOSAR',
+    'll': i4copter_code['ll'],
+    'ina_settings': ina_settings,
+  }
+  ina_targets += [i4copter]
+
+  run_sse = 'sse-' + i4copter['name'].to_lower()
+  run_target(run_sse,
+    depends: oilfile,
+    command: [
+      py3_inst, ara, i4copter['ll'],
+      '--os', i4copter['os'],
+      '--log-level', 'info',
+      '--step-settings', sse_settings])
+  summary('Run SSE on ' + i4copter['name'], 'meson compile ' + run_sse, section: i4copter['name'])
+endif
 
 # actual processing
 if arm_freertos_apps.length() > 0
@@ -270,7 +308,7 @@ foreach app : sia_targets
   run_target(run_sia,
     command: [
       py3_inst, ara, app['ll'],
-      '--os', 'FreeRTOS',
+      '--os', app['os'],
       '--log-level', 'info',
       '--step-settings', app['sia_settings']])
   summary('Run SIA on ' + app['name'], 'meson compile ' + run_sia, section: app['name'])
@@ -282,7 +320,7 @@ foreach app : ina_targets
   run_target(run_ina,
     command: [
       py3_inst, ara, app['ll'],
-      '--os', 'FreeRTOS',
+      '--os', app['os'],
       '--log-level', 'info',
       '--step-settings', app['ina_settings']])
   summary('Run INA on ' + app['name'], 'meson compile ' + run_ina, section: app['name'])
