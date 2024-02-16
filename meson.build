@@ -214,7 +214,8 @@ if build_gpslogger
     'cflags': gpslogger_proj.get_variable('gpslogger_cflags'),
     'sia_settings': files('settings' / 'sia_gpslogger.json')[0],
     'ina_settings': files('settings' / 'ina_gpslogger.json')[0],
-    'freertos_config': gpslogger_proj.get_variable('freertos_config')
+    'freertos_config': gpslogger_proj.get_variable('freertos_config'),
+    'summary_section': 'GPSLogger (FreeRTOS)',
   }
   arm_freertos_apps += [gpslogger]
   sia_targets += [gpslogger]
@@ -246,7 +247,8 @@ if build_librepilot
     'ina_settings': ina_settings,
     'corrections': librepilot_proj.get_variable('instance_corrections'),
     'extra_settings': extra_settings,
-    'freertos_config': gpslogger_proj.get_variable('freertos_config')
+    'freertos_config': librepilot_proj.get_variable('freertos_config'),
+    'summary_section': 'LibrePilot (FreeRTOS)',
   }
   arm_freertos_apps += [librepilot]
   sia_targets += [librepilot]
@@ -261,7 +263,8 @@ if build_infinitime
     'os': 'FreeRTOS',
     'll': infinitime_gllvm.get_variable('pinetime_app'),
     'sia_settings': files('settings' / 'sia_infinitime.json')[0],
-    'freertos_config': infinitime_gllvm.get_variable('freertos_config')
+    'freertos_config': infinitime_gllvm.get_variable('freertos_config'),
+    'summary_section': 'InfiniTime (FreeRTOS)',
   }
   sia_targets += [infinitime]
 endif
@@ -286,6 +289,7 @@ if build_i4copter
     'os': 'AUTOSAR',
     'll': i4copter_code['ll'],
     'ina_settings': ina_settings,
+    'summary_section': 'i4copter (AUTOSAR)',
   }
   ina_targets += [i4copter]
 
@@ -297,7 +301,7 @@ if build_i4copter
       '--os', i4copter['os'],
       '--log-level', 'info',
       '--step-settings', sse_settings])
-  summary('Run SSE on ' + i4copter['name'], 'meson compile ' + run_sse, section: i4copter['name'])
+  summary('Run SSE on ' + i4copter['name'], 'meson compile ' + run_sse, section: i4copter['summary_section'])
 endif
 
 if build_zephyr
@@ -354,7 +358,7 @@ foreach app : sia_targets
       '--os', app['os'],
       '--log-level', 'info',
       '--step-settings', app['sia_settings']])
-  summary('Run SIA on ' + app['name'], 'meson compile ' + run_sia, section: app['name'])
+  summary('Run SIA on ' + app['name'], 'meson compile ' + run_sia, section: app['summary_section'])
 endforeach
 
 # ina targets
@@ -366,7 +370,7 @@ foreach app : ina_targets
       '--os', app['os'],
       '--log-level', 'info',
       '--step-settings', app['ina_settings']])
-  summary('Run INA on ' + app['name'], 'meson compile ' + run_ina, section: app['name'])
+  summary('Run INA on ' + app['name'], 'meson compile ' + run_ina, section: app['summary_section'])
 endforeach
 
 # if build_librepilot

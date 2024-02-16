@@ -78,7 +78,7 @@ foreach app : arm_freertos_apps
   foreach target : ara_freertos_generator_targets
     name_prefix = '@0@-@1@'.format(app_name, target['name']).to_lower()
 
-    summary('ARA config of @0@ target @1@'.format(app_name, target['name']), target['settings'].full_path(), bool_yn: true, section: app_name)
+    summary('ARA config of @0@ target @1@'.format(app_name, target['name']), target['settings'].full_path(), bool_yn: true, section: app['summary_section'])
     ara_target = custom_target(name_prefix + '-os',
                                input: app['ll'],
                                depfile: name_prefix+ '-os.cc.dep',
@@ -170,23 +170,23 @@ foreach app : arm_freertos_apps
 
       flash_name = 'flash_' + lto_prefix
       run_target(flash_name, command: [st_flash, 'write', bin_target, '0x8000000'])
-      summary(f'Flash @app_name@ on device (@config@)', 'meson compile ' + flash_name, bool_yn: true, section: app_name)
+      summary(f'Flash @app_name@ on device (@config@)', 'meson compile ' + flash_name, bool_yn: true, section: app['summary_section'])
 
       size_name = 'size_' + lto_prefix
       run_target(size_name, command: [arm_size, '-A', lto_elf])
-      summary(f'Size of @app_name@ binary (@config@)', 'meson compile ' + size_name, bool_yn: true, section: app_name)
+      summary(f'Size of @app_name@ binary (@config@)', 'meson compile ' + size_name, bool_yn: true, section: app['summary_section'])
 
       gdb_hw_name = 'run_gdb_hw_' + lto_prefix
       run_target(gdb_hw_name, command: [gdb_hw_script, lto_elf])
-      summary(f'Run GDB on device (@config@)', 'meson compile ' + size_name, bool_yn: true, section: app_name)
+      summary(f'Run GDB on device (@config@)', 'meson compile ' + size_name, bool_yn: true, section: app['summary_section'])
 
       qemu_name = 'run_qemu_' + lto_prefix
       run_target(qemu_name, command: [qemu_cmd, lto_elf])
-      summary(f'Run @app_name@ binary on QEMU (@config@)', 'meson compile ' + size_name, bool_yn: true, section: app_name)
+      summary(f'Run @app_name@ binary on QEMU (@config@)', 'meson compile ' + size_name, bool_yn: true, section: app['summary_section'])
 
       qemu_gdb_name = 'run_gdb_qemu_' + lto_prefix
       run_target(qemu_gdb_name, command: [gdb_qemu_cmd, lto_elf])
-      summary(f'Connect GDB to QEMU (@config@)', 'meson compile ' + size_name, bool_yn: true, section: app_name)
+      summary(f'Connect GDB to QEMU (@config@)', 'meson compile ' + size_name, bool_yn: true, section: app['summary_section'])
 
       elf_targets += lto_elf
       named_elf_targets += [target['name'] + '-' + lto_version, lto_elf]
@@ -223,15 +223,15 @@ foreach app : arm_freertos_apps
 
   comp_nm = 'compare_nm-' + app_low
   run_target(comp_nm, command: [py3_inst, compare_nm, arm_nm.path(), named_elf_targets])
-  summary(f'Compare ELF symbols of @app_name@', 'meson compile ' + comp_nm, bool_yn: true, section: app_name)
+  summary(f'Compare ELF symbols of @app_name@', 'meson compile ' + comp_nm, bool_yn: true, section: app['summary_section'])
 
   comp_size = 'compare_size-' + app_low
   run_target(comp_size, command: [arm_size, elf_targets])
-  summary(f'Compare ELF sizes of @app_name@', 'meson compile ' + comp_size, bool_yn: true, section: app_name)
+  summary(f'Compare ELF sizes of @app_name@', 'meson compile ' + comp_size, bool_yn: true, section: app['summary_section'])
 
   comp_time = 'compare_time' + app_low
   run_target(comp_time, command: [py3_inst, compare_time, meson.build_root(), app_low], depends: elf_targets)
-  summary(f'Compare generate times @app_name@', 'meson compile ' + comp_time, bool_yn: true, section: app_name)
+  summary(f'Compare generate times @app_name@', 'meson compile ' + comp_time, bool_yn: true, section: app['summary_section'])
 
   analyze_timing = 'analyze_timing-' + app_low
   timing_exp_result = custom_target(analyze_timing,
@@ -263,7 +263,7 @@ foreach app : arm_freertos_apps
     f'Get timing data of @app_name@ (drefs)': 'meson compile ' + comp_time,
     f'Show timing data of @app_name@': 'meson compile ' + show_timing,
     f'Show old timing data of @app_name@': 'meson compile ' + show_old_timing,
-  }, bool_yn: true, section: app_name)
+  }, bool_yn: true, section: app['summary_section'])
 
 
 endforeach # arm_freertos_apps
