@@ -7,3 +7,5 @@ nrf5-llvm.wrap
 nrf5-sdk.wrap
 pyllco.wrap
 svf.wrap
+zephyr.wrap
+zephyr-toolchain.wrap

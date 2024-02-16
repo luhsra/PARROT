@@ -1,0 +1,21 @@
+{
+	"steps": [
+		"SIA",
+		"DumpCFG",
+		"DumpInstances"
+	],
+
+	"SIA": {
+		"dump": true
+	},
+
+	"ZephyrStaticPost": {
+		"kconfigfile": "@kconfig_file@"
+	},
+
+	"logger": {
+		"StepManager": "info",
+		"FreeRTOS": "debug",
+		"ara": "info"
+	}
+}

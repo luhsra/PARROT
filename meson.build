@@ -30,6 +30,7 @@ endif
 
 toolchains = subproject('toolchains')
 arm_enabled = toolchains.get_variable('arm_enabled')
+posix_enabled = toolchains.get_variable('posix_enabled')
 
 # ara
 ara_proj = subproject('ara')
@@ -43,12 +44,14 @@ build_librepilot = get_option('build_librepilot')
 build_gpslogger = get_option('build_gpslogger')
 build_infinitime = get_option('build_infinitime')
 build_i4copter = get_option('build_i4copter')
+build_zephyr = get_option('build_zephyr')
 
 summary({
   'LibrePilot (build_librepilot)': build_librepilot,
   'GPSLogger (build_gpslogger)': build_gpslogger,
   'InfiniTime (build_infinitime)': build_infinitime,
   'i4copter (build_i4copter)': build_i4copter,
+  'sys_kernel/app_kernel (build_zephyr)': build_zephyr,
 }, bool_yn: true, section: 'Wanted applications')
 
 subdir('tools')
@@ -295,6 +298,46 @@ if build_i4copter
       '--log-level', 'info',
       '--step-settings', sse_settings])
   summary('Run SSE on ' + i4copter['name'], 'meson compile ' + run_sse, section: i4copter['name'])
+endif
+
+if build_zephyr
+  ara_zephyr_apps = subproject('ara-zephyr-apps')
+  foreach app : ['sys_kernel', 'app_kernel']
+    arch_variants = []
+    if posix_enabled
+      arch_variants += [{
+        'name': f'@app@-posix',
+        'app': ara_zephyr_apps.get_variable(f'native_posix_@app@')
+      }]
+    endif
+    if arm_enabled
+      foreach board : ara_zephyr_apps.get_variable('arm_boards')
+        arch_variants += [{
+          'name': f'@app@-arm-@board@',
+          'app': ara_zephyr_apps.get_variable(f'@board@_@app@')
+        }]
+      endforeach
+    endif
+
+    foreach arch_variant : arch_variants
+      name = arch_variant['name']
+      app_code = arch_variant['app']
+
+      conf_data = configuration_data()
+      conf_data.set('kconfig_file', app_code['config'].full_path())
+      sia_settings = configure_file(input : files('settings' / f'sia_@app@.json.in'),
+                                    output : f'sia_@name@.json',
+                                    configuration : conf_data)
+      zephyr_app = {
+        'name': name,
+        'os': 'Zephyr',
+        'll': app_code['ll'],
+        'sia_settings': sia_settings,
+        'summary_section': 'ARA Zephyr Apps',
+      }
+      sia_targets += [zephyr_app]
+    endforeach
+  endforeach
 endif
 
 # actual processing

@@ -1,11 +1,14 @@
 # Parrot options
 option('build_gpslogger', type: 'boolean', value: true)
 option('build_librepilot', type: 'boolean', value: true)
-option('build_zephyr', type: 'boolean', value: true)
+option('build_zephyr', type: 'boolean', value: true, description: 'Build sys_kernel and app_kernel related targets.')
 option('build_posix', type: 'boolean', value: true)
 option('build_ironos', type: 'boolean', value: true)
 option('build_infinitime', type: 'boolean', value: true)
 option('build_i4copter', type: 'boolean', value: true)
+
+option('offline', type: 'boolean', value: 'false', yield: true,
+  description: 'Do not download anything (this is independant of Meson\'s internal subproject mechanisms).')
 
 # ARA options
 option('arch', type: 'combo', choices: ['arm', 'i386'], value: 'arm',

@@ -1,3 +1,4 @@
 [wrap-git]
 url = git@scm.sra.uni-hannover.de:research/ara-zephyr-apps.git
 revision = main
+depth = 1
