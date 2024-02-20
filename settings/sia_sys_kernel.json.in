@@ -15,7 +15,7 @@
 
 	"logger": {
 		"StepManager": "info",
-		"FreeRTOS": "debug",
+		"Zephyr": "debug",
 		"ara": "info"
 	}
 }

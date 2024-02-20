@@ -1,17 +1,16 @@
 {
 	"steps": [
-		"SIA",
-		"DumpCFG",
-		"DumpInstances"
+		"InteractionAnalysis"
 	],
 
-	"SIA": {
+	"InteractionAnalysis": {
 		"dump": true
 	},
 
 	"ZephyrStaticPost": {
 		"kconfigfile": "@kconfig_file@"
 	},
+
 
 	"logger": {
 		"StepManager": "info",

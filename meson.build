@@ -332,14 +332,19 @@ if build_zephyr
       sia_settings = configure_file(input : files('settings' / f'sia_@app@.json.in'),
                                     output : f'sia_@name@.json',
                                     configuration : conf_data)
+      ina_settings = configure_file(input : files('settings' / f'ina_@app@.json.in'),
+                                    output : f'ina_@name@.json',
+                                    configuration : conf_data)
       zephyr_app = {
         'name': name,
         'os': 'Zephyr',
         'll': app_code['ll'],
         'sia_settings': sia_settings,
+        'ina_settings': ina_settings,
         'summary_section': 'ARA Zephyr Apps',
       }
       sia_targets += [zephyr_app]
+      ina_targets += [zephyr_app]
     endforeach
   endforeach
 endif
