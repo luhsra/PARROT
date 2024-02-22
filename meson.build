@@ -45,6 +45,8 @@ build_gpslogger = get_option('build_gpslogger')
 build_infinitime = get_option('build_infinitime')
 build_i4copter = get_option('build_i4copter')
 build_zephyr = get_option('build_zephyr')
+build_posix_apps = get_option('build_posix_apps')
+build_libmicrohttpd = get_option('build_libmicrohttpd')
 
 summary({
   'LibrePilot (build_librepilot)': build_librepilot,
@@ -52,6 +54,8 @@ summary({
   'InfiniTime (build_infinitime)': build_infinitime,
   'i4copter (build_i4copter)': build_i4copter,
   'sys_kernel/app_kernel (build_zephyr)': build_zephyr,
+  'POSIX applications (build_posix_apps)': build_posix_apps,
+  'Including libmicrohttpd (build_libmicrohttpd)': build_libmicrohttpd,
 }, bool_yn: true, section: 'Wanted applications')
 
 subdir('tools')
@@ -346,6 +350,23 @@ if build_zephyr
       sia_targets += [zephyr_app]
       ina_targets += [zephyr_app]
     endforeach
+  endforeach
+endif
+
+if build_posix_apps
+  ara_posix_apps = subproject('ara-posix-apps')
+  posix_apps = ara_posix_apps.get_variable('posix_apps')
+  foreach app : posix_apps
+    posix_app = {
+      'name': app['name'],
+      'os': 'POSIX',
+      'll': app['ll'],
+      'sia_settings': files('settings' / 'sia_posix.json')[0],
+      'ina_settings': files('settings' / 'ina_posix.json')[0],
+      'summary_section': 'ARA POSIX Apps',
+    }
+    sia_targets += [posix_app]
+    ina_targets += [posix_app]
   endforeach
 endif
 

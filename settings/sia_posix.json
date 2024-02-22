@@ -1,0 +1,17 @@
+{
+	"steps": [
+        "SIA",
+	    "DumpCFG",
+	    "DumpInstances"
+    ],
+
+    "SIA": {
+        "dump": true
+    },
+
+	"logger": {
+		"StepManager": "info",
+		"FreeRTOS": "debug",
+		"ara": "info"
+	}
+}

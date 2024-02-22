@@ -2,6 +2,8 @@
 
 InfiniTime.wrap
 gllvm-meson.wrap
+libmicrohttpd-orig.wrap
+libmicrohttpd.wrap
 musl-libc.wrap
 nRF5_SDK_15.3.0_59ac345.wrap
 nrf5-llvm.wrap
