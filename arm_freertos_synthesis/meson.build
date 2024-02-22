@@ -25,9 +25,6 @@ sparse_rle2 = sparsedata.get_variable('libsparserle2')
 
 ## libplatforms
 libplatforms = subproject('ara-libplatforms')
-clang_c = libplatforms.get_variable('clang_c')
-clang_cpp = libplatforms.get_variable('clang_cpp')
-ir_flags = libplatforms.get_variable('ir_flags')
 clang_flags = libplatforms.get_variable('clang_flags')
 arm_clang_flags = libplatforms.get_variable('arm_clang_flags')
 arm_ld_flags = libplatforms.get_variable('arm_ld_flags')
@@ -40,6 +37,9 @@ llvm_link_cmd = toolchains.get_variable('llvm_link_cmd')
 llvm_objcopy = toolchains.get_variable('llvm_objcopy')
 arm_size = toolchains.get_variable('arm_size')
 arm_nm = toolchains.get_variable('arm_nm')
+clang_c = toolchains.get_variable('clang_c_cmd')
+clang_cpp = toolchains.get_variable('clang_cpp_cmd')
+ir_flags = toolchains.get_variable('ir_flags')
 
 ## libsra
 ara_libsra = subproject('ara-libsra')
