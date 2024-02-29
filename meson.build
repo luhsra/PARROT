@@ -261,11 +261,10 @@ endif
 
 if build_infinitime
   infinitime_gllvm = subproject('infinitime-gllvm')
-  pinetime_app = infinitime_gllvm.get_variable('pinetime_app')
   infinitime = {
     'name': 'InfiniTime',
     'os': 'FreeRTOS',
-    'll': infinitime_gllvm.get_variable('pinetime_app'),
+    'll': infinitime_gllvm.get_variable('infinitime_app'),
     'sia_settings': files('settings' / 'sia_infinitime.json')[0],
     'freertos_config': infinitime_gllvm.get_variable('freertos_config'),
     'summary_section': 'InfiniTime (FreeRTOS)',
