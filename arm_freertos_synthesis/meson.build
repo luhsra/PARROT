@@ -41,6 +41,8 @@ clang_c = toolchains.get_variable('clang_c_cmd')
 clang_cpp = toolchains.get_variable('clang_cpp_cmd')
 ir_flags = toolchains.get_variable('ir_flags')
 
+freertos_includes += ['-I', toolchains.get_variable('arm_include_path')]
+
 ## libsra
 ara_libsra = subproject('ara-libsra')
 libsra_ar = ara_libsra.get_variable('libsra_ar')
