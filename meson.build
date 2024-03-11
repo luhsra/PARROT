@@ -295,39 +295,59 @@ if build_ironos
 endif
 
 if build_i4copter
-  i4copter_code = ara_proj.get_variable('autosar_singlecore_complex_isorc')
+  copters = [
+    {'name': 'i4copter', 'code': ara_proj.get_variable('autosar_singlecore_complex_isorc')},
+    {'name': 'i4copter-mc', 'code': ara_proj.get_variable('autosar_multicore_complex_copter_with_alarms')},
+  ]
 
-  if meson.version().version_compare('>=1.4.0')
-    error('Please remove the horrible hack below and use the "i4copter_code[\'oil\'].full_path()" directly.')
-  endif
-  oilfile = fs.copyfile(i4copter_code['oil'], 'copter.oil.json')
-  conf_data = configuration_data()
-  conf_data.set('oil_file', oilfile.full_path())
-  ina_settings = configure_file(input : files('settings' / 'ina_i4copter.json.in'),
-                                output : 'ina_i4copter.json',
-                                configuration : conf_data)
-  sse_settings = configure_file(input : files('settings' / 'sse_i4copter.json.in'),
-                                output : 'sse_i4copter.json',
-                                configuration : conf_data)
-  i4copter = {
-    'name': 'i4copter',
-    'os': 'AUTOSAR',
-    'll': i4copter_code['ll'],
-    'ina_settings': ina_settings,
-    'summary_section': 'i4copter (AUTOSAR)',
-  }
-  all_lls += [i4copter['ll']]
-  ina_targets += [i4copter]
+  foreach copter : copters
+    if meson.version().version_compare('>=1.4.0')
+      error('Please remove the horrible hack below and use the "i4copter_code[\'oil\'].full_path()" directly.')
+    endif
+    oilfile = fs.copyfile(copter['code']['oil'], copter['name'] + '.oil.json')
+    conf_data = configuration_data()
+    conf_data.set('oil_file', oilfile.full_path())
+    ina_settings = configure_file(input : files('settings' / 'ina_i4copter.json.in'),
+                                  output : 'ina_' + copter['name'].underscorify() + '.json',
+                                  configuration : conf_data)
+    app = {
+      'name': copter['name'],
+      'os': 'AUTOSAR',
+      'll': copter['code']['ll'],
+      'ina_settings': ina_settings,
+      'summary_section': 'i4copter (AUTOSAR)',
+    }
+    all_lls += [app['ll']]
+    ina_targets += [app]
 
-  run_sse = 'sse-' + i4copter['name'].to_lower()
-  run_target(run_sse,
-    depends: oilfile,
-    command: [
-      py3_inst, ara, i4copter['ll'],
-      '--os', i4copter['os'],
-      '--log-level', 'info',
-      '--step-settings', sse_settings])
-  summary('Run SSE on ' + i4copter['name'], 'meson compile ' + run_sse, section: i4copter['summary_section'])
+    multisse_settings = configure_file(input : files('settings' / 'multisse_i4copter.json.in'),
+                                       output : 'multisse_' + copter['name'].underscorify() + '.json',
+                                       configuration : conf_data)
+    run_multisse = 'multisse-' + app['name'].to_lower()
+    run_target(run_multisse,
+      depends: oilfile,
+      command: [
+        py3_inst, ara, app['ll'],
+        '--os', app['os'],
+        '--log-level', 'info',
+        '--step-settings', multisse_settings])
+    summary('Run MultiSSE on ' + app['name'], 'meson compile ' + run_multisse, section: app['summary_section'])
+
+    if copter['code']['core'] == 'singlecore'
+      sse_settings = configure_file(input : files('settings' / 'sse_i4copter.json.in'),
+                                    output : 'sse_' + copter['name'].underscorify() + '.json',
+                                    configuration : conf_data)
+      run_sse = 'sse-' + app['name'].to_lower()
+      run_target(run_sse,
+        depends: oilfile,
+        command: [
+          py3_inst, ara, app['ll'],
+          '--os', app['os'],
+          '--log-level', 'info',
+          '--step-settings', sse_settings])
+      summary('Run SSE on ' + app['name'], 'meson compile ' + run_sse, section: app['summary_section'])
+    endif
+  endforeach
 endif
 
 if build_zephyr
