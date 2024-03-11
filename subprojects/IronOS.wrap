@@ -1,4 +1,5 @@
 [wrap-git]
 url = git@scm.sra.uni-hannover.de:misc/IronOS.git
-revision = meson
+revision = ara
 depth = 1
+clone-recursive = true
