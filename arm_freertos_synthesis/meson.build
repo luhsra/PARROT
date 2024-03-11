@@ -62,6 +62,7 @@ libplatform_linkerscript_fixed = fs.copyfile(libplatform_linkerscript, 'libplatf
 foreach app : arm_freertos_apps
   app_name = app['name']
   app_low = app_name.to_lower()
+  all_lls += [app['ll']]
 
   combined_cflags = ir_flags + clang_flags + arm_clang_flags + arm_ld_flags + app['cflags']
   named_elf_targets = []

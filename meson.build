@@ -28,6 +28,8 @@ if py3_inst.language_version().version_compare('<3.10')
   error('At least Python 3.10 is required.')
 endif
 
+nop = [py3_inst, '-c', 'pass']
+
 toolchains = subproject('toolchains')
 arm_enabled = toolchains.get_variable('arm_enabled')
 posix_enabled = toolchains.get_variable('posix_enabled')
@@ -207,6 +209,7 @@ subdir('experiments')
 arm_freertos_apps = []
 sia_targets = []
 ina_targets = []
+all_lls = []
 
 # collect apps
 if build_gpslogger
@@ -221,6 +224,7 @@ if build_gpslogger
     'freertos_config': gpslogger_proj.get_variable('freertos_config'),
     'summary_section': 'GPSLogger (FreeRTOS)',
   }
+  all_lls += [gpslogger['ll']]
   arm_freertos_apps += [gpslogger]
   sia_targets += [gpslogger]
   ina_targets += [gpslogger]
@@ -254,6 +258,7 @@ if build_librepilot
     'freertos_config': librepilot_proj.get_variable('freertos_config'),
     'summary_section': 'LibrePilot (FreeRTOS)',
   }
+  all_lls += [librepilot['ll']]
   arm_freertos_apps += [librepilot]
   sia_targets += [librepilot]
   ina_targets += [librepilot]
@@ -269,6 +274,7 @@ if build_infinitime
     'freertos_config': infinitime_gllvm.get_variable('freertos_config'),
     'summary_section': 'InfiniTime (FreeRTOS)',
   }
+  all_lls += [infinitime['ll']]
   sia_targets += [infinitime]
 endif
 
@@ -294,6 +300,7 @@ if build_i4copter
     'ina_settings': ina_settings,
     'summary_section': 'i4copter (AUTOSAR)',
   }
+  all_lls += [i4copter['ll']]
   ina_targets += [i4copter]
 
   run_sse = 'sse-' + i4copter['name'].to_lower()
@@ -346,6 +353,7 @@ if build_zephyr
         'ina_settings': ina_settings,
         'summary_section': 'ARA Zephyr Apps',
       }
+      all_lls += [app_code['ll']]
       sia_targets += [zephyr_app]
       ina_targets += [zephyr_app]
     endforeach
@@ -364,6 +372,7 @@ if build_posix_apps
       'ina_settings': files('settings' / 'ina_posix.json')[0],
       'summary_section': 'ARA POSIX Apps',
     }
+    all_lls += [app['ll']]
     sia_targets += [posix_app]
     ina_targets += [posix_app]
   endforeach
@@ -397,6 +406,16 @@ foreach app : ina_targets
       '--step-settings', app['ina_settings']])
   summary('Run INA on ' + app['name'], 'meson compile ' + run_ina, section: app['summary_section'])
 endforeach
+
+if meson.version().version_compare('>=1.4.0')
+  error('Delete the version check. It depends on https://github.com/mesonbuild/meson/pull/12956.')
+  build_all_lls = 'build-all-lls'
+  run_target(build_all_lls,
+    command: nop,
+    depends: all_lls,
+  )
+  summary('Build all application to LLVM IR', 'meson compile ' + build_all_lls, section: app['summary_section'])
+endif
 
 # if build_librepilot
 #   librepilot_proj = subproject('librepilot', required: get_option('build_librepilot'))
