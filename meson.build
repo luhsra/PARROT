@@ -49,6 +49,7 @@ build_i4copter = get_option('build_i4copter')
 build_zephyr = get_option('build_zephyr')
 build_posix_apps = get_option('build_posix_apps')
 build_libmicrohttpd = get_option('build_libmicrohttpd')
+build_ironos = get_option('build_ironos')
 
 summary({
   'LibrePilot (build_librepilot)': build_librepilot,
@@ -58,6 +59,7 @@ summary({
   'sys_kernel/app_kernel (build_zephyr)': build_zephyr,
   'POSIX applications (build_posix_apps)': build_posix_apps,
   'Including libmicrohttpd (build_libmicrohttpd)': build_libmicrohttpd,
+  'IronOS (build_ironos)': build_ironos,
 }, bool_yn: true, section: 'Wanted applications')
 
 subdir('tools')
@@ -276,6 +278,20 @@ if build_infinitime
   }
   all_lls += [infinitime['ll']]
   sia_targets += [infinitime]
+endif
+
+if build_ironos
+  ironos_source = subproject('IronOS')
+  ironos = {
+    'name': 'IronOS',
+    'os': 'FreeRTOS',
+    'll': ironos_source.get_variable('ironos_bc'),
+    'sia_settings': files('settings' / 'sia_ironos.json')[0],
+    'freertos_config': ironos_source.get_variable('freertos_config'),
+    'summary_section': 'IronOS (FreeRTOS)',
+  }
+  all_lls += [ironos['ll']]
+  sia_targets += [ironos]
 endif
 
 if build_i4copter
