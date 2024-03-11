@@ -89,16 +89,17 @@ class SiaRuntimeExperiment(Experiment):
             "--os", app_os,
             "--step-settings", str(step_data.absolute())] + extra_config
         print(cmd)
-        with timer:
-            subprocess.run(cmd, check=False)
-        with open(cur_dir / 'ARA.-.runtime_stats.json') as stats_file:
-            sia_time = 0
-            for step in json.load(stats_file):
-                if step[0] == "SIA":
-                    sia_time += step[2]
-            self.outputs.results[app_name][str(mode)]['sia_runtime'] = sia_time
+        for i in range(10):
+            with timer:
+                subprocess.run(cmd, check=True)
+            with open(cur_dir / 'ARA.-.runtime_stats.json') as stats_file:
+                sia_time = 0
+                for step in json.load(stats_file):
+                    if step[0] == "SIA":
+                        sia_time += step[2]
+                self.outputs.results[app_name][str(mode)]['sia_runtime'][i] = sia_time
 
-        self.outputs.results[app_name][str(mode)]['ara_runtime'] = timer.get_time()
+            self.outputs.results[app_name][str(mode)]['ara_runtime'][i] = timer.get_time()
 
     def run(self):
         self.outputs.results['metadata']['cmdline'] = 'meson compile ' + self.title
