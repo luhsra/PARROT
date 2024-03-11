@@ -1,6 +1,7 @@
 # experiments
 GenericTimingExperiment = files('GenericTimingExperiment.py')
 ShowGenericTimingExperiment = files('make_figures.py')
+sia_runtime_experiment = files('sia_runtime.py')
 
 # # run_sia_runtime
 # sia_runtime_experiments = []

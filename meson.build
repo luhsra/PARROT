@@ -433,6 +433,34 @@ if meson.version().version_compare('>=1.4.0')
   summary('Build all application to LLVM IR', 'meson compile ' + build_all_lls, section: app['summary_section'])
 endif
 
+# experiments
+sia_runtime_apps = []
+sia_runtime_deps = []
+foreach app : sia_targets
+  sia_runtime_apps += [
+    '--applications',
+    '{"name": "@0@", "ll": "@1@", "os": "@2@", "settings": "@3@"}'.format(
+      app['name'],
+      app['ll'].full_path(),
+      app['os'],
+      app['sia_settings'], # TODO: full_path() with Meson 1.4.0
+    )
+  ]
+  sia_runtime_deps += [app['ll']]
+endforeach
+run_sia_runtime = 'run-sia-runtime'
+message(sia_runtime_apps)
+run_target(run_sia_runtime,
+  command: [
+    py3_inst, sia_runtime_experiment,
+    '--work-dir', meson.current_build_dir(),
+    '--title', run_sia_runtime,
+    '--result_dir', meson.current_build_dir(),
+    '--python', py3_inst,
+    '--ara', ara.full_path()] + sia_runtime_apps,
+  depends: [ara] + sia_runtime_deps)
+summary('Measure SIA runtime in all modes', 'meson compile ' + run_sia_runtime, section: 'experiments')
+
 # if build_librepilot
 #   librepilot_proj = subproject('librepilot', required: get_option('build_librepilot'))
 #

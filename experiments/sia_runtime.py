@@ -11,7 +11,7 @@ from pathlib import Path
 from versuchung.experiment import Experiment
 from versuchung.types import String, List
 from versuchung.files import Directory
-from versuchung.tex import DatarefDict
+from versuchung.tex import LuaTable
 
 ARA_CONFIG = {
     "steps": ["SIA"],
@@ -45,7 +45,7 @@ class SiaRuntimeExperiment(Experiment):
         ),
     }
     outputs = {
-        "results": DatarefDict(filename="sia-runtime.dref"),
+        "results": LuaTable(filename="sia-runtime.lua", experiment_name="experiments.sia_runtime"),
     }
 
     def __init__(self, *args, python=None, run_dir=None, title=None, cwd=None, **kwargs):
@@ -96,11 +96,12 @@ class SiaRuntimeExperiment(Experiment):
             for step in json.load(stats_file):
                 if step[0] == "SIA":
                     sia_time += step[2]
-            self.outputs.results[f"{app_name}/{mode}/sia_runtime"] = sia_time
+            self.outputs.results[app_name][str(mode)]['sia_runtime'] = sia_time
 
-        self.outputs.results[f"{app_name}/{mode}/ara_runtime"] = timer.get_time()
+        self.outputs.results[app_name][str(mode)]['ara_runtime'] = timer.get_time()
 
     def run(self):
+        self.outputs.results['metadata']['cmdline'] = 'meson compile ' + self.title
         for application_info in self.inputs.applications:
             for mode in self.inputs.modes:
                 self.run_sia(application_info, mode)
