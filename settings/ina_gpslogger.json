@@ -1,11 +1,13 @@
 {
 	"steps": [
-        "InteractionAnalysis"
-    ],
+		"InteractionAnalysis",
+		"DumpInstances",
+		"DumpCFG"
+	],
 
-    "InteractionAnalysis": {
-        "dump": true
-    },
+	"InteractionAnalysis": {
+		"dump": true
+	},
 
 	"logger": {
 		"StepManager": "info",

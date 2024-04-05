@@ -2,7 +2,8 @@
 	"steps": [
 		"SIA",
 		"DumpCFG",
-		"DumpInstances"
+		"DumpInstances",
+		"DumpCallgraph"
 	],
 
 	"SIA": {

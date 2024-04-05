@@ -1,6 +1,8 @@
 {
 	"steps": [
-		"InteractionAnalysis"
+		"InteractionAnalysis",
+		"DumpCFG",
+		"DumpInstances"
 	],
 
 	"InteractionAnalysis": {
