@@ -289,6 +289,7 @@ if build_ironos
     'sia_settings': files('settings' / 'sia_ironos.json')[0],
     'freertos_config': ironos_source.get_variable('freertos_config'),
     'summary_section': 'IronOS (FreeRTOS)',
+    'va_corrections': ironos_source.get_variable('va_corrections')
   }
   all_lls += [ironos['ll']]
   sia_targets += [ironos]
@@ -415,24 +416,34 @@ endif
 
 # sia targets
 foreach app : sia_targets
+  corrections = files('settings' / 'no_corrections.json')[0]
+  if 'va_corrections' in app
+    corrections = app['va_corrections']
+  endif
   run_sia = 'sia-' + app['name'].to_lower()
   run_target(run_sia,
     command: [
       py3_inst, ara, app['ll'],
       '--os', app['os'],
       '--log-level', 'info',
+      '--va-corrections', corrections.full_path(),
       '--step-settings', app['sia_settings']])
   summary('Run SIA on ' + app['name'], 'meson compile ' + run_sia, section: app['summary_section'])
 endforeach
 
 # ina targets
 foreach app : ina_targets
+  corrections = files('settings' / 'no_corrections.json')[0]
+  if 'va_corrections' in app
+    corrections = app['va_corrections']
+  endif
   run_ina = 'ina-' + app['name'].to_lower()
   run_target(run_ina,
     command: [
       py3_inst, ara, app['ll'],
       '--os', app['os'],
       '--log-level', 'info',
+      '--va-corrections', corrections.full_path(),
       '--step-settings', app['ina_settings']])
   summary('Run INA on ' + app['name'], 'meson compile ' + run_ina, section: app['summary_section'])
 endforeach
