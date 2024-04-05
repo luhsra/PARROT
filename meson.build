@@ -437,8 +437,9 @@ foreach app : ina_targets
   summary('Run INA on ' + app['name'], 'meson compile ' + run_ina, section: app['summary_section'])
 endforeach
 
-if meson.version().version_compare('>=1.4.0')
-  error('Delete the version check. It depends on https://github.com/mesonbuild/meson/pull/12956.')
+if meson.version().version_compare('>=1.5.0')
+  # Only possible with https://github.com/mesonbuild/meson/pull/12956
+  warning('You may want to remove the version check.')
   build_all_lls = 'build-all-lls'
   run_target(build_all_lls,
     command: nop,
