@@ -238,7 +238,7 @@ if build_librepilot
   librepilot_corrections = librepilot_proj.get_variable('instance_corrections')
 
   conf_data = configuration_data()
-  conf_data.set('translation_map', librepilot_translation_map)
+  conf_data.set('translation_map', librepilot_translation_map.full_path())
   sia_settings = configure_file(input : files('settings' / 'sia_librepilot.json.in'),
                                 output : 'sia_librepilot.json',
                                 configuration : conf_data)
@@ -301,12 +301,8 @@ if build_i4copter
   ]
 
   foreach copter : copters
-    if meson.version().version_compare('>=1.4.0')
-      error('Please remove the horrible hack below and use the "i4copter_code[\'oil\'].full_path()" directly.')
-    endif
-    oilfile = fs.copyfile(copter['code']['oil'], copter['name'] + '.oil.json')
     conf_data = configuration_data()
-    conf_data.set('oil_file', oilfile.full_path())
+    conf_data.set('oil_file', copter['code']['oil'].full_path())
     ina_settings = configure_file(input : files('settings' / 'ina_i4copter.json.in'),
                                   output : 'ina_' + copter['name'].underscorify() + '.json',
                                   configuration : conf_data)
@@ -325,7 +321,6 @@ if build_i4copter
                                        configuration : conf_data)
     run_multisse = 'multisse-' + app['name'].to_lower()
     run_target(run_multisse,
-      depends: oilfile,
       command: [
         py3_inst, ara, app['ll'],
         '--os', app['os'],
@@ -339,7 +334,6 @@ if build_i4copter
                                     configuration : conf_data)
       run_sse = 'sse-' + app['name'].to_lower()
       run_target(run_sse,
-        depends: oilfile,
         command: [
           py3_inst, ara, app['ll'],
           '--os', app['os'],
@@ -463,7 +457,7 @@ foreach app : sia_targets
       app['name'],
       app['ll'].full_path(),
       app['os'],
-      app['sia_settings'], # TODO: full_path() with Meson 1.4.0
+      app['sia_settings'].full_path(),
     )
   ]
   sia_runtime_deps += [app['ll']]
