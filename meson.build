@@ -347,7 +347,7 @@ endif
 
 if build_zephyr
   ara_zephyr_apps = subproject('ara-zephyr-apps')
-  foreach app : ['sys_kernel', 'app_kernel']
+  foreach app : ara_zephyr_apps.get_variable('zephyr_apps')
     arch_variants = []
     if posix_enabled
       arch_variants += [{
@@ -370,10 +370,10 @@ if build_zephyr
 
       conf_data = configuration_data()
       conf_data.set('kconfig_file', app_code['config'].full_path())
-      sia_settings = configure_file(input : files('settings' / f'sia_@app@.json.in'),
+      sia_settings = configure_file(input : files('settings' / f'sia_zephyr.json.in'),
                                     output : f'sia_@name@.json',
                                     configuration : conf_data)
-      ina_settings = configure_file(input : files('settings' / f'ina_@app@.json.in'),
+      ina_settings = configure_file(input : files('settings' / f'ina_zephyr.json.in'),
                                     output : f'ina_@name@.json',
                                     configuration : conf_data)
       zephyr_app = {
