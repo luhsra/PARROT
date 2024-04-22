@@ -5,18 +5,17 @@ This is a meta repository for all that is needed for ARA
 
 ## Start the building process.
 
-### On Gentoo
+The binaries and toolchain locations are managed by native files.
 
-Create a file `native.txt`:
 ```
 [binaries]
 llvm-config = '/usr/lib/llvm/14/bin/llvm-config'
 python = '/usr/bin/python3.12'
 ```
 
-Create a Meson build directory:
+Create a Meson build directory, e.g. on Debian with
 ```
-meson setup build -D toolchains:arm_libs=/usr/arm-none-eabi --native-file native.txt
+meson setup build --native-file native-debian.ini
 ```
 
 Meson reports you about possible targets then.
