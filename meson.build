@@ -268,11 +268,16 @@ endif
 
 if build_infinitime
   infinitime_gllvm = subproject('infinitime-gllvm')
+  conf_data = configuration_data()
+  conf_data.set('translation_map', infinitime_gllvm.get_variable('translation_map').full_path())
+  sia_settings = configure_file(input : files('settings' / 'sia_infinitime.json.in'),
+                                output : 'sia_infinitime.json',
+                                configuration : conf_data)
   infinitime = {
     'name': 'InfiniTime',
     'os': 'FreeRTOS',
     'll': infinitime_gllvm.get_variable('infinitime_app'),
-    'sia_settings': files('settings' / 'sia_infinitime.json')[0],
+    'sia_settings': sia_settings,
     'freertos_config': infinitime_gllvm.get_variable('freertos_config'),
     'summary_section': 'InfiniTime (FreeRTOS)',
   }
@@ -287,12 +292,14 @@ if build_ironos
     'os': 'FreeRTOS',
     'll': ironos_source.get_variable('ironos_bc'),
     'sia_settings': files('settings' / 'sia_ironos.json')[0],
+    'ina_settings': files('settings' / 'ina_ironos.json')[0],
     'freertos_config': ironos_source.get_variable('freertos_config'),
     'summary_section': 'IronOS (FreeRTOS)',
     'va_corrections': ironos_source.get_variable('va_corrections')
   }
   all_lls += [ironos['ll']]
   sia_targets += [ironos]
+  ina_targets += [ironos]
 endif
 
 if build_i4copter
@@ -426,6 +433,7 @@ foreach app : sia_targets
       py3_inst, ara, app['ll'],
       '--os', app['os'],
       '--log-level', 'info',
+      '--with-stubs',
       '--va-corrections', corrections.full_path(),
       '--step-settings', app['sia_settings']])
   summary('Run SIA on ' + app['name'], 'meson compile ' + run_sia, section: app['summary_section'])

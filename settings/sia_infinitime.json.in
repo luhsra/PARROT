@@ -1,0 +1,29 @@
+{
+	"steps": [
+		"SIA",
+		"DumpCFG",
+		"DumpCallgraph",
+		"DumpInstances"
+	],
+
+	"SIA": {
+		"dump": true,
+		"log_level": "debug"
+	},
+
+	"ResolveFunctionPointer": {
+		"block_list": "[ \"main\" ]",
+		"translation_map": "@translation_map@"
+	},
+
+	"ICFG": {
+		"log_level": "debug"
+	},
+
+	"logger": {
+		"StepManager": "info",
+		"FreeRTOS": "debug",
+		"ara": "info",
+		"ValueAnalyzer": "debug"
+	}
+}
