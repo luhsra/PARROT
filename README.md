@@ -7,27 +7,31 @@ This is a meta repository for all that is needed for ARA
 
 The binaries and toolchain locations are managed by native files.
 
-```
+```ini
 [binaries]
 llvm-config = '/usr/lib/llvm/14/bin/llvm-config'
 python = '/usr/bin/python3.12'
 ```
 
-Create a Meson build directory, e.g. on Debian with
-```
+To build the project:
+
+``` bash
+# Create a Meson build directory, e.g. on Debian and Meson reports possible targets then.
 meson setup build --native-file native-debian.ini
+
+# Updating meson subprojects (ARA, toolchains, etc.)
+meson subprojects update --reset
+
+# building everything
+cd build
+meson compile
 ```
 
-Meson reports you about possible targets then.
+## Docker
 
-Dependencies (not complete):
-```
-sys-devel/llvm:14[LLVM_TARGETS="ARM RISCV X86"]
-sys-devel/clang:14[LLVM_TARGETS="ARM RISCV X86"]
-sys-devel/lld:14[LLVM_TARGETS="ARM RISCV X86"]
-cross-arm-none-eabi/gcc
-sys-devel/gcc
-dev-build/meson
-dev-build/cmake
-dev-python/pip
-sys-apps/dtc
+All build dependencies including clang, toolchains etc. are preinstalled in the Docker file.
+
+```bash
+cd Docker
+docker build -t parrot
+./run_docker.sh
