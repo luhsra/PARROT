@@ -1,0 +1,11 @@
+build:
+  tags: ["test"]
+  image: scm.sra.uni-hannover.de:5050/research/parrot
+  interruptible: true
+  only: [main, citest]
+  script:
+    - export GIT_CONFIG_GLOBAL=$PWD/ci_gitconfig
+    - git config --global --add url."https://gitlab-ci-token:${CI_JOB_TOKEN}@${CI_SERVER_HOST}/".insteadOf "ssh://git@scm.sra.uni-hannover.de"
+    - git config --global --add url."https://gitlab-ci-token:${CI_JOB_TOKEN}@${CI_SERVER_HOST}/".insteadOf "https://scm.sra.uni-hannover.de"
+    - meson setup build --native-file native-debian.ini
+    - cd build && meson compile
