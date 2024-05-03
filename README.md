@@ -23,7 +23,7 @@ meson setup build --native-file native-debian.ini
 meson subprojects update --reset
 
 # You want to deactivate some applications with
-meson setup build --native-file native-debian.ini -Dbuild_gpslogger=no -Dbuild_librepilot=no -Dbuild_zephyr=no -Dbuild_ironos=no -Dbuild_infinitime=no -Dbuild_i4copter=no -Dbuild_posix_apps=no -Dbuild_libmicrohttpd=no
+meson setup build --native-file native-debian.ini -Dbuild_gpslogger=false -Dbuild_librepilot=false -Dbuild_zephyr=false -Dbuild_ironos=false -Dbuild_infinitime=false -Dbuild_i4copter=false -Dbuild_posix_apps=false -Dbuild_libmicrohttpd=false
 
 # If you want to change meson options in an already configured directory, use
 meson configure ...
