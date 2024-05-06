@@ -8,7 +8,7 @@
 export uid=$(id -u)
 export gid=$(id -g)
 
-# create docker container: docker build -t parrot .
+# create docker container: docker build -t scm.sra.uni-hannover.de:5050/research/parrot .
 
 docker run --rm -it \
 	--user $uid:$gid  \
@@ -19,4 +19,4 @@ docker run --rm -it \
 	--volume "/etc/shadow:/etc/shadow:ro"\
 	--volume "$HOME:$HOME:rw" \
 	--name parrot-dev \
-	parrot
+	scm.sra.uni-hannover.de:5050/research/parrot

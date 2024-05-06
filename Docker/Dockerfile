@@ -14,7 +14,7 @@ ENV CPATH=/usr/lib/python3/dist-packages/graph_tool/include
 ENV GOBIN=/usr/local/bin/
 
 RUN apt update && apt-get install -y\
-	clang-14 clang-format-14 llvm-14-dev lld-14\
+	clang clang-14 clang-format-14 llvm-14-dev lld-14\
 	python3 python3-pip tmux build-essential ninja-build git\
 	binutils-arm-none-eabi libnewlib-arm-none-eabi libstdc++-arm-none-eabi-newlib\
 	binutils-riscv64-unknown-elf gcc-riscv64-unknown-elf libstdc++-12-dev-riscv64-cross\
@@ -28,7 +28,7 @@ RUN apt update && apt-get install -y\
 RUN	rm /usr/lib/python3.11/EXTERNALLY-MANAGED
 
 # meson version in debian is too old
-RUN pip3 install meson>=1.4.0 versuchung
+RUN pip3 install meson versuchung
 
 # gllvm must be installed via go package manager
 RUN go install github.com/SRI-CSL/gllvm/cmd/...@master
