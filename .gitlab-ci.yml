@@ -1,5 +1,5 @@
 build:
-  tags: ["test"]
+  tags: ["sra.labor"]
   image: scm.sra.uni-hannover.de:5050/research/parrot
   interruptible: true
   only: [main, citest]
