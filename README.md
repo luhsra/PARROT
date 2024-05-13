@@ -13,6 +13,12 @@ llvm-config = '/usr/lib/llvm/14/bin/llvm-config'
 python = '/usr/bin/python3.12'
 ```
 
+To use your own LLVM-Build you need these following flags for cmake for building LLVM:
+
+```
+-DLLVM_ENABLE_PROJECTS="clang;lld" -DLLVM_BUILD_LLVM_DYLIB=ON -DLLVM_LINK_LLVM_DYLIB=ON
+```
+
 To build the project:
 
 ``` bash
