@@ -8,4 +8,7 @@ build:
     - git config --global --add url."https://gitlab-ci-token:${CI_JOB_TOKEN}@${CI_SERVER_HOST}/".insteadOf "ssh://git@scm.sra.uni-hannover.de"
     - git config --global --add url."https://gitlab-ci-token:${CI_JOB_TOKEN}@${CI_SERVER_HOST}/".insteadOf "https://scm.sra.uni-hannover.de"
     - meson setup build --native-file native-debian.ini
-    - cd build && meson compile
+    - cd build && meson compile |& tee build.log
+  artifacts:
+    paths:
+      - build/build.log
