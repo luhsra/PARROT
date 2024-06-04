@@ -33,4 +33,6 @@ RUN pip3 install meson versuchung
 # gllvm must be installed via go package manager
 RUN go install github.com/SRI-CSL/gllvm/cmd/...@master
 
+RUN apt update && apt-get install -qq python3-graph-tool -t bookworm-backports
+
 CMD ["bash"]
