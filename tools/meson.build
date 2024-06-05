@@ -9,13 +9,3 @@ else
   qemu_cmd = disabler()
   gdb_qemu_cmd = disabler()
 endif
-
-# gcc_version = files('gcc_version.py') # drop, when https://github.com/mesonbuild/meson/issues/7166 is resolved
-# get_environment_var = files('get_environment_var.py')
-#
-# if get_option('arch') == 'arm'
-# else
-#   qemu_cmd = disabler()
-#   gdb_qemu_cmd = disabler()
-# endif
-#
