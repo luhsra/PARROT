@@ -207,6 +207,7 @@ if build_i4copter
 endif
 
 if build_zephyr
+  zephyr_test_apps = []
   ara_zephyr_apps = subproject('ara-zephyr-apps')
   foreach app : ara_zephyr_apps.get_variable('zephyr_apps')
     arch_variants = []
@@ -248,8 +249,12 @@ if build_zephyr
       all_lls += [app_code['ll']]
       sia_targets += [zephyr_app]
       ina_targets += [zephyr_app]
+      zephyr_test_apps += [zephyr_app]
     endforeach
   endforeach
+  if get_option('execute_ara')
+    subdir('test/Zephyr')
+  endif
 endif
 
 if build_posix_apps
