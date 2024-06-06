@@ -36,8 +36,8 @@
     "stack_size": 1024
   },
   {
-    "label": "Mutex",
-    "id": "guard",
+    "label": "Queue",
+    "id": "q1",
     "branch": 0,
     "usually_taken": 0,
     "loop": 0,
@@ -45,31 +45,34 @@
     "after_scheduler": 0,
     "unique": 1,
     "is_control": 0,
-    "file": "../../ara-zephyr-apps/appl/static_msgq/src/main.c",
-    "line": 12,
+    "file": "../../ara-zephyr-apps/appl/OSPERT_2022/src/main.c",
+    "line": 32,
     "specialization_level": "",
     "type": "instance"
   },
   {
-    "label": "MSGQ",
-    "id": "work",
+    "label": "Thread",
+    "id": "t1",
     "branch": 0,
     "usually_taken": 0,
     "loop": 0,
     "recursive": 0,
     "after_scheduler": 0,
     "unique": 1,
-    "is_control": 0,
-    "file": "../../ara-zephyr-apps/appl/static_msgq/src/main.c",
-    "line": 11,
+    "is_control": 1,
+    "file": "../../ara-zephyr-apps/appl/OSPERT_2022/src/main.c",
+    "line": 45,
     "specialization_level": "",
     "type": "instance",
-    "max_msgs": 256,
-    "msg_size": 4
+    "delay": 0,
+    "entry_name": "t1_action",
+    "options": 0,
+    "priority": 1,
+    "stack_size": 1024
   },
   {
     "label": "Thread",
-    "id": "worker",
+    "id": "t2",
     "branch": 0,
     "usually_taken": 0,
     "loop": 0,
@@ -77,62 +80,32 @@
     "after_scheduler": 1,
     "unique": 1,
     "is_control": 1,
-    "file": "../../ara-zephyr-apps/appl/static_msgq/src/main.c",
-    "line": 27,
+    "file": "../../ara-zephyr-apps/appl/OSPERT_2022/src/main.c",
+    "line": 49,
     "specialization_level": "",
     "type": "instance",
-    "delay": "<unknown>",
-    "entry_name": "do_work",
+    "delay": "@unknown@",
+    "entry_name": "t2_action",
     "options": 0,
-    "priority": 1,
+    "priority": 2,
     "stack_size": 1024
   },
   {
     "source": "__main",
-    "target": "worker",
+    "target": "t2",
     "label": "k_thread_create",
     "type": "create"
   },
   {
-    "source": "worker",
-    "target": "work",
-    "label": "k_msgq_get",
+    "source": "t1",
+    "target": "q1",
+    "label": "k_queue_append",
     "type": "interaction"
   },
   {
-    "source": "worker",
-    "target": "work",
-    "label": "k_msgq_num_used_get",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "work",
-    "label": "k_msgq_put",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "guard",
-    "label": "k_mutex_lock",
-    "type": "interaction"
-  },
-  {
-    "source": "worker",
-    "target": "guard",
-    "label": "k_mutex_lock",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "guard",
-    "label": "k_mutex_unlock",
-    "type": "interaction"
-  },
-  {
-    "source": "worker",
-    "target": "guard",
-    "label": "k_mutex_unlock",
+    "source": "t2",
+    "target": "q1",
+    "label": "k_queue_get",
     "type": "interaction"
   }
 ]

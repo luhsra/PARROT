@@ -13,7 +13,7 @@
     "line": 0,
     "specialization_level": "",
     "type": "instance",
-    "heap_size": 0
+    "heap_size": 4096
   },
   {
     "label": "Thread",
@@ -66,7 +66,7 @@
     "unique": 1,
     "is_control": 0,
     "file": "../../ara-zephyr-apps/appl/dyn_pipe/src/main.c",
-    "line": 30,
+    "line": 31,
     "specialization_level": "",
     "type": "instance",
     "size": 256
@@ -76,6 +76,12 @@
     "target": "work",
     "label": "k_pipe_alloc_init",
     "type": "create"
+  },
+  {
+    "source": "__main",
+    "target": "__main",
+    "label": "k_current_get",
+    "type": "interaction"
   },
   {
     "source": "thread_a",

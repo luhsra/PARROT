@@ -118,7 +118,7 @@
     "line": 45,
     "specialization_level": "",
     "type": "instance",
-    "delay": "<unknown>",
+    "delay": "@unknown@",
     "entry_name": "do_work",
     "options": 0,
     "priority": 1,

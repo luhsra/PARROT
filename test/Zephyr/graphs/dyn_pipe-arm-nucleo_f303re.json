@@ -13,7 +13,7 @@
     "line": 0,
     "specialization_level": "",
     "type": "instance",
-    "heap_size": 0
+    "heap_size": 4096
   },
   {
     "label": "Thread",
@@ -36,23 +36,8 @@
     "stack_size": 1024
   },
   {
-    "label": "Queue",
-    "id": "q1",
-    "branch": 0,
-    "usually_taken": 0,
-    "loop": 0,
-    "recursive": 0,
-    "after_scheduler": 0,
-    "unique": 1,
-    "is_control": 0,
-    "file": "../../ara-zephyr-apps/appl/OSPERT_2022/src/main.c",
-    "line": 32,
-    "specialization_level": "",
-    "type": "instance"
-  },
-  {
     "label": "Thread",
-    "id": "t1",
+    "id": "thread_a",
     "branch": 0,
     "usually_taken": 0,
     "loop": 0,
@@ -60,52 +45,54 @@
     "after_scheduler": 0,
     "unique": 1,
     "is_control": 1,
-    "file": "../../ara-zephyr-apps/appl/OSPERT_2022/src/main.c",
-    "line": 45,
+    "file": "../../ara-zephyr-apps/appl/dyn_pipe/src/main.c",
+    "line": 26,
     "specialization_level": "",
     "type": "instance",
     "delay": 0,
-    "entry_name": "t1_action",
+    "entry_name": "do_stuff",
     "options": 0,
-    "priority": 1,
+    "priority": 7,
     "stack_size": 1024
   },
   {
-    "label": "Thread",
-    "id": "t2",
+    "label": "Pipe",
+    "id": "work",
     "branch": 0,
     "usually_taken": 0,
     "loop": 0,
     "recursive": 0,
     "after_scheduler": 1,
     "unique": 1,
-    "is_control": 1,
-    "file": "../../ara-zephyr-apps/appl/OSPERT_2022/src/main.c",
-    "line": 49,
+    "is_control": 0,
+    "file": "../../ara-zephyr-apps/appl/dyn_pipe/src/main.c",
+    "line": 31,
     "specialization_level": "",
     "type": "instance",
-    "delay": "<unknown>",
-    "entry_name": "t2_action",
-    "options": 0,
-    "priority": 2,
-    "stack_size": 1024
+    "size": 256
   },
   {
     "source": "__main",
-    "target": "t2",
-    "label": "k_thread_create",
+    "target": "work",
+    "label": "k_pipe_alloc_init",
     "type": "create"
   },
   {
-    "source": "t1",
-    "target": "q1",
-    "label": "k_queue_append",
+    "source": "__main",
+    "target": "__main",
+    "label": "k_current_get",
     "type": "interaction"
   },
   {
-    "source": "t2",
-    "target": "q1",
-    "label": "k_queue_get",
+    "source": "thread_a",
+    "target": "work",
+    "label": "k_pipe_get",
+    "type": "interaction"
+  },
+  {
+    "source": "__main",
+    "target": "work",
+    "label": "k_pipe_put",
     "type": "interaction"
   }
 ]

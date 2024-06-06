@@ -13,7 +13,7 @@
     "line": 0,
     "specialization_level": "",
     "type": "instance",
-    "heap_size": 0
+    "heap_size": 4096
   },
   {
     "label": "Thread",
@@ -45,42 +45,8 @@
     "after_scheduler": 1,
     "unique": 1,
     "is_control": 0,
-    "file": "../../ara-zephyr-apps/appl/dyn_isr/src/main.c",
-    "line": 43,
-    "specialization_level": "",
-    "type": "instance"
-  },
-  {
-    "label": "ISR",
-    "id": "produce_work_isr",
-    "branch": 0,
-    "usually_taken": 0,
-    "loop": 0,
-    "recursive": 0,
-    "after_scheduler": 1,
-    "unique": 1,
-    "is_control": 1,
-    "file": "../../ara-zephyr-apps/appl/dyn_isr/src/main.c",
-    "line": 45,
-    "specialization_level": "",
-    "type": "instance",
-    "entry_name": "produce_work_isr",
-    "flags": 0,
-    "irq_number": 0,
-    "priority": 1
-  },
-  {
-    "label": "Mutex",
-    "id": "some_instance",
-    "branch": 0,
-    "usually_taken": 0,
-    "loop": 0,
-    "recursive": 0,
-    "after_scheduler": 1,
-    "unique": 1,
-    "is_control": 0,
-    "file": "../../ara-zephyr-apps/appl/dyn_isr/src/main.c",
-    "line": 32,
+    "file": "../../ara-zephyr-apps/appl/dyn_stack/src/main.c",
+    "line": 33,
     "specialization_level": "",
     "type": "instance"
   },
@@ -94,8 +60,8 @@
     "after_scheduler": 1,
     "unique": 1,
     "is_control": 0,
-    "file": "../../ara-zephyr-apps/appl/dyn_isr/src/main.c",
-    "line": 42,
+    "file": "../../ara-zephyr-apps/appl/dyn_stack/src/main.c",
+    "line": 32,
     "specialization_level": "",
     "type": "instance",
     "max_entries": 256
@@ -110,11 +76,11 @@
     "after_scheduler": 1,
     "unique": 1,
     "is_control": 1,
-    "file": "../../ara-zephyr-apps/appl/dyn_isr/src/main.c",
-    "line": 39,
+    "file": "../../ara-zephyr-apps/appl/dyn_stack/src/main.c",
+    "line": 29,
     "specialization_level": "",
     "type": "instance",
-    "delay": "<unknown>",
+    "delay": -1,
     "entry_name": "do_work",
     "options": 0,
     "priority": 1,
@@ -123,12 +89,6 @@
   {
     "source": "__main",
     "target": "guard",
-    "label": "k_mutex_init",
-    "type": "create"
-  },
-  {
-    "source": "produce_work_isr",
-    "target": "some_instance",
     "label": "k_mutex_init",
     "type": "create"
   },
@@ -145,7 +105,13 @@
     "type": "create"
   },
   {
-    "source": "produce_work_isr",
+    "source": "__main",
+    "target": "__main",
+    "label": "k_current_get",
+    "type": "interaction"
+  },
+  {
+    "source": "__main",
     "target": "guard",
     "label": "k_mutex_lock",
     "type": "interaction"
@@ -157,7 +123,7 @@
     "type": "interaction"
   },
   {
-    "source": "produce_work_isr",
+    "source": "__main",
     "target": "guard",
     "label": "k_mutex_unlock",
     "type": "interaction"
@@ -175,7 +141,7 @@
     "type": "interaction"
   },
   {
-    "source": "produce_work_isr",
+    "source": "__main",
     "target": "work",
     "label": "k_stack_push",
     "type": "interaction"

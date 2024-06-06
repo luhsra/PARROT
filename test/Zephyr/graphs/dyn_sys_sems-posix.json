@@ -36,17 +36,37 @@
     "stack_size": 1024
   },
   {
+    "label": "Thread",
+    "id": "threadA_data",
+    "branch": 0,
+    "usually_taken": 0,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 1,
+    "unique": 1,
+    "is_control": 1,
+    "file": "../../ara-zephyr-apps/appl/dyn_sys_sems/src/main.c",
+    "line": 79,
+    "specialization_level": "",
+    "type": "instance",
+    "delay": 0,
+    "entry_name": "threadA",
+    "options": 0,
+    "priority": 7,
+    "stack_size": 1024
+  },
+  {
     "label": "UserSemaphore",
     "id": "threadA_sem",
     "branch": 0,
     "usually_taken": 0,
     "loop": 0,
     "recursive": 0,
-    "after_scheduler": 0,
+    "after_scheduler": 1,
     "unique": 1,
     "is_control": 0,
-    "file": "../../ara-zephyr-apps/appl/static_sys_sems/src/main.c",
-    "line": 39,
+    "file": "../../ara-zephyr-apps/appl/dyn_sys_sems/src/main.c",
+    "line": 61,
     "specialization_level": "",
     "type": "instance",
     "count": 1,
@@ -62,11 +82,11 @@
     "after_scheduler": 1,
     "unique": 1,
     "is_control": 1,
-    "file": "../../ara-zephyr-apps/appl/static_sys_sems/src/main.c",
-    "line": 61,
+    "file": "../../ara-zephyr-apps/appl/dyn_sys_sems/src/main.c",
+    "line": 64,
     "specialization_level": "",
     "type": "instance",
-    "delay": "<unknown>",
+    "delay": 0,
     "entry_name": "threadB",
     "options": 0,
     "priority": 7,
@@ -79,52 +99,56 @@
     "usually_taken": 0,
     "loop": 0,
     "recursive": 0,
-    "after_scheduler": 0,
+    "after_scheduler": 1,
     "unique": 1,
     "is_control": 0,
-    "file": "../../ara-zephyr-apps/appl/static_sys_sems/src/main.c",
-    "line": 40,
+    "file": "../../ara-zephyr-apps/appl/dyn_sys_sems/src/main.c",
+    "line": 62,
     "specialization_level": "",
     "type": "instance",
     "count": 0,
     "limit": 1
   },
   {
-    "label": "Thread",
-    "id": "thread_a",
-    "branch": 0,
-    "usually_taken": 0,
-    "loop": 0,
-    "recursive": 0,
-    "after_scheduler": 0,
-    "unique": 1,
-    "is_control": 1,
-    "file": "../../ara-zephyr-apps/appl/static_sys_sems/src/main.c",
-    "line": 70,
-    "specialization_level": "",
-    "type": "instance",
-    "delay": 0,
-    "entry_name": "threadA",
-    "options": 0,
-    "priority": 7,
-    "stack_size": 1024
+    "source": "__main",
+    "target": "threadA_data",
+    "label": "k_thread_create",
+    "type": "create"
   },
   {
-    "source": "thread_a",
+    "source": "threadA_data",
     "target": "threadB_data",
     "label": "k_thread_create",
     "type": "create"
   },
   {
+    "source": "threadA_data",
+    "target": "threadA_sem",
+    "label": "sys_sem_init",
+    "type": "create"
+  },
+  {
+    "source": "threadA_data",
+    "target": "threadB_sem",
+    "label": "sys_sem_init",
+    "type": "create"
+  },
+  {
+    "source": "threadA_data",
+    "target": "threadA_data",
+    "label": "k_current_get",
+    "type": "interaction"
+  },
+  {
     "source": "threadB_data",
     "target": "threadB_data",
     "label": "k_current_get",
     "type": "interaction"
   },
   {
-    "source": "thread_a",
-    "target": "thread_a",
-    "label": "k_current_get",
+    "source": "threadA_data",
+    "target": "threadA_data",
+    "label": "k_msleep",
     "type": "interaction"
   },
   {
@@ -134,21 +158,9 @@
     "type": "interaction"
   },
   {
-    "source": "thread_a",
-    "target": "thread_a",
-    "label": "k_msleep",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "threadB_data",
-    "label": "k_thread_join",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "thread_a",
-    "label": "k_thread_join",
+    "source": "threadA_data",
+    "target": "threadB_sem",
+    "label": "sys_sem_give",
     "type": "interaction"
   },
   {
@@ -158,20 +170,14 @@
     "type": "interaction"
   },
   {
-    "source": "thread_a",
-    "target": "threadB_sem",
-    "label": "sys_sem_give",
-    "type": "interaction"
-  },
-  {
-    "source": "threadB_data",
-    "target": "threadB_sem",
+    "source": "threadA_data",
+    "target": "threadA_sem",
     "label": "sys_sem_take",
     "type": "interaction"
   },
   {
-    "source": "thread_a",
-    "target": "threadA_sem",
+    "source": "threadB_data",
+    "target": "threadB_sem",
     "label": "sys_sem_take",
     "type": "interaction"
   }

@@ -641,11 +641,5 @@
     "target": "__main",
     "label": "k_sleep",
     "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_sleep",
-    "type": "interaction"
   }
 ]

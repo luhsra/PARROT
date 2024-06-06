@@ -13,7 +13,7 @@
     "line": 0,
     "specialization_level": "",
     "type": "instance",
-    "heap_size": 0
+    "heap_size": 4096
   },
   {
     "label": "Thread",
@@ -42,11 +42,11 @@
     "usually_taken": 0,
     "loop": 0,
     "recursive": 0,
-    "after_scheduler": 0,
+    "after_scheduler": 1,
     "unique": 1,
     "is_control": 0,
-    "file": "../../ara-zephyr-apps/appl/static_stack/src/main.c",
-    "line": 13,
+    "file": "../../ara-zephyr-apps/appl/dyn_stack/src/main.c",
+    "line": 33,
     "specialization_level": "",
     "type": "instance"
   },
@@ -57,11 +57,11 @@
     "usually_taken": 0,
     "loop": 0,
     "recursive": 0,
-    "after_scheduler": 0,
+    "after_scheduler": 1,
     "unique": 1,
     "is_control": 0,
-    "file": "../../ara-zephyr-apps/appl/static_stack/src/main.c",
-    "line": 11,
+    "file": "../../ara-zephyr-apps/appl/dyn_stack/src/main.c",
+    "line": 32,
     "specialization_level": "",
     "type": "instance",
     "max_entries": 256
@@ -76,11 +76,11 @@
     "after_scheduler": 1,
     "unique": 1,
     "is_control": 1,
-    "file": "../../ara-zephyr-apps/appl/static_stack/src/main.c",
-    "line": 27,
+    "file": "../../ara-zephyr-apps/appl/dyn_stack/src/main.c",
+    "line": 29,
     "specialization_level": "",
     "type": "instance",
-    "delay": "<unknown>",
+    "delay": "@unknown@",
     "entry_name": "do_work",
     "options": 0,
     "priority": 1,
@@ -88,9 +88,27 @@
   },
   {
     "source": "__main",
+    "target": "guard",
+    "label": "k_mutex_init",
+    "type": "create"
+  },
+  {
+    "source": "__main",
+    "target": "work",
+    "label": "k_stack_alloc_init",
+    "type": "create"
+  },
+  {
+    "source": "__main",
     "target": "worker",
     "label": "k_thread_create",
     "type": "create"
+  },
+  {
+    "source": "__main",
+    "target": "__main",
+    "label": "k_current_get",
+    "type": "interaction"
   },
   {
     "source": "__main",

@@ -154,7 +154,7 @@
     "line": 46,
     "specialization_level": "",
     "type": "instance",
-    "delay": "<unknown>",
+    "delay": -1,
     "entry_name": "thread_suspend_resume",
     "options": 0,
     "priority": 6,
@@ -209,7 +209,7 @@
     "line": 103,
     "specialization_level": "",
     "type": "instance",
-    "delay": "<unknown>",
+    "delay": 0,
     "entry_name": "thread_one",
     "options": 0,
     "priority": -10,
@@ -217,7 +217,7 @@
   },
   {
     "label": "Thread",
-    "id": "thread_one_data.40",
+    "id": "thread_one_data.48",
     "branch": 0,
     "usually_taken": 0,
     "loop": 0,
@@ -229,7 +229,7 @@
     "line": 49,
     "specialization_level": "",
     "type": "instance",
-    "delay": "<unknown>",
+    "delay": -1,
     "entry_name": "thread_sema_test1",
     "options": 0,
     "priority": 3,
@@ -249,7 +249,7 @@
     "line": 106,
     "specialization_level": "",
     "type": "instance",
-    "delay": "<unknown>",
+    "delay": 0,
     "entry_name": "thread_two",
     "options": 0,
     "priority": -10,
@@ -269,7 +269,7 @@
     "line": 63,
     "specialization_level": "",
     "type": "instance",
-    "delay": "<unknown>",
+    "delay": 0,
     "entry_name": "yielding_thread",
     "options": 0,
     "priority": 10,
@@ -289,7 +289,7 @@
   },
   {
     "source": "test_thread_id",
-    "target": "thread_one_data.40",
+    "target": "thread_one_data.48",
     "label": "k_thread_create",
     "type": "create"
   },
@@ -366,7 +366,7 @@
     "type": "interaction"
   },
   {
-    "source": "thread_one_data.40",
+    "source": "thread_one_data.48",
     "target": "sem_bench",
     "label": "k_sem_take",
     "type": "interaction"
