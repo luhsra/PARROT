@@ -268,6 +268,10 @@ if build_posix_apps
     sia_targets += [posix_app]
     ina_targets += [posix_app]
   endforeach
+  # Tests
+  if get_option('execute_ara')
+    subdir('test/POSIX')
+  endif
 endif
 
 # actual processing

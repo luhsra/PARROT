@@ -185,7 +185,7 @@ foreach app : arm_freertos_apps
       named_elf_targets += [target['name'] + '-' + lto_version, lto_elf]
       profiles_list += ['--profiles', target['name'] + '-' + lto_version]
 
-      if get_option('enable_gpslogger_tests')
+      if get_option('build_gpslogger')
         test('validate_generator_' + lto_prefix,
              py3_inst,
              args: [validate_generator_runner,
