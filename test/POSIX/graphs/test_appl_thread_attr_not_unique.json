@@ -21,8 +21,8 @@
     "sched_priority": "<default>"
   },
   {
-    "label": "signal_catching_func()",
-    "id": "signal_catching_func()",
+    "label": "Thread 1 (new_thread_routine)",
+    "id": "Thread 1",
     "branch": 0,
     "usually_taken": 0,
     "loop": 0,
@@ -30,26 +30,33 @@
     "after_scheduler": 1,
     "unique": 1,
     "is_control": 1,
-    "file": "../../ara-posix-apps/appl/test_appl/signal_handler_siginfo.c",
-    "line": 18,
+    "file": "../../ara-posix-apps/appl/test_appl/thread_attr_not_unique.c",
+    "line": 24,
     "specialization_level": "",
     "type": "instance",
-    "catching_signals": [
-      "SIGSEGV"
-    ],
-    "function_name": "signal_catching_func",
-    "name": "signal_catching_func()"
+    "function_name": "new_thread_routine",
+    "inherited_sched_attr": "@unknown@",
+    "name": "Thread 1",
+    "num_id": 1,
+    "sched_policy": "@unknown@",
+    "sched_priority": "@unknown@"
   },
   {
     "source": "Main Thread",
-    "target": "signal_catching_func()",
-    "label": "sigaction()",
+    "target": "Thread 1",
+    "label": "pthread_create()",
     "type": "create"
   },
   {
-    "source": "signal_catching_func()",
-    "target": "signal_catching_func()",
+    "source": "Thread 1",
+    "target": "Thread 1",
     "label": "pause()",
+    "type": "interaction"
+  },
+  {
+    "source": "Main Thread",
+    "target": "Thread 1",
+    "label": "pthread_join()",
     "type": "interaction"
   }
 ]

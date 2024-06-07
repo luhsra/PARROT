@@ -53,7 +53,7 @@
     "line": 26,
     "specialization_level": "",
     "type": "instance",
-    "init_counter": 25,
+    "init_counter": "<unknown>",
     "name": "Semaphore 1",
     "num_id": 1,
     "process_shared": false

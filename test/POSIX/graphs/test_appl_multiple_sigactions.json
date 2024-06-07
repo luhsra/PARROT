@@ -31,7 +31,7 @@
     "unique": 1,
     "is_control": 1,
     "file": "../../ara-posix-apps/appl/test_appl/multiple_sigactions.c",
-    "line": 30,
+    "line": 31,
     "specialization_level": "",
     "type": "instance",
     "catching_signals": [
@@ -52,7 +52,7 @@
     "unique": 1,
     "is_control": 1,
     "file": "../../ara-posix-apps/appl/test_appl/multiple_sigactions.c",
-    "line": 33,
+    "line": 34,
     "specialization_level": "",
     "type": "instance",
     "catching_signals": [

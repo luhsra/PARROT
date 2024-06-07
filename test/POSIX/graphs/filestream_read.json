@@ -1,23 +1,20 @@
 [
   {
-    "label": "Test Thread",
-    "id": "<likely: Test Thread>",
-    "branch": 0,
+    "label": "File 0",
+    "id": "File 0",
+    "branch": 1,
     "usually_taken": 0,
     "loop": 0,
     "recursive": 0,
     "after_scheduler": 1,
-    "unique": 1,
-    "file": "../../appl/POSIX/test_appl/thread_attr_not_unique.c",
-    "line": 24,
+    "unique": 0,
+    "is_control": 0,
+    "file": "../../musl-libc/src/stdio/fopen.c",
+    "line": 21,
     "specialization_level": "",
     "type": "instance",
-    "function": "new_thread_routine",
-    "inherited_sched_attr": "<likely: False>",
-    "name": "<likely: Test Thread>",
-    "num_id": 1,
-    "sched_policy": "<likely: SCHED_RR>",
-    "sched_priority": "<likely: 7>"
+    "name": "File 0",
+    "path": "@unknown@"
   },
   {
     "label": "Main Thread",
@@ -28,11 +25,12 @@
     "recursive": 0,
     "after_scheduler": 0,
     "unique": 1,
+    "is_control": 1,
     "file": "N/A",
     "line": 0,
     "specialization_level": "N/A",
     "type": "instance",
-    "function": "main",
+    "function_name": "ARA_ENTRY_POINT",
     "inherited_sched_attr": null,
     "name": "Main Thread",
     "num_id": 0,
@@ -41,14 +39,8 @@
   },
   {
     "source": "Main Thread",
-    "target": "<likely: Test Thread>",
-    "label": "pthread_join()",
-    "type": "interaction"
-  },
-  {
-    "source": "<likely: Test Thread>",
-    "target": "<likely: Test Thread>",
-    "label": "pause()",
+    "target": "File 0",
+    "label": "open()",
     "type": "interaction"
   }
 ]

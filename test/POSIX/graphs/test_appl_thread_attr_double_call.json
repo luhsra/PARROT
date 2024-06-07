@@ -30,16 +30,16 @@
     "after_scheduler": 1,
     "unique": 1,
     "is_control": 1,
-    "file": "../../ara-posix-apps/appl/test_appl/pthread_cancel.c",
-    "line": 21,
+    "file": "../../ara-posix-apps/appl/test_appl/thread_attr_double_call.c",
+    "line": 29,
     "specialization_level": "",
     "type": "instance",
     "function_name": "new_thread_routine",
-    "inherited_sched_attr": "<default>",
+    "inherited_sched_attr": "@unknown@",
     "name": "Thread 1",
     "num_id": 1,
-    "sched_policy": "<default>",
-    "sched_priority": "<default>"
+    "sched_policy": "@unknown@",
+    "sched_priority": "@unknown@"
   },
   {
     "source": "Main Thread",
@@ -50,25 +50,13 @@
   {
     "source": "Thread 1",
     "target": "Thread 1",
-    "label": "nanosleep(tv_sec: 1, tv_nsec: 0)",
-    "type": "interaction"
-  },
-  {
-    "source": "Main Thread",
-    "target": "Main Thread",
-    "label": "nanosleep(tv_sec: 5, tv_nsec: 0)",
+    "label": "pause()",
     "type": "interaction"
   },
   {
     "source": "Main Thread",
     "target": "Thread 1",
-    "label": "pthread_cancel()",
-    "type": "interaction"
-  },
-  {
-    "source": "Main Thread",
-    "target": "Thread 1",
-    "label": "pthread_detach()",
+    "label": "pthread_join()",
     "type": "interaction"
   }
 ]

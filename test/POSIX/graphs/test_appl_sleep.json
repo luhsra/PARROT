@@ -23,7 +23,7 @@
   {
     "source": "Main Thread",
     "target": "Main Thread",
-    "label": "nanosleep(tv_sec: 5, tv_nsec: 0)",
+    "label": "nanosleep(tv_sec: <unknown>, tv_nsec: 0)",
     "type": "interaction"
   }
 ]
