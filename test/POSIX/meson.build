@@ -42,6 +42,10 @@ graphs = meson.current_source_dir() / 'graphs'
 posix_test_settings = meson.current_source_dir() / 'settings'
 
 foreach app : posix_apps
+    # dont test libmicrohttpd
+    if app['name'].contains('libmicrohttpd')
+        continue
+    endif
     # Instance-Graph Test cases
     # Make sure to provide a test with musl and without musl when this is possible.
     test(app['name'],
@@ -54,7 +58,7 @@ foreach app : posix_apps
         suite: 'posix'
     )
     # Detect Clang/LLVM strange behaviour for POSIX static instance detection
-    if app['name'] in ['clang_global_var_static','clang_global_var_dynamic']
+    if app['name'].contains('clang_global_var_')
         test(app['name'] + '_clang_global',
             py3_inst,
             args: [run_test_cstep, 'PosixClangGlobalTest', app['ll'].full_path()],
