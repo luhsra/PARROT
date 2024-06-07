@@ -21,8 +21,8 @@
     "sched_priority": 0
   },
   {
-    "label": "This is the threads name!",
-    "id": "This is the threads name!",
+    "label": "Thread 1 (new_thread_routine)",
+    "id": "Thread 1",
     "branch": 0,
     "usually_taken": 0,
     "loop": 0,
@@ -30,27 +30,33 @@
     "after_scheduler": 1,
     "unique": 1,
     "is_control": 1,
-    "file": "../appl/POSIX/test_appl/pthread_setname_np.c",
-    "line": 16,
+    "file": "../../ara-posix-apps/appl/test_appl/thread_setname_cond_calls.c",
+    "line": 24,
     "specialization_level": "",
     "type": "instance",
     "function_name": "new_thread_routine",
-    "inherited_sched_attr": true,
-    "name": "This is the threads name!",
+    "inherited_sched_attr": "@unknown@",
+    "name": "Thread 1",
     "num_id": 1,
-    "sched_policy": "SCHED_OTHER",
-    "sched_priority": 0
+    "sched_policy": "@unknown@",
+    "sched_priority": "@unknown@"
   },
   {
     "source": "Main Thread",
-    "target": "This is the threads name!",
-    "label": "pthread_join()",
+    "target": "Thread 1",
+    "label": "pthread_create()",
+    "type": "create"
+  },
+  {
+    "source": "Thread 1",
+    "target": "Thread 1",
+    "label": "pause()",
     "type": "interaction"
   },
   {
-    "source": "This is the threads name!",
-    "target": "This is the threads name!",
-    "label": "pause()",
+    "source": "Main Thread",
+    "target": "Thread 1",
+    "label": "pthread_join()",
     "type": "interaction"
   }
 ]

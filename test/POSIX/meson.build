@@ -46,17 +46,7 @@ foreach app : posix_apps
     if app['name'].contains('libmicrohttpd')
         continue
     endif
-    # Instance-Graph Test cases
-    # Make sure to provide a test with musl and without musl when this is possible.
-    test(app['name'],
-        py3_inst,
-        # The json object is not a files() object to allow paths to non existing json files.
-        # See test/instance_graph.py in ARA for more information.
-        args: [instance_graph_test, graphs / app['name'] + '.json', app['ll'].full_path(), 'POSIX'],
-        env: [test_env],
-        depends: [ara_py, app['ll']],
-        suite: 'posix'
-    )
+
     # Detect Clang/LLVM strange behaviour for POSIX static instance detection
     if app['name'].contains('clang_global_var_')
         test(app['name'] + '_clang_global',
@@ -66,6 +56,29 @@ foreach app : posix_apps
             depends: [ara_py, app['ll']],
             suite: 'posix'
         )
+        continue
     endif
 
+    # Instance-Graph Test cases
+    # Make sure to provide a test with musl and without musl when this is possible.
+    test(app['name'],
+        py3_inst,
+        # The json object is not a files() object to allow paths to non existing json files.
+        # See test/instance_graph.py in ARA for more information.
+        args: [instance_graph_test, graphs / app['name'] + '.json', app['ll'].full_path(), 'POSIX', files('settings/posix_default.json')],
+        env: [test_env],
+        depends: [ara_py, app['ll']],
+        suite: 'posix'
+    )
+
+    # Linux profile tests for thread related test applications
+    if app['name'].contains('thread') or app['name'].contains('system_profile')
+        test(app['name'] + '_linux',
+            py3_inst,
+            args: [instance_graph_test, graphs / app['name'] + '_linux.json', app['ll'].full_path(), 'POSIX', files('settings/system_profile_linux.json')],
+            env: [test_env],
+            depends: [ara_py, app['ll']],
+            suite: 'posix'
+        )
+    endif
   endforeach
