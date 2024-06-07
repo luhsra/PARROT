@@ -10,6 +10,7 @@ remove_sysfunc_body_drop_llvm_json = files('remove_sysfunc_body_drop_llvm.json')
 ara_py = ara_proj.get_variable('ara_py')
 run_test_cstep = ara_proj.get_variable('run_test_cstep')
 instance_graph_test = ara_proj.get_variable('instance_graph_test')
+instance_graph_stats = ara_proj.get_variable('instance_graph_stats')
 test_dir = ara_proj.get_variable('test_dir')
 python_path = ara_proj.get_variable('python_path')
 test_env = [python_path + ':' + test_dir]
@@ -81,4 +82,17 @@ foreach app : posix_apps
             suite: 'posix'
         )
     endif
-  endforeach
+
+    # instance graph stats
+    if app['name'].contains('stats')
+        test(app['name'] + '_stats',
+            py3_inst,
+            args: [instance_graph_stats, graphs / app['name'] + '_stats.json', app['ll'].full_path(), 'POSIX', files('settings/instance_graph_stats.json')],
+            env: [test_env],
+            depends: [ara_py, app['ll']],
+            suite: 'posix',
+            timeout: 300
+        )
+    endif
+
+endforeach
