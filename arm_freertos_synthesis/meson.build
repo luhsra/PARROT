@@ -28,6 +28,7 @@ libplatforms = subproject('ara-libplatforms')
 clang_flags = libplatforms.get_variable('clang_flags')
 arm_clang_flags = libplatforms.get_variable('arm_clang_flags')
 arm_ld_flags = libplatforms.get_variable('arm_ld_flags')
+stm32_ld_flags = libplatforms.get_variable('stm32_ld_flags')
 llc_cmd = libplatforms.get_variable('llc_cmd')
 libplatform_linkerscript = libplatforms.get_variable('libplatform_linkerscript')
 
@@ -84,6 +85,7 @@ foreach app : arm_freertos_apps
                                         name_prefix + '-modifiedapp.ll',
                                         name_prefix + '-os.cc.freertos_overrides.h',
                                        ],
+                               depends: app['freertos_config'],
                                command: [py3_inst, ara, '@INPUT@',
                                          '--generator_output', '@OUTPUT0@',
                                          '--ir_output', '@OUTPUT2@',
@@ -104,7 +106,7 @@ foreach app : arm_freertos_apps
                                 input: src,
                                 output: name_prefix + '-freertos_' + src_id + '.c.ll',
                                 depfile: name_prefix + '-freertos_' + src_id + '.dep',
-                                depends: ara_target,
+                                depends: [ara_target, app['freertos_config']],
                                 command: clang_c +
                                          freertos_includes +
                                          libsra_includes +
@@ -142,7 +144,8 @@ foreach app : arm_freertos_apps
                             output: lto_prefix + '-os_app.ll.o',
                             command: llc_cmd)
 
-      lto_elf = custom_target(lto_prefix + '.elf',
+      if (false) # TODO use correct FreeRTOSConfig for GPSLogger
+        lto_elf = custom_target(lto_prefix + '.elf',
                               input: [lto_o,
                                       os_target[1], # startup.s
                                       libsra_ar,
@@ -151,8 +154,12 @@ foreach app : arm_freertos_apps
                               output: lto_prefix + '.elf',
                               depfile: lto_prefix + '.elf.dep',
                               command: clang_cpp +
-                                       combined_cflags +
+                                       ['-nostdlib'] +
+                                       clang_flags + arm_clang_flags + stm32_ld_flags +
                                        ['-T' + libplatform_linkerscript.full_path() ])
+      else
+        lto_elf = disabler()
+      endif
 
       bin_target = custom_target(lto_prefix + '.bin',
                                  input: [lto_elf],
