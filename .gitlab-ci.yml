@@ -10,5 +10,6 @@ build:
     - meson setup build --native-file native-debian.ini
     - cd build && meson compile |& tee build.log
   artifacts:
+    when: always
     paths:
       - build/build.log
