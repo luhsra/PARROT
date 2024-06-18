@@ -35,4 +35,7 @@ RUN go install github.com/SRI-CSL/gllvm/cmd/...@master
 
 RUN apt update && apt-get install -qq python3-graph-tool -t bookworm-backports
 
+# dependencies for zephyr build
+RUN apt update && apt-get install -qq python3-pykwalify python3-pyelftools
+
 CMD ["bash"]
