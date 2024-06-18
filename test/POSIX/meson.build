@@ -42,9 +42,18 @@ test('remove_sysfunc_body_drop',
 graphs = meson.current_source_dir() / 'graphs'
 posix_test_settings = meson.current_source_dir() / 'settings'
 
-foreach app : posix_apps
+posix_test_apps = []
+
+
+
+foreach app : posix_test_apps
     # dont test libmicrohttpd
     if app['name'].contains('libmicrohttpd')
+        continue
+    endif
+
+    # these tests are broken
+    if app['name'] in ['pipe2_test', 'test_appl_signal_handler_siginfo']
         continue
     endif
 

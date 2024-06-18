@@ -8,8 +8,12 @@ build:
     - git config --global --add url."https://gitlab-ci-token:${CI_JOB_TOKEN}@${CI_SERVER_HOST}/".insteadOf "ssh://git@scm.sra.uni-hannover.de"
     - git config --global --add url."https://gitlab-ci-token:${CI_JOB_TOKEN}@${CI_SERVER_HOST}/".insteadOf "https://scm.sra.uni-hannover.de"
     - meson setup build --native-file native-debian.ini
-    - cd build && meson compile |& tee build.log
+    - cd build
+    - meson compile |& tee build_all.log
+    - ninja ara-zephyr-apps@@build-zephyr-apps |& tee build_zephyr.log
+    - meson test --suite parrot --timeout-multiplier 2 |& tee test.log
   artifacts:
     when: always
     paths:
-      - build/build.log
+      - build/*.log
+      - build/meson-logs/testlog.txt
