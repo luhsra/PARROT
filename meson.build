@@ -329,16 +329,13 @@ foreach app : ina_targets
   summary('Run INA on ' + app['name'], 'meson compile ' + run_ina, section: app['summary_section'])
 endforeach
 
-if meson.version().version_compare('>=1.5.0')
-  # Only possible with https://github.com/mesonbuild/meson/pull/12956
-  warning('You may want to remove the version check.')
-  build_all_lls = 'build-all-lls'
-  run_target(build_all_lls,
-    command: nop,
-    depends: all_lls,
-  )
-  summary('Build all application to LLVM IR', 'meson compile ' + build_all_lls, section: app['summary_section'])
-endif
+
+build_all_lls = 'build-all-lls'
+run_target(build_all_lls,
+  command: nop,
+  depends: all_lls,
+)
+summary('Build all application to LLVM IR', 'meson compile ' + build_all_lls, section: app['summary_section'])
 
 # experiments
 sia_runtime_apps = []
@@ -356,17 +353,14 @@ foreach app : sia_targets
   sia_runtime_deps += [app['ll']]
 endforeach
 run_sia_runtime = 'run-sia-runtime'
-if meson.version().version_compare('>=1.5.0')
-  # Only possible with https://github.com/mesonbuild/meson/pull/12956
-  warning('You may want to remove the version check.')
-  run_target(run_sia_runtime,
-    command: [
-      py3_inst, sia_runtime_experiment,
-      '--work-dir', meson.current_build_dir(),
-      '--title', run_sia_runtime,
-      '--result_dir', meson.current_build_dir(),
-      '--python', py3_inst,
-      '--ara', ara.full_path()] + sia_runtime_apps,
-    depends: [ara] + sia_runtime_deps)
-  summary('Measure SIA runtime in all modes', 'meson compile ' + run_sia_runtime, section: 'experiments')
-endif
+
+run_target(run_sia_runtime,
+  command: [
+    py3_inst, sia_runtime_experiment,
+    '--work-dir', meson.current_build_dir(),
+    '--title', run_sia_runtime,
+    '--result_dir', meson.current_build_dir(),
+    '--python', py3_inst,
+    '--ara', ara.full_path()] + sia_runtime_apps,
+  depends: [ara] + sia_runtime_deps)
+summary('Measure SIA runtime in all modes', 'meson compile ' + run_sia_runtime, section: 'experiments')
