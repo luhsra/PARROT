@@ -211,36 +211,13 @@ if build_zephyr
   ara_zephyr_apps = subproject('ara-zephyr-apps')
   arch_variants = []
 
-  # posix apps
-  foreach app : ara_zephyr_apps.get_variable('zephyr_apps')
-    if posix_enabled
-      arch_variants += [{
-        'name': f'@app@-posix',
-        'app': ara_zephyr_apps.get_variable(f'native_posix_@app@'),
-        'board': 'native_posix'
-      }]
-    endif
-  endforeach
-
-  # ARM boards support more apps
-  foreach app : ara_zephyr_apps.get_variable('zephyr_apps') + ara_zephyr_apps.get_variable('z_hw_apps')
-    if arm_enabled
-      foreach board : ara_zephyr_apps.get_variable('arm_boards')
-        arch_variants += [{
-          'name': f'@app@-arm-@board@',
-          'app': ara_zephyr_apps.get_variable(f'@board@_@app@'),
-          'board': board
-        }]
-      endforeach
-    endif
-  endforeach
-
-  foreach arch_variant : arch_variants
-    name = arch_variant['name']
-    app_code = arch_variant['app']
+  foreach tgt : ara_zephyr_apps.get_variable('zephyr_targets')
+    ll = tgt[0]
+    config = tgt[1]
+    name = fs.stem(ll.full_path())
 
     conf_data = configuration_data()
-    conf_data.set('kconfig_file', app_code['config'].full_path())
+    conf_data.set('kconfig_file', config.full_path())
     sia_settings = configure_file(input : files('settings' / f'sia_zephyr.json.in'),
                                   output : f'sia_@name@.json',
                                   configuration : conf_data)
@@ -250,12 +227,12 @@ if build_zephyr
     zephyr_app = {
       'name': name,
       'os': 'Zephyr',
-      'll': app_code['ll'],
+      'll': ll,
       'sia_settings': sia_settings,
       'ina_settings': ina_settings,
       'summary_section': 'ARA Zephyr Apps',
     }
-    all_lls += [app_code['ll']]
+    all_lls += [ll]
     sia_targets += [zephyr_app]
     ina_targets += [zephyr_app]
 
@@ -267,27 +244,6 @@ if build_zephyr
   endif
 endif
 
-if build_posix_apps
-  ara_posix_apps = subproject('ara-posix-apps')
-  posix_apps = ara_posix_apps.get_variable('posix_apps')
-  foreach app : posix_apps
-    posix_app = {
-      'name': app['name'],
-      'os': 'POSIX',
-      'll': app['ll'],
-      'sia_settings': files('settings' / 'sia_posix.json')[0],
-      'ina_settings': files('settings' / 'ina_posix.json')[0],
-      'summary_section': 'ARA POSIX Apps',
-    }
-    all_lls += [app['ll']]
-    sia_targets += [posix_app]
-    ina_targets += [posix_app]
-  endforeach
-  # Tests
-  if get_option('execute_ara')
-    subdir('test/POSIX')
-  endif
-endif
 
 # actual processing
 if arm_freertos_apps.length() > 0
