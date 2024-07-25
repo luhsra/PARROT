@@ -244,6 +244,27 @@ if build_zephyr
   endif
 endif
 
+if build_posix_apps
+  ara_posix_apps = subproject('ara-posix-apps')
+  posix_apps = ara_posix_apps.get_variable('posix_apps')
+  foreach app : posix_apps
+    posix_app = {
+      'name': app['name'],
+      'os': 'POSIX',
+      'll': app['ll'],
+      'sia_settings': files('settings' / 'sia_posix.json')[0],
+      'ina_settings': files('settings' / 'ina_posix.json')[0],
+      'summary_section': 'ARA POSIX Apps',
+    }
+    all_lls += [app['ll']]
+    sia_targets += [posix_app]
+    ina_targets += [posix_app]
+  endforeach
+  # Tests
+  if get_option('execute_ara')
+    subdir('test/POSIX')
+  endif
+endif
 
 # actual processing
 if arm_freertos_apps.length() > 0
