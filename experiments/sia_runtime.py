@@ -61,10 +61,12 @@ class SiaRuntimeExperiment(Experiment):
 
         app_info = json.loads(application_info.value)
 
+        print("Loading:", app_info)
+
         app_name = app_info["name"]
         app_ll = app_info["ll"]
         app_os = app_info["os"]
-        app_config = self.cwd / app_info["config"] if "config" in app_info else None
+        app_config = self.cwd / app_info["settings"] if "settings" in app_info else None
 
         cur_config = copy.copy(ARA_CONFIG)
         cur_config["SIA"]["traversal_mode"] = mode.value
@@ -87,19 +89,26 @@ class SiaRuntimeExperiment(Experiment):
             "--runtime-stats-file", "dump",
             "--runtime-stats-format", "json",
             "--os", app_os,
-            "--step-settings", str(step_data.absolute())] + extra_config
-        print(cmd)
-        for i in range(10):
-            with timer:
-                subprocess.run(cmd, check=True)
-            with open(cur_dir / 'ARA.-.runtime_stats.json') as stats_file:
-                sia_time = 0
-                for step in json.load(stats_file):
-                    if step[0] == "SIA":
-                        sia_time += step[2]
-                self.outputs.results[app_name][str(mode)]['sia_runtime'][i] = sia_time
+        ]
+        cmd.extend(extra_config)
+        cmd.extend(["--step-settings", str(step_data.absolute())])
+        print("Executing", ' '.join([f"'{x}'" for x in cmd]))
+        for i in range(1):
+            try:
+                with timer:
+                    subprocess.run(cmd, check=True)
+                with open(cur_dir / 'ARA.-.runtime_stats.json') as stats_file:
+                    sia_time = 0
+                    for step in json.load(stats_file):
+                        if step[0] == "SIA":
+                            sia_time += step[2]
+                    self.outputs.results[app_name][str(mode)]['sia_runtime'][i] = sia_time
 
-            self.outputs.results[app_name][str(mode)]['ara_runtime'][i] = timer.get_time()
+                self.outputs.results[app_name][str(mode)]['ara_runtime'][i] = timer.get_time()
+            except subprocess.CalledProcessError as e:
+                print("Execution failed")
+                print(' '.join([f"'{x}'" for x in cmd]))
+                raise e
 
     def run(self):
         self.outputs.results['metadata']['cmdline'] = 'meson compile ' + self.title

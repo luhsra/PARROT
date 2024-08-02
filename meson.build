@@ -318,13 +318,18 @@ summary('Build all application to LLVM IR', 'meson compile ' + build_all_lls, se
 sia_runtime_apps = []
 sia_runtime_deps = []
 foreach app : sia_targets
+  corrections = files('settings' / 'no_corrections.json')[0]
+  if 'va_corrections' in app
+    corrections = app['va_corrections']
+  endif
   sia_runtime_apps += [
     '--applications',
-    '{"name": "@0@", "ll": "@1@", "os": "@2@", "settings": "@3@"}'.format(
+    '{"name": "@0@", "ll": "@1@", "os": "@2@", "settings": "@3@", "va_corrections": "@4@"}'.format(
       app['name'],
       app['ll'].full_path(),
       app['os'],
       app['sia_settings'].full_path(),
+      corrections,
     )
   ]
   sia_runtime_deps += [app['ll']]
