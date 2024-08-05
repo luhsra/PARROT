@@ -19,6 +19,7 @@ from versuchung.tex import LuaTable
 ARA_CONFIG = {
     "steps": ["SIA"],
     "SIA": {"traversal_mode": "TBD"},
+    "logger": {}
 }
 
 job_count = None
@@ -73,13 +74,21 @@ class SiaRuntimeExperiment(Experiment):
         timer = TimeMeasure()
         prefix = ["--dump-prefix", str(cur_dir.absolute()) + "/{step_name}.{uuid}."]
         cmd += prefix
+        pretty_cmd = " ".join([f"'{x}'" for x in cmd])
+        print("\033[1;34mExecuting:\033[1;0m", pretty_cmd)
         try:
             with timer:
-                subprocess.run(cmd, check=True)
+                ara = subprocess.run(cmd, check=True, capture_output=True)
         except subprocess.CalledProcessError as e:
-            print("Execution failed")
-            print(" ".join([f"'{x}'" for x in cmd]))
+            print("\033[1;41m-> ERROR: Execution failed:\033[1;0m", pretty_cmd)
             raise e
+        finally:
+            with open(cur_dir / "ARA.stderr.txt", "wb") as log:
+                log.write(ara.stderr)
+            with open(cur_dir / "ARA.stdout.txt", "wb") as log:
+                log.write(ara.stdout)
+
+        print("\033[1;32mFinished:\033[1;0m", pretty_cmd)
 
         sia_time = 0
         with open(cur_dir / "ARA.-.runtime_stats.json") as stats_file:
