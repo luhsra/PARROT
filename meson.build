@@ -343,6 +343,7 @@ run_target(run_sia_runtime,
     '--title', run_sia_runtime,
     '--result_dir', meson.current_build_dir(),
     '--python', py3_inst,
+    '--iterations', '10',
     '--ara', ara.full_path()] + sia_runtime_apps,
   depends: [ara] + sia_runtime_deps)
 summary('Measure SIA runtime in all modes', 'meson compile ' + run_sia_runtime, section: 'experiments')
