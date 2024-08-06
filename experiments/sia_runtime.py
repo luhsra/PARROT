@@ -82,6 +82,7 @@ class SiaRuntimeExperiment(Experiment):
         prefix = ["--dump-prefix", str(cur_dir.absolute()) + "/{step_name}.{uuid}."]
         cmd += prefix
         pretty_cmd = " ".join([f"'{x}'" for x in cmd])
+        app_failed = False
         print("\033[1;34mExecuting:\033[1;0m", pretty_cmd)
         try:
             with timer:
@@ -90,9 +91,18 @@ class SiaRuntimeExperiment(Experiment):
         except subprocess.CalledProcessError as e:
             print("\033[1;41m-> ERROR: Execution failed:\033[1;0m", pretty_cmd)
             save_log(e)
-            raise e
+            app_failed = True
 
         print("\033[1;32mFinished:\033[1;0m", pretty_cmd)
+
+        if app_failed:
+            return {
+                "app_name": app_name,
+                "mode": str(mode),
+                "index": idx,
+                "ara_time": timer.get_time(),
+                "failed": True,
+            }
 
         sia_time = 0
         with open(cur_dir / "ARA.-.runtime_stats.json") as stats_file:
@@ -106,6 +116,7 @@ class SiaRuntimeExperiment(Experiment):
             "index": idx,
             "sia_time": sia_time,
             "ara_time": timer.get_time(),
+            "failed": False,
         }
 
     def prepare_sia(self, pool, executor, application_info, mode):
@@ -161,6 +172,8 @@ class SiaRuntimeExperiment(Experiment):
 
             for future in as_completed(pool):
                 res = future.result()
+                if res["failed"]:
+                    print(f"Failed app: {res["app_name"]} ({res["mode"]})")
                 self.outputs.results[res["app_name"]][res["mode"]]["sia_runtime"][
                     res["index"]
                 ] = res["sia_time"]
