@@ -71,6 +71,13 @@ class SiaRuntimeExperiment(Experiment):
     def run_sia(app_name, cur_dir, cmd, mode, idx):
         cur_dir = cur_dir / str(idx)
         cur_dir.mkdir(exist_ok=True)
+
+        def save_log(obj):
+            with open(cur_dir / "ARA.stderr.txt", "wb") as log:
+                log.write(obj.stderr)
+            with open(cur_dir / "ARA.stdout.txt", "wb") as log:
+                log.write(obj.stdout)
+
         timer = TimeMeasure()
         prefix = ["--dump-prefix", str(cur_dir.absolute()) + "/{step_name}.{uuid}."]
         cmd += prefix
@@ -79,14 +86,11 @@ class SiaRuntimeExperiment(Experiment):
         try:
             with timer:
                 ara = subprocess.run(cmd, check=True, capture_output=True)
+                save_log(ara)
         except subprocess.CalledProcessError as e:
             print("\033[1;41m-> ERROR: Execution failed:\033[1;0m", pretty_cmd)
+            save_log(e)
             raise e
-        finally:
-            with open(cur_dir / "ARA.stderr.txt", "wb") as log:
-                log.write(ara.stderr)
-            with open(cur_dir / "ARA.stdout.txt", "wb") as log:
-                log.write(ara.stdout)
 
         print("\033[1;32mFinished:\033[1;0m", pretty_cmd)
 
@@ -140,7 +144,6 @@ class SiaRuntimeExperiment(Experiment):
         ]
         cmd.extend(extra_config)
         cmd.extend(["--step-settings", str(step_data.absolute())])
-        print("Executing", " ".join([f"'{x}'" for x in cmd]))
         for i in range(self.iterations.value):
             pool.add(
                 executor.submit(
