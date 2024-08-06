@@ -266,6 +266,42 @@ if build_posix_apps
   endif
 endif
 
+if build_posix_apps and build_libmicrohttpd
+  # libmicrohttpd
+  libmicrohttpd_adapted = ara_posix_apps.get_variable('libmicrohttpd_app')
+  libmicrohttpd_orig = ara_posix_apps.get_variable('libmicrohttpd_orig_app')
+  # TODO make also libmicrohttpd_orig available
+  libmicrohttpd_apps = [libmicrohttpd_adapted] #, libmicrohttpd_orig]
+  foreach app : libmicrohttpd_apps
+    corrs = []
+    foreach corr : app['fp_corrections']
+      corrs += ['"' + corr + '"']
+    endforeach
+    conf_data = configuration_data()
+    conf_data.set('translation_map', ', '.join(corrs))
+    sia_settings = configure_file(input : files('settings' / 'sia_libmicrohttpd.json.in'),
+                                  output : 'sia_' + app['name'] + '.json',
+                                  configuration : conf_data)
+    ina_settings = configure_file(input : files('settings' / 'ina_libmicrohttpd.json.in'),
+                                  output : 'ina_' + app['name'] + '.json',
+                                  configuration : conf_data)
+
+    lmhd_app = {
+      'name': app['name'],
+      'os': 'POSIX',
+      'll': app['ll'],
+      'sia_settings': sia_settings,
+      'ina_settings': ina_settings,
+      'summary_section': 'libmicrohttpd (POSIX)',
+    }
+    all_lls += [app['ll']]
+    sia_targets += [lmhd_app]
+    ina_targets += [lmhd_app]
+  endforeach
+endif
+
+
+
 # actual processing
 if arm_freertos_apps.length() > 0
   subdir('arm_freertos_synthesis')
@@ -312,7 +348,7 @@ run_target(build_all_lls,
   command: nop,
   depends: all_lls,
 )
-summary('Build all application to LLVM IR', 'meson compile ' + build_all_lls, section: app['summary_section'])
+summary('Build all application to LLVM IR', 'meson compile ' + build_all_lls, section: 'generic')
 
 # experiments
 sia_runtime_apps = []

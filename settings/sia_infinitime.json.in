@@ -18,11 +18,11 @@
 
 	"ResolveFunctionPointer": {
 		"block_list": "[ \"main\" ]",
-		"translation_map": "@translation_map@"
+		"translation_map": ["@translation_map@"]
 	},
 
 	"SVFAnalyses": {
-		"translation_map": "@translation_map@"
+		"translation_map": ["@translation_map@"]
 	},
 
 	"logger": {

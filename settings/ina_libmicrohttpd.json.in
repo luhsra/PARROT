@@ -1,24 +1,21 @@
 {
 	"steps": [
-		"SIA",
-		"DumpCFG",
-		"DumpInstances",
-		"DumpCallgraph"
+		"InteractionAnalysis"
 	],
 
-	"SIA": {
+	"InteractionAnalysis": {
 		"dump": true
 	},
 
 	"ResolveFunctionPointer": {
 		"block_list": "[ \"main\" ]",
-		"translation_map": ["@translation_map@"],
-		"use_only_translation_map": true
+		"translation_map": [@translation_map@]
 	},
 
 	"SVFAnalyses": {
-		"translation_map": ["@translation_map@"]
+		"translation_map": [@translation_map@]
 	},
+
 
 	"logger": {
 		"StepManager": "info",

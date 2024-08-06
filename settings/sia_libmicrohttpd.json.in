@@ -1,0 +1,28 @@
+{
+	"steps": [
+		"Syscall",
+		"SIA",
+		"DumpInstances"
+	],
+
+	"SIA": {
+		"dump": true,
+		"log_level": "debug",
+		"traversal_mode": "flowsensitive"
+	},
+
+	"ResolveFunctionPointer": {
+		"block_list": "[ \"main\" ]",
+		"translation_map": [@translation_map@]
+	},
+
+	"SVFAnalyses": {
+		"translation_map": [@translation_map@]
+	},
+
+	"logger": {
+		"StepManager": "info",
+		"POSIX": "debug",
+		"ara": "info"
+	}
+}

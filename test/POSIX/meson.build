@@ -44,11 +44,6 @@ posix_test_settings = meson.current_source_dir() / 'settings'
 
 
 foreach app : posix_apps
-    # dont test libmicrohttpd
-    if app['name'].contains('libmicrohttpd')
-        continue
-    endif
-
     # these tests are broken
     if app['name'] in ['pipe2_test', 'test_appl_signal_handler_siginfo']
         continue
@@ -100,5 +95,4 @@ foreach app : posix_apps
             timeout: 300
         )
     endif
-
 endforeach
