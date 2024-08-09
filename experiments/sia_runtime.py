@@ -172,8 +172,9 @@ class SiaRuntimeExperiment(Experiment):
 
             for future in as_completed(pool):
                 res = future.result()
-                if res["failed"] or "sia_time" not in res:
+                if res["failed"]:
                     print(f"Failed app: {res["app_name"]} ({res["mode"]})")
+                    continue
                 self.outputs.results[res["app_name"]][res["mode"]]["sia_runtime"][
                     res["index"]
                 ] = res["sia_time"]
