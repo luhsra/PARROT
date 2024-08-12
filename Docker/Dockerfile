@@ -30,7 +30,7 @@ RUN apt update && apt-get install -qq python3-graph-tool -t bookworm-backports
 RUN	rm /usr/lib/python3.11/EXTERNALLY-MANAGED
 
 # meson version in debian is too old
-RUN pip3 install meson versuchung
+RUN pip3 install meson==1.5.1 versuchung
 
 # gllvm must be installed via go package manager
 RUN go install github.com/SRI-CSL/gllvm/cmd/...@master
