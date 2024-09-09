@@ -21,7 +21,7 @@ foreach zephyr_test_app : zephyr_test_apps
         py3_inst,
         # The json object is not a files() object to allow paths to non existing json files.
         # See test/instance_graph.py in ARA for more information.
-        args: [instance_graph_test, graphs / zephyr_test_app['name'] + '.json', zephyr_test_app['ll'].full_path(), 'Zephyr', zephyr_test_app['ina_settings'].full_path()],
+        args: [instance_graph_test, graphs / zephyr_test_app['name'] + '.json', zephyr_test_app['ll'].full_path(), 'Zephyr', zephyr_test_app['sia_settings'].full_path()],
         env: [test_env],
         depends: [ara_py, zephyr_test_app['ll']],
         should_fail: expected_fail,
