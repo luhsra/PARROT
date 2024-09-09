@@ -2,6 +2,7 @@
 option('build_gpslogger', type: 'boolean', value: true)
 option('build_librepilot', type: 'boolean', value: true)
 option('build_zephyr', type: 'boolean', value: true, description: 'Build sys_kernel and app_kernel related targets.')
+option('build_intel_ecfw', type: 'boolean', value: true, description: 'Build the Zephyr-based Intel embedded controller firmware')
 option('build_ironos', type: 'boolean', value: true)
 option('build_infinitime', type: 'boolean', value: true)
 option('build_i4copter', type: 'boolean', value: true)

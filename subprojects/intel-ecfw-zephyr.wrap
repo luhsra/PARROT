@@ -1,0 +1,4 @@
+[wrap-git]
+url = ssh://git@scm.sra.uni-hannover.de/research/parrot-projects/intel-ecfw-zephyr.git
+revision = zephyr-v3.7.0
+depth = 1

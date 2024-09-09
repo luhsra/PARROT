@@ -38,6 +38,7 @@ build_gpslogger = get_option('build_gpslogger')
 build_infinitime = get_option('build_infinitime')
 build_i4copter = get_option('build_i4copter')
 build_zephyr = get_option('build_zephyr')
+build_intel_ecfw = get_option('build_intel_ecfw')
 build_posix_apps = get_option('build_posix_apps')
 build_libmicrohttpd = get_option('build_libmicrohttpd')
 build_ironos = get_option('build_ironos')
@@ -48,6 +49,7 @@ summary({
   'InfiniTime (build_infinitime)': build_infinitime,
   'i4copter (build_i4copter)': build_i4copter,
   'sys_kernel/app_kernel (build_zephyr)': build_zephyr,
+  'Intel ECFW Zephyr (build_intel_ecfw)': build_intel_ecfw,
   'POSIX applications (build_posix_apps)': build_posix_apps,
   'Including libmicrohttpd (build_libmicrohttpd)': build_libmicrohttpd,
   'IronOS (build_ironos)': build_ironos,
@@ -206,12 +208,21 @@ if build_i4copter
   endforeach
 endif
 
-if build_zephyr
-  zephyr_test_apps = []
-  ara_zephyr_apps = subproject('ara-zephyr-apps')
-  arch_variants = []
+zephyr_targets = []
+zephyr_test_apps = []
 
-  foreach tgt : ara_zephyr_apps.get_variable('zephyr_targets')
+if build_intel_ecfw
+  intel_ecfw_zephyr = subproject('intel-ecfw-zephyr')
+  zephyr_targets += intel_ecfw_zephyr.get_variable('zephyr_targets')
+endif
+
+if build_zephyr
+  ara_zephyr_apps = subproject('ara-zephyr-apps')
+  zephyr_targets += ara_zephyr_apps.get_variable('zephyr_targets')
+endif
+
+if build_intel_ecfw or build_zephyr
+  foreach tgt : zephyr_targets
     ll = tgt[0]
     config = tgt[1]
     name = fs.stem(ll.full_path())
