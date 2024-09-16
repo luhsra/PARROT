@@ -1,2 +1,3 @@
 native.txt
 .cache
+__pycache__

@@ -69,6 +69,7 @@ arm_freertos_apps = []
 sia_targets = []
 ina_targets = []
 all_lls = []
+all_apps = []
 
 if build_gpslogger
   gpslogger_proj = subproject('GPSLogger')
@@ -86,6 +87,7 @@ if build_gpslogger
   arm_freertos_apps += [gpslogger]
   sia_targets += [gpslogger]
   ina_targets += [gpslogger]
+  all_apps += [gpslogger]
 endif
 
 if build_librepilot
@@ -120,6 +122,7 @@ if build_librepilot
   arm_freertos_apps += [librepilot]
   sia_targets += [librepilot]
   ina_targets += [librepilot]
+  all_apps += [librepilot]
 endif
 
 if build_infinitime
@@ -139,6 +142,7 @@ if build_infinitime
   }
   all_lls += [infinitime['ll']]
   sia_targets += [infinitime]
+  all_apps += [infinitime]
 endif
 
 if build_ironos
@@ -156,12 +160,13 @@ if build_ironos
   all_lls += [ironos['ll']]
   sia_targets += [ironos]
   ina_targets += [ironos]
+  all_apps += [ironos]
 endif
 
 if build_i4copter
   copters = [
     {'name': 'i4copter', 'code': ara_proj.get_variable('autosar_singlecore_complex_isorc')},
-    {'name': 'i4copter-mc', 'code': ara_proj.get_variable('autosar_multicore_complex_copter_with_alarms')},
+    {'name': 'i4copter-mc', 'code': ara_proj.get_variable('autosar_multicore_complex_copter_autostart')},
   ]
 
   foreach copter : copters
@@ -170,19 +175,18 @@ if build_i4copter
     ina_settings = configure_file(input : files('settings' / 'ina_i4copter.json.in'),
                                   output : 'ina_' + copter['name'].underscorify() + '.json',
                                   configuration : conf_data)
+    multisse_settings = configure_file(input : files('settings' / 'multisse_i4copter.json.in'),
+                                       output : 'multisse_' + copter['name'].underscorify() + '.json',
+                                       configuration : conf_data)
     app = {
       'name': copter['name'],
       'os': 'AUTOSAR',
       'll': copter['code']['ll'],
       'ina_settings': ina_settings,
+      'multisse_settings': multisse_settings,
       'summary_section': 'i4copter (AUTOSAR)',
     }
-    all_lls += [app['ll']]
-    ina_targets += [app]
 
-    multisse_settings = configure_file(input : files('settings' / 'multisse_i4copter.json.in'),
-                                       output : 'multisse_' + copter['name'].underscorify() + '.json',
-                                       configuration : conf_data)
     run_multisse = 'multisse-' + app['name'].to_lower()
     run_target(run_multisse,
       command: [
@@ -204,7 +208,14 @@ if build_i4copter
           '--log-level', 'info',
           '--step-settings', sse_settings])
       summary('Run SSE on ' + app['name'], 'meson compile ' + run_sse, section: app['summary_section'])
+
+      app = app + {'sse_settings': sse_settings}
     endif
+
+    all_lls += [app['ll']]
+    ina_targets += [app]
+    all_apps += [app]
+
   endforeach
 endif
 
@@ -246,6 +257,7 @@ if build_intel_ecfw or build_zephyr
     all_lls += [ll]
     sia_targets += [zephyr_app]
     ina_targets += [zephyr_app]
+    all_apps += [zephyr_app]
 
     zephyr_test_apps += [zephyr_app]
   endforeach
@@ -270,6 +282,7 @@ if build_posix_apps
     all_lls += [app['ll']]
     sia_targets += [posix_app]
     ina_targets += [posix_app]
+    all_apps += [posix_app]
   endforeach
   # Tests
   if get_option('execute_ara')
@@ -308,6 +321,7 @@ if build_posix_apps and build_libmicrohttpd
     all_lls += [app['ll']]
     sia_targets += [lmhd_app]
     ina_targets += [lmhd_app]
+    all_apps += [lmhd_app]
   endforeach
 endif
 
@@ -362,35 +376,73 @@ run_target(build_all_lls,
 summary('Build all application to LLVM IR', 'meson compile ' + build_all_lls, section: 'generic')
 
 # experiments
-sia_runtime_apps = []
-sia_runtime_deps = []
-foreach app : sia_targets
+apps_in_json = []
+deps_for_apps = []
+foreach app : all_apps
   corrections = files('settings' / 'no_corrections.json')[0]
   if 'va_corrections' in app
     corrections = app['va_corrections']
   endif
-  sia_runtime_apps += [
+  app_settings = ''
+  if 'sia_settings' in app
+    app_settings += ', "sia_settings": "@0@"'.format(app['sia_settings'].full_path())
+  endif
+  if 'ina_settings' in app
+    app_settings += ', "ina_settings": "@0@"'.format(app['ina_settings'].full_path())
+  endif
+  if 'sse_settings' in app
+    app_settings += ', "sse_settings": "@0@"'.format(app['sse_settings'].full_path())
+  endif
+  if 'multisse_settings' in app
+    app_settings += ', "multisse_settings": "@0@"'.format(app['multisse_settings'].full_path())
+  endif
+  apps_in_json += [
     '--applications',
-    '{"name": "@0@", "ll": "@1@", "os": "@2@", "settings": "@3@", "va_corrections": "@4@"}'.format(
+    '{"name": "@0@", "ll": "@1@", "os": "@2@", "va_corrections": "@3@"@4@}'.format(
       app['name'],
       app['ll'].full_path(),
       app['os'],
-      app['sia_settings'].full_path(),
       corrections,
+      app_settings,
     )
   ]
-  sia_runtime_deps += [app['ll']]
+  deps_for_apps += [app['ll']]
+  summary(app['name'], 'OS: @0@, SIA: @1@, INA: @2@, SSE: @3@, MultiSSE: @4@, LL: @5@'.format(
+    app['os'],
+    'sia_settings' in app,
+    'ina_settings' in app,
+    'sse_settings' in app,
+    'multisse_settings' in app,
+    app['ll'].full_path()), section: 'Enabled Apps')
 endforeach
-run_sia_runtime = 'run-sia-runtime'
 
+run_sia_runtime = 'run-sia-runtime'
 run_target(run_sia_runtime,
   command: [
     py3_inst, sia_runtime_experiment,
-    '--work-dir', meson.current_build_dir(),
+    '--work-dir', meson.current_build_dir() / 'sia-runtime',
     '--title', run_sia_runtime,
-    '--result_dir', meson.current_build_dir(),
     '--python', py3_inst,
     '--iterations', '10',
-    '--ara', ara.full_path()] + sia_runtime_apps,
-  depends: [ara] + sia_runtime_deps)
+    '--ara', ara.full_path()] + apps_in_json,
+  depends: [ara] + deps_for_apps)
 summary('Measure SIA runtime in all modes', 'meson compile ' + run_sia_runtime, section: 'experiments')
+
+instance_graph_stats = 'run-app-stats'
+run_target(instance_graph_stats,
+  command: [
+    py3_inst, instance_graph_experiment,
+    '--work-dir', meson.current_build_dir() / 'app-stats',
+    '--title', run_sia_runtime,
+    '--python', py3_inst,
+    '--include', 'i4copter',
+    '--include', 'i4copter-mc',
+    '--include', 'GPSLogger',
+    '--include', 'LibrePilot',
+    '--include', 'IronOS',
+    '--include', 'libmicrohttpd',
+    '--include', 'native_posix-sys_kernel',
+    '--include', 'native_posix-app_kernel',
+    '--ara', ara.full_path()] + apps_in_json,
+  depends: [ara] + deps_for_apps)
+summary('Get app statistics', 'meson compile ' + instance_graph_stats, section: 'experiments')
