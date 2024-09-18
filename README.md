@@ -45,5 +45,8 @@ All build dependencies including clang, toolchains etc. are preinstalled in the 
 
 ```bash
 cd Docker
-docker build -t parrot
+# authenticate with your SRA credentials
+docker login scm.sra.uni-hannover.de:5050
+docker build -t scm.sra.uni-hannover.de:5050/research/parrot .
+# run the container and attach to it
 ./run_docker.sh
