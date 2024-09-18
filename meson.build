@@ -132,16 +132,21 @@ if build_infinitime
   sia_settings = configure_file(input : files('settings' / 'sia_infinitime.json.in'),
                                 output : 'sia_infinitime.json',
                                 configuration : conf_data)
+  ina_settings = configure_file(input : files('settings' / 'ina_infinitime.json.in'),
+                                output : 'ina_infinitime.json',
+                                configuration : conf_data)
   infinitime = {
     'name': 'InfiniTime',
     'os': 'FreeRTOS',
     'll': infinitime_gllvm.get_variable('infinitime_app'),
     'sia_settings': sia_settings,
+    'ina_settings': ina_settings,
     'freertos_config': infinitime_gllvm.get_variable('freertos_config'),
     'summary_section': 'InfiniTime (FreeRTOS)',
   }
   all_lls += [infinitime['ll']]
   sia_targets += [infinitime]
+  ina_targets += [infinitime]
   all_apps += [infinitime]
 endif
 
@@ -442,8 +447,8 @@ run_target(instance_graph_stats,
     '--include', 'IronOS',
     '--include', 'libmicrohttpd',
     '--include', 'InfiniTime',
-    '--include', 'native_posix-sys_kernel',
-    '--include', 'native_posix-app_kernel',
+    '--include', 'native_sim-sys_kernel',
+    '--include', 'native_sim-app_kernel',
     '--ara', ara.full_path()] + apps_in_json,
   depends: [ara] + deps_for_apps)
 summary('Get app statistics', 'meson compile ' + instance_graph_stats, section: 'experiments')

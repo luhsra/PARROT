@@ -1,0 +1,33 @@
+{
+	"steps": [
+		"InteractionAnalysis",
+		"DumpCFG",
+		"DumpInstances"
+	],
+
+	"InteractionAnalysis": {
+		"dump": true,
+		"log_level": "debug"
+	},
+
+	"ISRSearch": {
+		"block_list": "[ \"main\", \"_ZN8Pinetime12Applications10DisplayApp7ProcessEPv\", \"_ZN8Pinetime6System10SystemTask7ProcessEPv\" ]",
+		"log_level": "debug"
+	},
+
+	"ResolveFunctionPointer": {
+		"block_list": "[ \"main\" ]",
+		"translation_map": ["@translation_map@"]
+	},
+
+	"SVFAnalyses": {
+		"translation_map": ["@translation_map@"]
+	},
+
+	"logger": {
+		"StepManager": "info",
+		"FreeRTOS": "debug",
+		"ara": "info",
+		"ValueAnalyzer": "warn"
+	}
+}
