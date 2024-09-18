@@ -9,8 +9,8 @@
     "after_scheduler": 0,
     "unique": 1,
     "is_control": 0,
-    "file": "../../ara-zephyr-apps/appl/app_kernel/src/master.c",
-    "line": 45,
+    "file": "../../zephyr/tests/benchmarks/app_kernel/src/master.c",
+    "line": 58,
     "specialization_level": "",
     "type": "instance",
     "max_msgs": 1,
@@ -26,12 +26,29 @@
     "after_scheduler": 0,
     "unique": 1,
     "is_control": 0,
-    "file": "../../ara-zephyr-apps/appl/app_kernel/src/master.c",
-    "line": 42,
+    "file": "../../zephyr/tests/benchmarks/app_kernel/src/master.c",
+    "line": 54,
     "specialization_level": "",
     "type": "instance",
     "max_msgs": 500,
     "msg_size": 1
+  },
+  {
+    "label": "MSGQ",
+    "id": "DEMOQX192",
+    "branch": 0,
+    "usually_taken": 0,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 0,
+    "unique": 1,
+    "is_control": 0,
+    "file": "../../zephyr/tests/benchmarks/app_kernel/src/master.c",
+    "line": 56,
+    "specialization_level": "",
+    "type": "instance",
+    "max_msgs": 500,
+    "msg_size": 192
   },
   {
     "label": "MSGQ",
@@ -43,8 +60,8 @@
     "after_scheduler": 0,
     "unique": 1,
     "is_control": 0,
-    "file": "../../ara-zephyr-apps/appl/app_kernel/src/master.c",
-    "line": 43,
+    "file": "../../zephyr/tests/benchmarks/app_kernel/src/master.c",
+    "line": 55,
     "specialization_level": "",
     "type": "instance",
     "max_msgs": 500,
@@ -60,8 +77,8 @@
     "after_scheduler": 0,
     "unique": 1,
     "is_control": 0,
-    "file": "../../ara-zephyr-apps/appl/app_kernel/src/master.c",
-    "line": 58,
+    "file": "../../zephyr/tests/benchmarks/app_kernel/src/master.c",
+    "line": 71,
     "specialization_level": "",
     "type": "instance"
   },
@@ -75,8 +92,8 @@
     "after_scheduler": 0,
     "unique": 1,
     "is_control": 0,
-    "file": "../../ara-zephyr-apps/appl/app_kernel/src/master.c",
-    "line": 44,
+    "file": "../../zephyr/tests/benchmarks/app_kernel/src/master.c",
+    "line": 57,
     "specialization_level": "",
     "type": "instance",
     "max_msgs": 1,
@@ -92,8 +109,8 @@
     "after_scheduler": 0,
     "unique": 1,
     "is_control": 0,
-    "file": "../../ara-zephyr-apps/appl/app_kernel/src/master.c",
-    "line": 62,
+    "file": "../../zephyr/tests/benchmarks/app_kernel/src/master.c",
+    "line": 75,
     "specialization_level": "",
     "type": "instance",
     "size": 4096
@@ -108,8 +125,8 @@
     "after_scheduler": 0,
     "unique": 1,
     "is_control": 0,
-    "file": "../../ara-zephyr-apps/appl/app_kernel/src/master.c",
-    "line": 60,
+    "file": "../../zephyr/tests/benchmarks/app_kernel/src/master.c",
+    "line": 73,
     "specialization_level": "",
     "type": "instance",
     "size": 0
@@ -124,31 +141,11 @@
     "after_scheduler": 0,
     "unique": 1,
     "is_control": 0,
-    "file": "../../ara-zephyr-apps/appl/app_kernel/src/master.c",
-    "line": 61,
+    "file": "../../zephyr/tests/benchmarks/app_kernel/src/master.c",
+    "line": 74,
     "specialization_level": "",
     "type": "instance",
     "size": 256
-  },
-  {
-    "label": "Thread",
-    "id": "RECVTASK",
-    "branch": 0,
-    "usually_taken": 0,
-    "loop": 0,
-    "recursive": 0,
-    "after_scheduler": 0,
-    "unique": 1,
-    "is_control": 1,
-    "file": "../../ara-zephyr-apps/appl/app_kernel/src/master.c",
-    "line": 40,
-    "specialization_level": "",
-    "type": "instance",
-    "delay": 0,
-    "entry_name": "recvtask",
-    "options": 0,
-    "priority": 5,
-    "stack_size": 1024
   },
   {
     "label": "KernelSemaphore",
@@ -160,8 +157,8 @@
     "after_scheduler": 0,
     "unique": 1,
     "is_control": 0,
-    "file": "../../ara-zephyr-apps/appl/app_kernel/src/master.c",
-    "line": 49,
+    "file": "../../zephyr/tests/benchmarks/app_kernel/src/master.c",
+    "line": 62,
     "specialization_level": "",
     "type": "instance",
     "count": 0,
@@ -177,8 +174,8 @@
     "after_scheduler": 0,
     "unique": 1,
     "is_control": 0,
-    "file": "../../ara-zephyr-apps/appl/app_kernel/src/master.c",
-    "line": 50,
+    "file": "../../zephyr/tests/benchmarks/app_kernel/src/master.c",
+    "line": 63,
     "specialization_level": "",
     "type": "instance",
     "count": 0,
@@ -194,8 +191,8 @@
     "after_scheduler": 0,
     "unique": 1,
     "is_control": 0,
-    "file": "../../ara-zephyr-apps/appl/app_kernel/src/master.c",
-    "line": 51,
+    "file": "../../zephyr/tests/benchmarks/app_kernel/src/master.c",
+    "line": 64,
     "specialization_level": "",
     "type": "instance",
     "count": 0,
@@ -211,8 +208,8 @@
     "after_scheduler": 0,
     "unique": 1,
     "is_control": 0,
-    "file": "../../ara-zephyr-apps/appl/app_kernel/src/master.c",
-    "line": 52,
+    "file": "../../zephyr/tests/benchmarks/app_kernel/src/master.c",
+    "line": 65,
     "specialization_level": "",
     "type": "instance",
     "count": 0,
@@ -228,8 +225,8 @@
     "after_scheduler": 0,
     "unique": 1,
     "is_control": 0,
-    "file": "../../ara-zephyr-apps/appl/app_kernel/src/master.c",
-    "line": 53,
+    "file": "../../zephyr/tests/benchmarks/app_kernel/src/master.c",
+    "line": 66,
     "specialization_level": "",
     "type": "instance",
     "count": 0,
@@ -245,8 +242,8 @@
     "after_scheduler": 0,
     "unique": 1,
     "is_control": 0,
-    "file": "../../ara-zephyr-apps/appl/app_kernel/src/master.c",
-    "line": 54,
+    "file": "../../zephyr/tests/benchmarks/app_kernel/src/master.c",
+    "line": 67,
     "specialization_level": "",
     "type": "instance",
     "count": 0,
@@ -289,357 +286,337 @@
     "stack_size": 1024
   },
   {
+    "label": "Thread",
+    "id": "recv_thread",
+    "branch": 0,
+    "usually_taken": 0,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 1,
+    "unique": 1,
+    "is_control": 1,
+    "file": "../../zephyr/tests/benchmarks/app_kernel/src/master.c",
+    "line": 163,
+    "specialization_level": "",
+    "type": "instance",
+    "delay": "@unknown@",
+    "entry_name": "recvtask",
+    "options": 0,
+    "priority": 5,
+    "stack_size": 1024
+  },
+  {
+    "label": "Thread",
+    "id": "test_thread",
+    "branch": 0,
+    "usually_taken": 0,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 1,
+    "unique": 1,
+    "is_control": 1,
+    "file": "../../zephyr/tests/benchmarks/app_kernel/src/master.c",
+    "line": 157,
+    "specialization_level": "",
+    "type": "instance",
+    "delay": "@unknown@",
+    "entry_name": "test_thread_entry",
+    "options": 0,
+    "priority": "@unknown@",
+    "stack_size": 1024
+  },
+  {
+    "source": "__main",
+    "target": "recv_thread",
+    "label": "k_thread_create",
+    "type": "create"
+  },
+  {
+    "source": "__main",
+    "target": "test_thread",
+    "label": "k_thread_create",
+    "type": "create"
+  },
+  {
     "source": "__main",
     "target": "__main",
     "label": "k_current_get",
     "type": "interaction"
   },
   {
-    "source": "__main",
-    "target": "__main",
+    "source": "test_thread",
+    "target": "test_thread",
     "label": "k_current_get",
     "type": "interaction"
   },
   {
-    "source": "__main",
-    "target": "__main",
+    "source": "test_thread",
+    "target": "test_thread",
     "label": "k_current_get",
     "type": "interaction"
   },
   {
-    "source": "RECVTASK",
+    "source": "test_thread",
+    "target": "test_thread",
+    "label": "k_current_get",
+    "type": "interaction"
+  },
+  {
+    "source": "recv_thread",
     "target": "DEMOQX1",
     "label": "k_msgq_get",
     "type": "interaction"
   },
   {
-    "source": "RECVTASK",
+    "source": "recv_thread",
+    "target": "DEMOQX192",
+    "label": "k_msgq_get",
+    "type": "interaction"
+  },
+  {
+    "source": "recv_thread",
     "target": "DEMOQX4",
     "label": "k_msgq_get",
     "type": "interaction"
   },
   {
-    "source": "__main",
+    "source": "test_thread",
     "target": "CH_COMM",
     "label": "k_msgq_get",
     "type": "interaction"
   },
   {
-    "source": "__main",
+    "source": "test_thread",
     "target": "CH_COMM",
     "label": "k_msgq_get",
     "type": "interaction"
   },
   {
-    "source": "__main",
-    "target": "CH_COMM",
-    "label": "k_msgq_get",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "CH_COMM",
-    "label": "k_msgq_get",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
+    "source": "test_thread",
     "target": "DEMOQX1",
     "label": "k_msgq_get",
     "type": "interaction"
   },
   {
-    "source": "__main",
+    "source": "test_thread",
+    "target": "DEMOQX192",
+    "label": "k_msgq_get",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread",
     "target": "DEMOQX4",
     "label": "k_msgq_get",
     "type": "interaction"
   },
   {
-    "source": "__main",
+    "source": "test_thread",
     "target": "MB_COMM",
     "label": "k_msgq_get",
     "type": "interaction"
   },
   {
-    "source": "__main",
+    "source": "test_thread",
     "target": "MB_COMM",
     "label": "k_msgq_get",
     "type": "interaction"
   },
   {
-    "source": "RECVTASK",
+    "source": "recv_thread",
     "target": "CH_COMM",
     "label": "k_msgq_put",
     "type": "interaction"
   },
   {
-    "source": "RECVTASK",
+    "source": "recv_thread",
     "target": "CH_COMM",
     "label": "k_msgq_put",
     "type": "interaction"
   },
   {
-    "source": "RECVTASK",
-    "target": "CH_COMM",
-    "label": "k_msgq_put",
-    "type": "interaction"
-  },
-  {
-    "source": "RECVTASK",
-    "target": "CH_COMM",
-    "label": "k_msgq_put",
-    "type": "interaction"
-  },
-  {
-    "source": "RECVTASK",
+    "source": "recv_thread",
     "target": "MB_COMM",
     "label": "k_msgq_put",
     "type": "interaction"
   },
   {
-    "source": "RECVTASK",
+    "source": "recv_thread",
     "target": "MB_COMM",
     "label": "k_msgq_put",
     "type": "interaction"
   },
   {
-    "source": "__main",
+    "source": "test_thread",
     "target": "DEMOQX1",
     "label": "k_msgq_put",
     "type": "interaction"
   },
   {
-    "source": "__main",
+    "source": "test_thread",
     "target": "DEMOQX1",
     "label": "k_msgq_put",
     "type": "interaction"
   },
   {
-    "source": "__main",
+    "source": "test_thread",
+    "target": "DEMOQX192",
+    "label": "k_msgq_put",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread",
+    "target": "DEMOQX192",
+    "label": "k_msgq_put",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread",
     "target": "DEMOQX4",
     "label": "k_msgq_put",
     "type": "interaction"
   },
   {
-    "source": "__main",
+    "source": "test_thread",
     "target": "DEMOQX4",
     "label": "k_msgq_put",
     "type": "interaction"
   },
   {
-    "source": "__main",
+    "source": "test_thread",
     "target": "DEMO_MUTEX",
     "label": "k_mutex_lock",
     "type": "interaction"
   },
   {
-    "source": "__main",
+    "source": "test_thread",
     "target": "DEMO_MUTEX",
     "label": "k_mutex_unlock",
     "type": "interaction"
   },
   {
-    "source": "RECVTASK",
-    "target": "PIPE_BIGBUFF",
-    "label": "k_pipe_get",
-    "type": "interaction"
-  },
-  {
-    "source": "RECVTASK",
-    "target": "PIPE_NOBUFF",
-    "label": "k_pipe_get",
-    "type": "interaction"
-  },
-  {
-    "source": "RECVTASK",
-    "target": "PIPE_SMALLBUFF",
-    "label": "k_pipe_get",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "PIPE_BIGBUFF",
-    "label": "k_pipe_put",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "PIPE_NOBUFF",
-    "label": "k_pipe_put",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "PIPE_SMALLBUFF",
-    "label": "k_pipe_put",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
+    "source": "test_thread",
     "target": "SEM0",
     "label": "k_sem_give",
     "type": "interaction"
   },
   {
-    "source": "__main",
+    "source": "test_thread",
     "target": "SEM0",
     "label": "k_sem_give",
     "type": "interaction"
   },
   {
-    "source": "__main",
+    "source": "test_thread",
     "target": "SEM0",
     "label": "k_sem_give",
     "type": "interaction"
   },
   {
-    "source": "__main",
+    "source": "test_thread",
     "target": "SEM1",
     "label": "k_sem_give",
     "type": "interaction"
   },
   {
-    "source": "__main",
+    "source": "test_thread",
     "target": "SEM1",
     "label": "k_sem_give",
     "type": "interaction"
   },
   {
-    "source": "__main",
+    "source": "test_thread",
     "target": "STARTRCV",
     "label": "k_sem_give",
     "type": "interaction"
   },
   {
-    "source": "__main",
+    "source": "test_thread",
     "target": "STARTRCV",
     "label": "k_sem_give",
     "type": "interaction"
   },
   {
-    "source": "__main",
+    "source": "test_thread",
     "target": "STARTRCV",
     "label": "k_sem_give",
     "type": "interaction"
   },
   {
-    "source": "__main",
+    "source": "test_thread",
     "target": "STARTRCV",
     "label": "k_sem_give",
     "type": "interaction"
   },
   {
-    "source": "__main",
+    "source": "test_thread",
     "target": "SEM0",
     "label": "k_sem_reset",
     "type": "interaction"
   },
   {
-    "source": "__main",
+    "source": "test_thread",
     "target": "SEM0",
     "label": "k_sem_reset",
     "type": "interaction"
   },
   {
-    "source": "__main",
+    "source": "test_thread",
     "target": "SEM1",
     "label": "k_sem_reset",
     "type": "interaction"
   },
   {
-    "source": "RECVTASK",
+    "source": "recv_thread",
     "target": "SEM0",
     "label": "k_sem_take",
     "type": "interaction"
   },
   {
-    "source": "RECVTASK",
+    "source": "recv_thread",
     "target": "SEM0",
     "label": "k_sem_take",
     "type": "interaction"
   },
   {
-    "source": "RECVTASK",
+    "source": "recv_thread",
     "target": "SEM1",
     "label": "k_sem_take",
     "type": "interaction"
   },
   {
-    "source": "RECVTASK",
+    "source": "recv_thread",
     "target": "SEM1",
     "label": "k_sem_take",
     "type": "interaction"
   },
   {
-    "source": "RECVTASK",
+    "source": "recv_thread",
     "target": "STARTRCV",
     "label": "k_sem_take",
     "type": "interaction"
   },
   {
-    "source": "RECVTASK",
+    "source": "recv_thread",
     "target": "STARTRCV",
     "label": "k_sem_take",
     "type": "interaction"
   },
   {
-    "source": "RECVTASK",
+    "source": "recv_thread",
     "target": "STARTRCV",
     "label": "k_sem_take",
     "type": "interaction"
   },
   {
-    "source": "RECVTASK",
+    "source": "recv_thread",
     "target": "STARTRCV",
     "label": "k_sem_take",
     "type": "interaction"
   },
   {
-    "source": "RECVTASK",
-    "target": "RECVTASK",
-    "label": "k_sleep",
-    "type": "interaction"
-  },
-  {
-    "source": "RECVTASK",
-    "target": "RECVTASK",
-    "label": "k_sleep",
-    "type": "interaction"
-  },
-  {
     "source": "__main",
-    "target": "__main",
-    "label": "k_sleep",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_sleep",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_sleep",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_sleep",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_sleep",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_sleep",
+    "target": "test_thread",
+    "label": "k_thread_join",
     "type": "interaction"
   }
 ]
