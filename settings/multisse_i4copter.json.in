@@ -8,6 +8,10 @@
 		"oilfile": "@oil_file@"
 	},
 
+	"MultiSSE": {
+		"zero_round_limit": @zero_round_limit@
+	},
+
 	"logger": {
 		"StepManager": "info",
 		"AUTOSAR": "info",

@@ -177,31 +177,16 @@ if build_i4copter
   foreach copter : copters
     conf_data = configuration_data()
     conf_data.set('oil_file', copter['code']['oil'].full_path())
-    ina_settings = configure_file(input : files('settings' / 'ina_i4copter.json.in'),
-                                  output : 'ina_' + copter['name'].underscorify() + '.json',
-                                  configuration : conf_data)
-    multisse_settings = configure_file(input : files('settings' / 'multisse_i4copter.json.in'),
-                                       output : 'multisse_' + copter['name'].underscorify() + '.json',
-                                       configuration : conf_data)
+
     app = {
       'name': copter['name'],
       'os': 'AUTOSAR',
       'll': copter['code']['ll'],
-      'ina_settings': ina_settings,
-      'multisse_settings': multisse_settings,
       'summary_section': 'i4copter (AUTOSAR)',
     }
 
-    run_multisse = 'multisse-' + app['name'].to_lower()
-    run_target(run_multisse,
-      command: [
-        py3_inst, ara, app['ll'],
-        '--os', app['os'],
-        '--log-level', 'info',
-        '--step-settings', multisse_settings])
-    summary('Run MultiSSE on ' + app['name'], 'meson compile ' + run_multisse, section: app['summary_section'])
-
     if copter['code']['core'] == 'singlecore'
+      conf_data.set('zero_round_limit', 5000)
       sse_settings = configure_file(input : files('settings' / 'sse_i4copter.json.in'),
                                     output : 'sse_' + copter['name'].underscorify() + '.json',
                                     configuration : conf_data)
@@ -215,7 +200,29 @@ if build_i4copter
       summary('Run SSE on ' + app['name'], 'meson compile ' + run_sse, section: app['summary_section'])
 
       app = app + {'sse_settings': sse_settings}
+    else
+      conf_data.set('zero_round_limit', -1)
     endif
+
+    ina_settings = configure_file(input : files('settings' / 'ina_i4copter.json.in'),
+                                  output : 'ina_' + copter['name'].underscorify() + '.json',
+                                  configuration : conf_data)
+    multisse_settings = configure_file(input : files('settings' / 'multisse_i4copter.json.in'),
+                                       output : 'multisse_' + copter['name'].underscorify() + '.json',
+                                       configuration : conf_data)
+    app = app + {
+      'ina_settings': ina_settings,
+      'multisse_settings': multisse_settings,
+    }
+
+    run_multisse = 'multisse-' + app['name'].to_lower()
+    run_target(run_multisse,
+      command: [
+        py3_inst, ara, app['ll'],
+        '--os', app['os'],
+        '--log-level', 'info',
+        '--step-settings', multisse_settings])
+    summary('Run MultiSSE on ' + app['name'], 'meson compile ' + run_multisse, section: app['summary_section'])
 
     all_lls += [app['ll']]
     ina_targets += [app]
