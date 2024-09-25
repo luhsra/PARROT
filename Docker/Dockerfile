@@ -36,4 +36,5 @@ RUN ln -s /usr/local/bin/cython /usr/bin/cython3
 # gllvm must be installed via go package manager
 RUN go install github.com/SRI-CSL/gllvm/cmd/...@master
 
+RUN apt-get install -qq cloc
 CMD ["bash"]
