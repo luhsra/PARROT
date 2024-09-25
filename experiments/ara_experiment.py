@@ -82,6 +82,29 @@ def get_file_loader(dir):
     return file_load
 
 
+class SaveTimer(Exception):
+    def __init__(self, time):
+        self.time = time
+
+
+def run_cmd(cmd, save_log=lambda x: x, save_cmd=lambda x: x):
+    pretty_cmd = " ".join([f"'{x}'" for x in cmd])
+    print(yellow("Executing:"), pretty_cmd)
+    save_cmd(pretty_cmd)
+    timer = TimeMeasure()
+    try:
+        with timer:
+            output = subprocess.run(cmd, check=True, capture_output=True)
+            save_log(output)
+    except subprocess.CalledProcessError as e:
+        print(red("-> ERROR: Execution failed:"), pretty_cmd)
+        save_log(e)
+        raise SaveTimer(timer.get_time())
+
+    print(green("Finished:"), pretty_cmd)
+    return output, timer.get_time()
+
+
 def run_ara(work_dir, cmd, idx=None):
     if idx is not None:
         work_dir = work_dir / str(idx)
@@ -93,26 +116,18 @@ def run_ara(work_dir, cmd, idx=None):
         with open(work_dir / "ARA.stdout.txt", "wb") as log:
             log.write(obj.stdout)
 
-    timer = TimeMeasure()
     prefix = ["--dump-prefix", str(work_dir.absolute()) + "/{step_name}.{uuid}."]
     cmd += prefix
-    pretty_cmd = " ".join([f"'{x}'" for x in cmd])
 
-    with open(work_dir / "cmd_line", "w") as f:
-        f.write(pretty_cmd)
+    def save_cmd(cmd):
+        with open(work_dir / "cmd_line", "w") as f:
+            f.write(cmd)
 
-    print(yellow("Executing:"), pretty_cmd)
     try:
-        with timer:
-            ara = subprocess.run(cmd, check=True, capture_output=True)
-            save_log(ara)
-    except subprocess.CalledProcessError as e:
-        print(red("-> ERROR: Execution failed:"), pretty_cmd)
-        save_log(e)
-        return work_dir, timer.get_time(), True
-
-    print(green("Finished:"), pretty_cmd)
-    return work_dir, timer.get_time(), False
+        _, time = run_cmd(cmd, save_log=save_log, save_cmd=save_cmd)
+    except SaveTimer as e:
+        return work_dir, e.time, True
+    return work_dir, time, False
 
 
 @dataclass
@@ -145,6 +160,7 @@ class ARAExperiment(Experiment):
         run_dir=None,
         title=None,
         cwd=None,
+        side_args=None,
         **kwargs,
     ):
         Experiment.__init__(self, *args, **kwargs)
@@ -153,6 +169,7 @@ class ARAExperiment(Experiment):
         self.job_count = job_count
         self.run_dir = run_dir
         self.cwd = cwd
+        self.side_args = side_args
         if title:
             self.title = title
 
@@ -161,7 +178,6 @@ class ARAExperiment(Experiment):
             settings = []
         print("Loading:", app_info)
 
-        app_name = app_info["name"]
         app_ll = app_info["ll"]
         app_os = app_info["os"]
 
@@ -173,7 +189,7 @@ class ARAExperiment(Experiment):
                 extra_config.extend(["--step-settings", str(app_cfg.absolute())])
 
         cmd = [self.python, self.ara, app_ll, "--os", app_os, *extra_config]
-        return app_name, cmd
+        return cmd
 
     def assign_dict(self, luatable, data):
         for key, value in data.items():
@@ -221,7 +237,7 @@ class ARAExperiment(Experiment):
                 self.fill_output(res)
 
 
-def run_ara_experiment(experiment_cls):
+def run_ara_experiment(experiment_cls, extra_args=lambda x: x):
     print("Experiment loaded with:", sys.argv)
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -243,6 +259,7 @@ def run_ara_experiment(experiment_cls):
         default=multiprocessing.cpu_count(),
         help="Maximal number of parallel SIA executions.",
     )
+    extra_args(parser)
     args, unknown = parser.parse_known_args()
 
     assert args.python.is_file(), "--python must be a file"
@@ -265,6 +282,7 @@ def run_ara_experiment(experiment_cls):
         run_dir=args.work_dir,
         title=args.title,
         cwd=cwd,
+        side_args=args,
     )
     dirname = experiment(unknown)
 

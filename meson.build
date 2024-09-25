@@ -81,6 +81,8 @@ if build_gpslogger
     'sia_settings': files('settings' / 'sia_gpslogger.json')[0],
     'ina_settings': files('settings' / 'ina_gpslogger.json')[0],
     'freertos_config': gpslogger_proj.get_variable('freertos_config'),
+    'cloc_app': gpslogger_proj.get_variable('cloc_app'),
+    'cloc_lib': gpslogger_proj.get_variable('cloc_lib'),
     'summary_section': 'GPSLogger (FreeRTOS)',
   }
   all_lls += [gpslogger['ll']]
@@ -116,6 +118,7 @@ if build_librepilot
     'corrections': librepilot_proj.get_variable('instance_corrections'),
     'extra_settings': extra_settings,
     'freertos_config': librepilot_proj.get_variable('freertos_config'),
+    'cloc_app': librepilot_proj.get_variable('cloc_app'),
     'summary_section': 'LibrePilot (FreeRTOS)',
   }
   all_lls += [librepilot['ll']]
@@ -142,6 +145,8 @@ if build_infinitime
     'sia_settings': sia_settings,
     'ina_settings': ina_settings,
     'freertos_config': infinitime_gllvm.get_variable('freertos_config'),
+    'cloc_app': infinitime_gllvm.get_variable('cloc_app'),
+    'cloc_lib': infinitime_gllvm.get_variable('cloc_lib'),
     'summary_section': 'InfiniTime (FreeRTOS)',
   }
   all_lls += [infinitime['ll']]
@@ -159,8 +164,9 @@ if build_ironos
     'sia_settings': files('settings' / 'sia_ironos.json')[0],
     'ina_settings': files('settings' / 'ina_ironos.json')[0],
     'freertos_config': ironos_source.get_variable('freertos_config'),
+    'cloc_app': ironos_source.get_variable('cloc_app'),
     'summary_section': 'IronOS (FreeRTOS)',
-    'va_corrections': ironos_source.get_variable('va_corrections')
+    'va_corrections': ironos_source.get_variable('va_corrections'),
   }
   all_lls += [ironos['ll']]
   sia_targets += [ironos]
@@ -246,8 +252,8 @@ endif
 
 if build_intel_ecfw or build_zephyr
   foreach tgt : zephyr_targets
-    ll = tgt[0]
-    config = tgt[1]
+    ll = tgt['ll']
+    config = tgt['config']
     name = fs.stem(ll.full_path())
 
     conf_data = configuration_data()
@@ -264,6 +270,7 @@ if build_intel_ecfw or build_zephyr
       'll': ll,
       'sia_settings': sia_settings,
       'ina_settings': ina_settings,
+      'cloc_app': tgt['cloc_app'],
       'summary_section': 'ARA Zephyr Apps',
     }
     all_lls += [ll]
@@ -328,6 +335,7 @@ if build_posix_apps and build_libmicrohttpd
       'll': app['ll'],
       'sia_settings': sia_settings,
       'ina_settings': ina_settings,
+      'cloc_app': app['cloc_app'],
       'summary_section': 'libmicrohttpd (POSIX)',
     }
     all_lls += [app['ll']]
@@ -408,6 +416,20 @@ foreach app : all_apps
   if 'multisse_settings' in app
     app_settings += ', "multisse_settings": "@0@"'.format(app['multisse_settings'].full_path())
   endif
+  if 'cloc_app' in app
+    paths = []
+    foreach file : app['cloc_app']
+      paths += ['"' + file + '"']
+    endforeach
+    app_settings += ', "cloc_app": [@0@]'.format(', '.join(paths))
+  endif
+  if 'cloc_lib' in app
+    paths = []
+    foreach file : app['cloc_lib']
+      paths += ['"' + file + '"']
+    endforeach
+    app_settings += ', "cloc_lib": [@0@]'.format(', '.join(paths))
+  endif
   apps_in_json += [
     '--applications',
     '{"name": "@0@", "ll": "@1@", "os": "@2@", "va_corrections": "@3@"@4@}'.format(
@@ -441,12 +463,14 @@ run_target(run_sia_runtime,
 summary('Measure SIA runtime in all modes', 'meson compile ' + run_sia_runtime, section: 'experiments')
 
 instance_graph_stats = 'run-app-stats'
+cloc = find_program('cloc')
 run_target(instance_graph_stats,
   command: [
     py3_inst, instance_graph_experiment,
     '--work-dir', meson.current_build_dir() / 'app-stats',
     '--title', run_sia_runtime,
     '--python', py3_inst,
+    '--cloc', cloc,
     '--include', 'i4copter',
     '--include', 'i4copter-mc',
     '--include', 'GPSLogger',
