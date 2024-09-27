@@ -53,7 +53,8 @@ class SiaRuntimeExperiment(ARAExperiment):
         if "sia_settings" not in application_info:
             return
         for mode in self.inputs.modes:
-            app_name, cmd = self.prepare_ara(application_info)
+            app_name = application_info['name']
+            cmd = self.prepare_ara(application_info)
 
             cur_config = copy.copy(ARA_CONFIG)
             cur_config["SIA"]["traversal_mode"] = mode.value
