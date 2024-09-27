@@ -2,12 +2,28 @@
 import copy
 import json
 
+from dataclasses import dataclass
 
-from ara_experiment import run_ara_experiment, ARAExperiment, run_ara
+
+from ara_experiment import (
+    run_ara_experiment,
+    ARAExperiment,
+    run_ara,
+    ExperimentResult
+)
 
 from versuchung.types import String, List, Integer
 
 ARA_CONFIG = {"steps": ["SIA"], "SIA": {"traversal_mode": "TBD"}, "logger": {}}
+
+
+@dataclass
+class SiaRuntimeResult(ExperimentResult):
+    os: str
+    mode: str
+    index: int
+    ara_time: float
+    sia_time: float
 
 
 class SiaRuntimeExperiment(ARAExperiment):
@@ -28,33 +44,33 @@ class SiaRuntimeExperiment(ARAExperiment):
     }
 
     @staticmethod
-    def run_sia(app_name, cur_dir, cmd, mode, idx):
+    def run_sia(app_name, os, cur_dir, cmd, mode, idx):
         work_dir, time, failed = run_ara(cur_dir, cmd, idx=idx)
-
-        ret = {
-            "app_name": app_name,
-            "mode": str(mode),
-            "index": idx,
-            "ara_time": time,
-            "failed": True,
-        }
-
         if failed:
-            return ret
+            return ExperimentResult(app_name=app_name, failed=True)
 
         sia_time = 0
         with open(work_dir / "ARA.-.runtime_stats.json") as stats_file:
             for step in json.load(stats_file):
                 if step[0] == "SIA":
                     sia_time += step[2]
-        return {**ret, "sia_time": sia_time, "failed": False}
+
+        return SiaRuntimeResult(
+            app_name=app_name,
+            failed=False,
+            os=os,
+            mode=str(mode),
+            index=idx,
+            ara_time=time,
+            sia_time=sia_time,
+        )
 
     def prepare_application(self, submit, application_info):
         if "sia_settings" not in application_info:
             return
         for mode in self.inputs.modes:
             app_name = application_info['name']
-            cmd = self.prepare_ara(application_info)
+            cmd = self.prepare_ara(application_info, settings=['sia_settings'])
 
             cur_config = copy.copy(ARA_CONFIG)
             cur_config["SIA"]["traversal_mode"] = mode.value
@@ -75,6 +91,7 @@ class SiaRuntimeExperiment(ARAExperiment):
                 submit(
                     SiaRuntimeExperiment.run_sia,
                     app_name,
+                    application_info['os'],
                     cur_dir,
                     copy.copy(cmd),
                     mode,
@@ -82,12 +99,13 @@ class SiaRuntimeExperiment(ARAExperiment):
                 )
 
     def fill_output(self, res):
-        self.outputs.results[res["app_name"]][res["mode"]]["sia_runtime"][
-            res["index"]
-        ] = res["sia_time"]
-        self.outputs.results[res["app_name"]][res["mode"]]["ara_runtime"][
-            res["index"]
-        ] = res["ara_time"]
+        self.outputs.results[res.app_name]["os"] = res.os
+        self.outputs.results[res.app_name][res.mode]["sia_runtime"][
+            res.index
+        ] = res.sia_time
+        self.outputs.results[res.app_name][res.mode]["ara_runtime"][
+            res.index
+        ] = res.ara_time
 
 
 if __name__ == "__main__":
