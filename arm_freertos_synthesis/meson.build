@@ -1,8 +1,3 @@
-## gpslogger app
-gpslogger_proj = subproject('GPSLogger')
-gpslogger_application = gpslogger_proj.get_variable('gpslogger_application')
-gpslogger_cflags = gpslogger_proj.get_variable('gpslogger_cflags')
-
 ## freertos sources
 freertos_proj = subproject('freertos')
 freertos_src_list = freertos_proj.get_variable('sources') + freertos_proj.get_variable('arm_sources')
@@ -11,14 +6,6 @@ foreach file : freertos_proj.get_variable('header_dirs') + freertos_proj.get_var
   freertos_includes += ['-I', file]
 endforeach
 
-## stuff from ara
-llvm_opt_cmd = ara_proj.get_variable('llvm_opt_cmd')
-ara_settings = ara_proj.get_variable('ara_settings')
-ara_freertos_generator_targets = ara_proj.get_variable('ara_freertos_generator_targets')
-llvm_lto_cmds = ara_proj.get_variable('llvm_lto_cmds')
-compare_nm = ara_proj.get_variable('compare_nm')
-compare_time = ara_proj.get_variable('compare_time')
-
 ## sparsedata
 sparsedata = subproject('sparsedata')
 sparse_rle2 = sparsedata.get_variable('libsparserle2')
@@ -26,16 +13,20 @@ sparse_rle2 = sparsedata.get_variable('libsparserle2')
 ## libplatforms
 libplatforms = subproject('ara-libplatforms')
 clang_flags = libplatforms.get_variable('clang_flags')
+ld_flags = libplatforms.get_variable('ld_flags')
 arm_clang_flags = libplatforms.get_variable('arm_clang_flags')
+stm32_clang_flags = libplatforms.get_variable('stm32_clang_flags')
 arm_ld_flags = libplatforms.get_variable('arm_ld_flags')
 stm32_ld_flags = libplatforms.get_variable('stm32_ld_flags')
+llvm_opt_flags = libplatforms.get_variable('llvm_opt_flags')
 llc_cmd = libplatforms.get_variable('llc_cmd')
 libplatform_linkerscript = libplatforms.get_variable('libplatform_linkerscript')
-
+arm_llc_flags = libplatforms.get_variable('arm_llc_flags')
 
 ## toolchain
 llvm_link_cmd = toolchains.get_variable('llvm_link_cmd')
 llvm_objcopy = toolchains.get_variable('llvm_objcopy')
+llvm_opt = toolchains.get_variable('llvm_opt')
 arm_size = toolchains.get_variable('arm_size')
 arm_nm = toolchains.get_variable('arm_nm')
 clang_c = toolchains.get_variable('clang_c_cmd')
@@ -54,23 +45,92 @@ endforeach
 
 st_flash = find_program('st-flash', required: false, disabler: true)
 
+ara_freertos_generator_targets = [
+  # {'name': 'passthrough', 'settings': freertos_gen_passthrough}, # does not build, TODO
+  {'name': 'vanilla', 'settings': freertos_gen_vanilla},
+  {'name': 'full_static', 'settings': freertos_gen_instances_full_static},
+  {'name': 'full_init', 'settings': freertos_gen_instances_full_initialized},
+]
+
+llvm_opt_cmd = [llvm_opt, '-S', '-o', '@OUTPUT@', '@INPUT@'] + llvm_opt_flags
+llvm_lto_cmds = {
+  'none': [llvm_opt, '-S', '-o', '@OUTPUT@', '@INPUT@', '--O0'],
+  'std': llvm_opt_cmd,
+  'rle2': llvm_opt_cmd + ['-load', sparse_rle2.full_path(), '-SparseRLE2', '-enable-new-pm=0'],
+}
+
 foreach app : arm_freertos_apps
+  # build standard and specialized variants for freertos
+  #
+  # the whole process works roughly so:
+  #
+  # +--------+ ARA +-------------+                     llc +----------+
+  # | app.ll |---->| modified-ll |-------------------+---->|  o-file  |
+  # +--------+  |  +-------------+                   |     +----------+
+  #             |                                    |
+  #             |  +-------------+ clang +---------+ | llvm-link +-----------+
+  #             +->|    os.cc    |------>|  os.ll  |-+---------->| app_os.ll |
+  #             |  +-------------+       +---------+             +-.---------+
+  #             |                                                  v opt
+  #             |  +-------------+                           +---------------+
+  #             +->|  startup.s  |---+                       | lto_app_os.ll |
+  #                +-------------+   |                       +-----.---------+
+  #                                  |                             v llc
+  #                                  |                       +---------------+
+  #                                  |                       | lto_app_os.ll |
+  #                                  |                       +-----.---------+
+  #                                  +-----------------------------|
+  #                                                                v clang
+  #                            +----------------+  objcopy  +----------------+
+  #                            | lto_app_os.bin |<----------| lto_app_os.elf |
+  #                            +----------------+           +----------------+
   app_name = app['name']
   app_low = app_name.to_lower()
   all_lls += [app['ll']]
 
-  combined_cflags = ir_flags + clang_flags + arm_clang_flags + arm_ld_flags + app['cflags']
+  combined_cflags = ir_flags + clang_flags + arm_clang_flags + stm32_clang_flags + arm_ld_flags + ld_flags
+  if app.has_key('cflags')
+    combined_cflags += app['cflags']
+  endif
   named_elf_targets = []
   elf_targets = []
   profiles_list = []
 
-  freertos_includes += ['-I', fs.parent(app['freertos_config'].full_path())]
+  app_includes = freertos_includes + ['-I', fs.parent(app['freertos_config'].full_path())]
   ara_settings = []
   if app.has_key('corrections')
     ara_settings += ['--manual-corrections', app['corrections']]
   endif
   if app.has_key('extra_settings')
     ara_settings += ['--step-settings', app['extra_settings']]
+  endif
+  if app.has_key('includes')
+    app_includes += app['includes']
+  endif
+  app_ld_flags = ['-T' + libplatform_linkerscript.full_path() ]
+  linkerscripts = [libplatform_linkerscript]
+  if app.has_key('linkerscripts')
+    app_ld_flags = []
+    linkerscripts = app['linkerscripts']
+    foreach script : linkerscripts
+      app_ld_flags += ['-T' + script.full_path()]
+    endforeach
+  endif
+  if app.has_key('ldflags')
+    app_ld_flags += app['ldflags']
+  endif
+  asm_files = []
+  if app.has_key('asm_files')
+    asm_files = app['asm_files']
+  endif
+  opt_flags = []
+  if app.has_key('opt_flags')
+    opt_flags = app['opt_flags']
+  endif
+
+  add_libs = []
+  if app.has_key('additional_libs')
+    add_libs = app['additional_libs']
   endif
 
   foreach target : ara_freertos_generator_targets
@@ -85,7 +145,7 @@ foreach app : arm_freertos_apps
                                         name_prefix + '-modifiedapp.ll',
                                         name_prefix + '-os.cc.freertos_overrides.h',
                                        ],
-                               depends: app['freertos_config'],
+                               depend_files: app['freertos_config'],
                                command: [py3_inst, ara, '@INPUT@',
                                          '--generator_output', '@OUTPUT0@',
                                          '--ir_output', '@OUTPUT2@',
@@ -106,9 +166,10 @@ foreach app : arm_freertos_apps
                                 input: src,
                                 output: name_prefix + '-freertos_' + src_id + '.c.ll',
                                 depfile: name_prefix + '-freertos_' + src_id + '.dep',
-                                depends: [ara_target, app['freertos_config']],
+                                depends: [ara_target],
+                                depend_files: app['freertos_config'],
                                 command: clang_c +
-                                         freertos_includes +
+                                         app_includes +
                                          libsra_includes +
                                          ['-DFREERTOS_OVERRIDES="@0@"'.format(freertos_overrides.full_path())] +
                                          combined_cflags)
@@ -120,7 +181,7 @@ foreach app : arm_freertos_apps
                                  output : name_prefix + '-os.cc.ll',
                                  depfile : name_prefix + '-os.cc.ll.dep',
                                  command : clang_cpp +
-                                           freertos_includes +
+                                           app_includes +
                                            libsra_includes +
                                            combined_cflags)
 
@@ -131,35 +192,38 @@ foreach app : arm_freertos_apps
                            command: llvm_link_cmd)
 
 
-    foreach lto_version : ['none', 'standard', 'rle2']
+    foreach lto_version : ['none', 'std', 'rle2']
       lto_prefix = name_prefix + '_' + lto_version
       lto_app_os = custom_target(lto_prefix + '-app_os.ll',
                                  input: app_os,
                                  depends: [sparse_rle2],
                                  output: lto_prefix + '-os_app.ll',
-                                 command: llvm_lto_cmds[lto_version])
+                                 command: llvm_lto_cmds[lto_version] + opt_flags)
 
       lto_o = custom_target(lto_prefix + '-app_os.o',
                             input: lto_app_os,
                             output: lto_prefix + '-os_app.ll.o',
-                            command: llc_cmd)
+                            command: llc_cmd + arm_llc_flags)
 
-      if (false) # TODO use correct FreeRTOSConfig for GPSLogger
-        lto_elf = custom_target(lto_prefix + '.elf',
-                              input: [lto_o,
-                                      os_target[1], # startup.s
-                                      libsra_ar,
-                                      # get_variable('libfreertos_' + target)
-                                     ],
-                              output: lto_prefix + '.elf',
-                              depfile: lto_prefix + '.elf.dep',
-                              command: clang_cpp +
-                                       ['-nostdlib'] +
-                                       clang_flags + arm_clang_flags + stm32_ld_flags +
-                                       ['-T' + libplatform_linkerscript.full_path() ])
+      if asm_files.length() == 0
+        asm_files_for_elf = os_target[1]
       else
-        lto_elf = disabler()
+        asm_files_for_elf = asm_files
       endif
+
+      lto_elf = custom_target(lto_prefix + '.elf',
+                            input: [lto_o,
+                                    libsra_ar,
+                                    # get_variable('libfreertos_' + target)
+                                    asm_files_for_elf,
+                                    add_libs,
+                                   ],
+                            output: lto_prefix + '.elf',
+                            depfile: lto_prefix + '.elf.dep',
+                            depend_files: linkerscripts,
+                            command: clang_cpp +
+                                     ['-nostdlib', '-Os'] +
+                                     arm_clang_flags + arm_ld_flags + ld_flags + stm32_ld_flags + app_ld_flags)
 
       bin_target = custom_target(lto_prefix + '.bin',
                                  input: [lto_elf],
@@ -178,48 +242,79 @@ foreach app : arm_freertos_apps
 
       gdb_hw_name = 'run_gdb_hw_' + lto_prefix
       run_target(gdb_hw_name, command: [gdb_hw_script, lto_elf])
-      summary(f'Run GDB on device (@config@)', 'meson compile ' + size_name, bool_yn: true, section: app['summary_section'])
+      summary(f'GDB on device (@app_name@, @config@)', 'meson compile ' + gdb_hw_name, bool_yn: true, section: app['summary_section'])
 
       qemu_name = 'run_qemu_' + lto_prefix
       run_target(qemu_name, command: [qemu_cmd, lto_elf])
-      summary(f'Run @app_name@ binary on QEMU (@config@)', 'meson compile ' + size_name, bool_yn: true, section: app['summary_section'])
+      summary(f'Run @app_name@ on QEMU (@config@)', 'meson compile ' + qemu_name, bool_yn: true, section: app['summary_section'])
 
       qemu_gdb_name = 'run_gdb_qemu_' + lto_prefix
       run_target(qemu_gdb_name, command: [gdb_qemu_cmd, lto_elf])
-      summary(f'Connect GDB to QEMU (@config@)', 'meson compile ' + size_name, bool_yn: true, section: app['summary_section'])
+      summary(f'GDB to QEMU (@app_name@, @config@)', 'meson compile ' + qemu_gdb_name, bool_yn: true, section: app['summary_section'])
 
       elf_targets += lto_elf
       named_elf_targets += [target['name'] + '-' + lto_version, lto_elf]
-      profiles_list += ['--profiles', target['name'] + '-' + lto_version]
-
-      if get_option('build_gpslogger')
-        test('validate_generator_' + lto_prefix,
-             py3_inst,
-             args: [validate_generator_runner,
-                    'gpslogger',
-                    target['name'],
-                    ara_target,
-                    os_target[0].full_path(),
-                    lto_elf,
-                   ],
-             workdir:  meson.current_source_dir(),
-             suite: 'generator'
-            )
-        test('run_qemu_' + name_prefix,
-             py3_inst,
-             args: [qemu_test_runner,
-                    qemu_cmd,
-                    'gpslogger',
-                    lto_elf,
-                   ],
-             # env: [test_env],  TODO maybe there are some arguments required
-             workdir: meson.current_source_dir(),
-             suite: 'gpslogger',
-             is_parallel: false,
-            )
+      if target['name'] != 'passthrough' and lto_version != 'none'
+        profiles_list += ['--profiles', target['name'] + '_' + lto_version]
       endif
+
+      # if get_option('build_gpslogger')
+      #   test('validate_generator_' + lto_prefix,
+      #        py3_inst,
+      #        args: [validate_generator_runner,
+      #               'gpslogger',
+      #               target['name'],
+      #               ara_target,
+      #               os_target[0].full_path(),
+      #               lto_elf,
+      #              ],
+      #        workdir:  meson.current_source_dir(),
+      #        suite: 'generator'
+      #       )
+      #   test('run_qemu_' + name_prefix,
+      #        py3_inst,
+      #        args: [qemu_test_runner,
+      #               qemu_cmd,
+      #               'gpslogger',
+      #               lto_elf,
+      #              ],
+      #        # env: [test_env],  TODO maybe there are some arguments required
+      #        workdir: meson.current_source_dir(),
+      #        suite: 'gpslogger',
+      #        is_parallel: false,
+      #       )
+      # endif
     endforeach # lto_version
   endforeach # ara specialization
+
+  # if app not in ir_apps
+  #   test('validate_generator_' + lto_prefix,
+  #        py3_inst,
+  #        args: [validate_generator_runner,
+  #               app,
+  #               target['name'],
+  #               app_aramodified_ll,
+  #               os_target[0].full_path(),
+  #               lto_elf,
+  #              ],
+  #        workdir: freertos_src_dir,
+  #        suite: 'generator'
+  #       )
+  #   endif
+
+  # if get_option('enable_qemu_tests') and app not in ir_apps
+  #     test('run_qemu_' + lto_prefix,
+  #          py3_inst,
+  #          args: [qemu_test_runner,
+  #                 qemu_cmd,
+  #                 app,
+  #                 lto_elf,
+  #                ],
+  #          workdir: freertos_src_dir,
+  #          suite: 'qemu',
+  #          is_parallel: false,
+  #         )
+  # endif
 
   comp_nm = 'compare_nm-' + app_low
   run_target(comp_nm, command: [py3_inst, compare_nm, arm_nm.path(), named_elf_targets])
@@ -238,32 +333,26 @@ foreach app : arm_freertos_apps
                                     command: [GenericTimingExperiment, '-d', meson.current_build_dir(),
                                               '-s',
                                               '--title', app_low,
+                                              '--meson-cmd', analyze_timing,
+                                              '--generate-dummys',
                                               profiles_list,
                                               '--run-dir', meson.build_root()],
                                     output: [f'timing_result-@app_low@.dref',
                                              f'timing_result_raw-@app_low@.dref'],
                                     console: true,
                                     depends: elf_targets)
-  show_timing = f'show-timing_result-@app_low@.dref'
+  summary(f'Measure instance specialization on @app_name@', 'meson compile ' + analyze_timing, bool_yn: true, section: 'experiments')
+
+  show_timing = f'show-timing_result-@app_low@'
   run_target(show_timing,
              command: [#'strace',
                ShowGenericTimingExperiment,
                profiles_list,
-               '--title', app_low,],
+               '--title', app_low,
+             ],
              depends: timing_exp_result,
   )
-  show_old_timing = f'show_old-timing_result-@app_low@.dref'
-  run_target(show_old_timing,
-             command: [#'strace',
-               ShowGenericTimingExperiment,
-               profiles_list,
-               '--title', 'gpslogger',],
-  )
-  summary({
-    f'Get timing data of @app_name@ (drefs)': 'meson compile ' + comp_time,
-    f'Show timing data of @app_name@': 'meson compile ' + show_timing,
-    f'Show old timing data of @app_name@': 'meson compile ' + show_old_timing,
-  }, bool_yn: true, section: app['summary_section'])
+  summary(f'Show timing data of @app_name@', 'meson compile ' + show_timing, bool_yn: true, section: 'experiments')
 
 
 endforeach # arm_freertos_apps

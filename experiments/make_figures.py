@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import os
 import sys
-sys.path.insert(0, '/home/bjoern/git/versuchung/src/')
 import argparse
 import matplotlib.pyplot as plt
 from collections import defaultdict
@@ -16,8 +15,8 @@ sys.path.append(os.path.dirname(__file__))
 class CreateGraphsExp(Experiment):
     inputs = {
         # 'exp': analyze.GPSLoggerExp(default_experiment_instance="GPSLoggerExp-4f3345839082463c184be5b95d6a0585"),
-        "results" :  lambda self:DatarefDict(filename=f"timing_result-{self.title}.dref"),
-        "raw" : lambda self: DatarefDict(filename=f"timing_result_raw-{self.title}.dref"),
+        "results": lambda self: DatarefDict(filename=f"timing_result-{self.title}.dref"),
+        "raw": lambda self: DatarefDict(filename=f"timing_result_raw-{self.title}.dref"),
         "profiles": List(String)
         }
 
@@ -43,7 +42,6 @@ class CreateGraphsExp(Experiment):
             # data[key + '.lto'] = None
         return data
 
-
     def run(self):
         data = defaultdict(self.new_dataset)
         # exit(1)
@@ -54,11 +52,15 @@ class CreateGraphsExp(Experiment):
         axes = plt.subplot(211)
         # axes = plt.subplot(111)
         lines = []
-        annot = axes.annotate("fdfdf", xy=(0,0), xytext=(-20,20), textcoords="offset points",
-                            bbox=dict(boxstyle="round", fc="w"),
-                            arrowprops=dict(arrowstyle='->'))
+        annot = axes.annotate(
+            "fdfdf",
+            xy=(0, 0),
+            xytext=(-20, 20),
+            textcoords="offset points",
+            bbox=dict(boxstyle="round", fc="w"),
+            arrowprops=dict(arrowstyle='->')
+        )
         annot.set_visible(False)
-
 
         def on_hover(event):
             is_visible = annot.get_visible()
@@ -80,9 +82,9 @@ class CreateGraphsExp(Experiment):
             if 'stdev' in marker:
                 continue
             if marker == 'n':
-                plt.annotate(f'n={rows["vanilla-standard"]}', (.50, .90), xycoords='axes fraction')
+                plt.annotate(f'n={rows["vanilla_std"]}', (.50, .90), xycoords='axes fraction')
                 continue
-            if 'size' in marker:
+            if 'size' in marker or 'dummy' in marker:
                 continue
             lines.append(self.make_plot(marker, rows))
         plt.ylabel("time [cycles from reset]\n until reaching the marker")
@@ -95,7 +97,7 @@ class CreateGraphsExp(Experiment):
             if 'stdev' in marker:
                 continue
             if marker == 'n':
-                plt.annotate(f'n={rows["vanilla-standard"]}', (.50, .90), xycoords='axes fraction')
+                plt.annotate(f'n={rows["vanilla_std"]}', (.50, .90), xycoords='axes fraction')
                 continue
             if 'size' not in marker:
                 continue
@@ -108,19 +110,12 @@ class CreateGraphsExp(Experiment):
         plt.show()
 
 
-
-
-
-
-
-
 if __name__ == "__main__":
     build_root = os.environ.get("MESON_BUILD_ROOT", None)
     if build_root:
         meson_subdir = os.environ.get("MESON_SUBDIR", None)
         build_dir = os.path.join(build_root, meson_subdir)
         os.chdir(build_dir)
-
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--title', help='Directory from where to run ninja commands')

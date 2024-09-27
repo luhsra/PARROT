@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import argparse
-import sys
 import os
 import statistics
 import subprocess
@@ -12,14 +11,16 @@ import serial
 from versuchung.experiment import Experiment
 from versuchung.types import String, List, Integer
 from versuchung.files import Directory
-from versuchung.tex import DatarefDict
+from versuchung.tex import DatarefDict, LuaTable
 
 
 section_map= {
     '.text': ['flash text', 'flash sum'],
     '.initcallmodule.init': ['flash text', 'flash sum'],
     '.initcallsettings.init': ['flash text', 'flash sum'],
+    '.preinit_array': ['flash text', 'flash sum'],
     '.init_array': ['flash text', 'flash sum'],
+    '.eh_frame': ['flash text', 'flash sum'],
     '.ARM.exidx': ['flash text', 'flash sum'],
     '.ARM': ['flash text', 'flash sum'],
     '.irq_stack': ['ram bss', 'ram sum',],
@@ -51,14 +52,29 @@ class GenericTimingExperiment(Experiment):
                                                       String("instances_full_initialized.lto"),
                                                       String("passthrough.lto"),
               ])}
-    outputs = {"results": DatarefDict(filename=f"timing_result-.dref"),
-               "raw": DatarefDict(filename=f"timing_result_raw-.dref")}
+    outputs = {
+        "results": DatarefDict(filename="timing_result-.dref"),
+        "results_lua": LuaTable(filename="timing_result-.lua",
+                                experiment_name="instance_specialization"),
+        "raw": DatarefDict(filename="timing_result_raw-.dref"),
+        "raw_lua": LuaTable(filename="timing_result_raw-.lua",
+                            experiment_name="instance_specialization"),
+    }
 
-    def __init__(self, *args, run_dir=None, title=None, **kwargs):
+    def __init__(self, *args,
+                 run_dir=None,
+                 title=None,
+                 meson_cmd="",
+                 dummys=False,
+                 **kwargs):
         Experiment.__init__(self, *args, **kwargs)
         self.run_dir = run_dir or '..'
-        if title:
-            self.title = title
+        assert title
+        self.title = title
+        self.meson_cmd = meson_cmd
+        self.dummys = dummys
+        self.results_lua = self.outputs.results_lua[title]
+        self.raw_lua = self.outputs.raw_lua[title]
 
     def get_size(self, profile):
         print("retrieving size of ", profile)
@@ -70,7 +86,7 @@ class GenericTimingExperiment(Experiment):
                                     stderr=subprocess.PIPE,
                                     stdout=subprocess.PIPE)
             content = result.stdout.decode()
-            result = defaultdict(lambda:0)
+            result = defaultdict(lambda: 0)
             print("content: ", content)
             for line in content.split('\n'):
                 # print(line)
@@ -146,8 +162,9 @@ class GenericTimingExperiment(Experiment):
         else:
             print("WARNING: can't check for validity as there is no 'done_taskCreate' marker")
 
-
         times = defaultdict(list)
+
+        lua_profile = str(profile).replace(' ', '_')
 
         if len(blocks) < reset_count+1:
             raise RuntimeError("Hardware behaves strange, block barriers not found")
@@ -155,7 +172,7 @@ class GenericTimingExperiment(Experiment):
             block = blocks[idx]
             body = block.split("$$$")[0]
             for line in body.replace('\r', '\n').strip('\n').split('\n'):
-                if not ':' in line:
+                if ':' not in line:
                     if not len(line):
                         continue
                     print("line skipped:", line)
@@ -168,20 +185,56 @@ class GenericTimingExperiment(Experiment):
                     continue
                 times[key].append(val)
                 self.outputs.raw[f"{profile}/{idx}/{key}"] = val
+                self.raw_lua[lua_profile][idx][key] = val
         for key, val in times.items():
             self.outputs.results[f"{profile}/{key}"] = statistics.mean(val)
             self.outputs.results[f"{profile}/{key} stdev"] = statistics.stdev(val)
+            self.results_lua[lua_profile][key] = statistics.mean(val)
+            self.results_lua[lua_profile][f"{key}_stdev"] = statistics.stdev(val)
         self.outputs.results[f"{profile}/n"] = reset_count
+        self.results_lua[lua_profile]["n"] = reset_count
 
+    def generate_dummy_values(self, profile):
+        import random
+        fake_keys = [
+            'done_sched_start',  # gpslogger
+            'done_taskCreate',  # librepilot
+            'done_queueCreate',  # queueCreate
+            'main_reached',  # gpslogger
+            'main_start',  # micro
+            'startup_bss_zero',
+            'startup_sparse_init',
+            'startup_data_copy',
+        ]
+        lua_profile = str(profile).replace(' ', '_')
+        for key in fake_keys:
+            self.outputs.results[f"{profile}/{key}"] = 1 + random.random()
+            self.outputs.results[f"{profile}/{key} stdev"] = 1
+            self.results_lua[lua_profile][key] = 1 + random.random()
+            self.results_lua[lua_profile][f"{key}_stdev"] = 1
+        self.outputs.results[f"{profile}/n"] = 0
+        self.results_lua[str(profile)]["n"] = 0
+        self.outputs.results[f"{profile}/dummys"] = True
+        self.results_lua[lua_profile]["dummys"] = True
 
     def run(self):
+        self.results_lua["metadata"]["cmdline"] = "meson compile " + self.meson_cmd
+        self.raw_lua["metadata"]["cmdline"] = "meson compile " + self.meson_cmd
         print(self.inputs.profiles)
         for profile in self.inputs.profiles:
             print("starting profile ", profile)
-            for k,v in self.get_size(profile).items():
+            for k, v in self.get_size(profile).items():
                 self.outputs.results[f"{profile}/size {k}"] = v
 
-            self.flash(profile)
+            try:
+                self.flash(profile)
+            except subprocess.CalledProcessError as e:
+                print("board not found, return")
+                if not self.dummys:
+                    raise e
+                self.generate_dummy_values(profile)
+                continue
+
             try:
                 self.get_time(profile)
             except:
@@ -189,12 +242,19 @@ class GenericTimingExperiment(Experiment):
                 print(f"Retry {profile}")
                 self.get_time(profile)
 
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--run-dir', help='Directory from where to run ninja commands')
-    parser.add_argument('--title', help='Directory from where to run ninja commands')
+    parser.add_argument('--title', help='Application name')
+    parser.add_argument('--meson-cmd', help='Meson command needed to call the experiment')
+    parser.add_argument('--generate-dummys', action="store_true", default=False,
+                        help='Do not measure on hardware but fabulate values (for demo).')
     args, unknown = parser.parse_known_args()
-    experiment = GenericTimingExperiment(run_dir=args.run_dir, title=args.title)
+    experiment = GenericTimingExperiment(run_dir=args.run_dir,
+                                         title=args.title,
+                                         meson_cmd=args.meson_cmd,
+                                         dummys=args.generate_dummys)
     dirname = experiment(unknown)
     print(dirname)
 

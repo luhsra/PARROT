@@ -1,0 +1,11 @@
+{
+	"steps": [
+		{
+			"name": "Generator",
+			"arch": "arm",
+			"instantiation_style": "vanilla",
+			"interaction_style": "vanilla",
+			"os": "freertos"
+		}
+	]
+}

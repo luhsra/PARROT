@@ -1,0 +1,17 @@
+{
+	"steps": [
+		{
+			"name": "Generator",
+			"arch": "arm",
+			"instantiation_style": "initialized",
+			"interaction_style": "vanilla",
+			"os": "freertos"
+		}
+	],
+
+	"ClassifySpecializationsFreeRTOS": {
+		"graceful_degrade": true,
+		"initialized_memory": true,
+		"allow_runtime_init": true
+	}
+}

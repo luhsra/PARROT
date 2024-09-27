@@ -59,10 +59,13 @@ subdir('tools')
 
 
 # # experiment scripts use elsewhere
-# GenericTimingExperiment = files('experiments' / 'GenericTimingExperiment.py')
-# ShowGenericTimingExperiment = files('experiments' / 'make_figures.py')
-# InstanceGraphExperiment = files('experiments' / 'instance_graph_experiment.py')
 subdir('experiments')
+
+# settings for freertos synthesis
+freertos_gen_passthrough = files('settings' / 'freertos_gen_passthrough.json')[0]
+freertos_gen_vanilla = files('settings' / 'freertos_gen_vanilla.json')[0]
+freertos_gen_instances_full_static = files('settings' / 'freertos_gen_instances_full_static.json')[0]
+freertos_gen_instances_full_initialized = files('settings' / 'freertos_gen_instances_full_initialized.json')[0]
 
 # collect apps
 arm_freertos_apps = []
@@ -71,6 +74,26 @@ ina_targets = []
 all_lls = []
 all_apps = []
 
+if arm_enabled
+  foreach app : ara_proj.get_variable('arm_freertos_apps')
+    parrot_app = {
+      'name': app['name'],
+      'os': 'FreeRTOS',
+      'll': app['ll'],
+      'additional_libs': app['additional_libs'],
+      'freertos_config': app['freertos_config'],
+      'summary_section': 'ARA FreeRTOS apps',
+      'sia_settings': files('settings' / 'sia_freertos_generic.json')[0],
+      'ina_settings': files('settings' / 'ina_freertos_generic.json')[0],
+    }
+    arm_freertos_apps += [parrot_app]
+    all_lls += [app['ll']]
+    sia_targets += [parrot_app]
+    ina_targets += [parrot_app]
+    all_apps += [parrot_app]
+  endforeach
+endif
+
 if build_gpslogger
   gpslogger_proj = subproject('GPSLogger')
   gpslogger = {
@@ -78,6 +101,7 @@ if build_gpslogger
     'os': 'FreeRTOS',
     'll': gpslogger_proj.get_variable('gpslogger_application'),
     'cflags': gpslogger_proj.get_variable('gpslogger_cflags'),
+    'includes': gpslogger_proj.get_variable('gpslogger_includes'),
     'sia_settings': files('settings' / 'sia_gpslogger.json')[0],
     'ina_settings': files('settings' / 'ina_gpslogger.json')[0],
     'freertos_config': gpslogger_proj.get_variable('freertos_config'),
@@ -113,6 +137,10 @@ if build_librepilot
     'os': 'FreeRTOS',
     'll': librepilot_proj.get_variable('librepilot_mock_application'),
     'cflags': librepilot_proj.get_variable('librepilot_cflags'),
+    'opt_flags': librepilot_proj.get_variable('librepilot_opt_flags'),
+    'ldflags': librepilot_proj.get_variable('librepilot_ldflags'),
+    'linkerscripts': librepilot_proj.get_variable('librepilot_linkerscripts'),
+    'asm_files': librepilot_proj.get_variable('librepilot_asm_files'),
     'sia_settings': sia_settings,
     'ina_settings': ina_settings,
     'corrections': librepilot_proj.get_variable('instance_corrections'),
@@ -457,7 +485,9 @@ run_target(run_sia_runtime,
     '--work-dir', meson.current_build_dir() / 'sia-runtime',
     '--title', run_sia_runtime,
     '--python', py3_inst,
-    '--iterations', '10',
+    '--exclude', 'InfiniTime',
+    '--exclude', 'intel-ecfw-zephyr',
+    '--iterations', '1',
     '--ara', ara.full_path()] + apps_in_json,
   depends: [ara] + deps_for_apps)
 summary('Measure SIA runtime in all modes', 'meson compile ' + run_sia_runtime, section: 'experiments')
