@@ -48,9 +48,10 @@ class SiaRuntimeExperiment(ARAExperiment):
 
     @staticmethod
     def run_sia(app_name, os, cur_dir, cmd, mode, idx):
+        id = f"{app_name}.{mode}.{idx}"
         work_dir, time, failed = run_ara(cur_dir, cmd, idx=idx)
         if failed:
-            return ExperimentResult(app_name=app_name, failed=True)
+            return ExperimentResult(app_name=app_name, id=id, failed=True)
 
         file_load = get_file_loader(work_dir)
 
@@ -63,6 +64,7 @@ class SiaRuntimeExperiment(ARAExperiment):
 
         return SiaRuntimeResult(
             app_name=app_name,
+            id=id,
             failed=False,
             os=os,
             mode=str(mode),

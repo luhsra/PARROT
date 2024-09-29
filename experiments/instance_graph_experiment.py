@@ -47,9 +47,10 @@ class AppStatsExperiment(ARAExperiment):
 
     @staticmethod
     def get_stats(app_name, analysis, cur_dir, cmd):
+        id = app_name
         work_dir, time, failed = run_ara(cur_dir, cmd)
         if failed:
-            return ExperimentResult(app_name=app_name, failed=True)
+            return ExperimentResult(app_name=app_name, id=id, failed=True)
 
         file_load = get_file_loader(work_dir)
 
@@ -57,6 +58,7 @@ class AppStatsExperiment(ARAExperiment):
             instance_graph_stats = file_load("InstanceGraphStats.*.json")
             return AppStatsResult(
                 app_name=app_name,
+                id=id,
                 failed=False,
                 cfg_stats=file_load("CFGStats.*.json"),
                 call_graph_stats=file_load("CallGraphStats.*.json"),
@@ -66,12 +68,14 @@ class AppStatsExperiment(ARAExperiment):
         elif analysis == "SSE":
             return AppStatsResult(
                 app_name=app_name,
+                id=id,
                 failed=False,
                 sstg=file_load("SSTGStats.*.json"),
             )
         elif analysis == "MultiSSE":
             return AppStatsResult(
                 app_name=app_name,
+                id=id,
                 failed=False,
                 mstg=file_load("MSTGStats.*.json"),
             )

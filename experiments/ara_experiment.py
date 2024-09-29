@@ -133,6 +133,7 @@ def run_ara(work_dir, cmd, idx=None):
 @dataclass
 class ExperimentResult:
     app_name: str
+    id: str
     failed: bool
 
 
@@ -213,6 +214,7 @@ class ARAExperiment(Experiment):
     def run(self):
         self.outputs.results["metadata"]["cmdline"] = "meson compile " + self.title
         app_names = set()
+        failed_apps = []
         with ThreadPoolExecutor(max_workers=self.job_count) as executor:
             pool = set()
 
@@ -236,9 +238,11 @@ class ARAExperiment(Experiment):
                 res = future.result()
                 assert isinstance(res, ExperimentResult), "result type is incorrect"
                 if res.failed:
-                    print(f"Failed app {res.app_name} ({res})")
+                    failed_apps.append(res)
                     continue
                 self.fill_output(res)
+        for app in sorted(failed_apps, key=lambda x: x.id):
+            print(f"Failed app {app.app_name} (ID: {app.id})")
 
 
 def run_ara_experiment(experiment_cls, extra_args=lambda x: x):
