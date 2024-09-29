@@ -242,53 +242,56 @@ class ARAExperiment(Experiment):
 
 
 def run_ara_experiment(experiment_cls, extra_args=lambda x: x):
-    print("Experiment loaded with:", sys.argv)
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--work-dir",
-        help="Working directory (must be able to store files there).",
-        required=True,
-        type=Path,
-    )
-    parser.add_argument("--title", help="Experiment title", required=True)
-    parser.add_argument(
-        "--python", help="Path to the Python interpreter.", required=True, type=Path
-    )
-    parser.add_argument(
-        "--ara", help="Path to the ARA script.", required=True, type=Path
-    )
-    parser.add_argument(
-        "--jobs",
-        type=int,
-        default=multiprocessing.cpu_count(),
-        help="Maximal number of parallel SIA executions.",
-    )
-    extra_args(parser)
-    args, unknown = parser.parse_known_args()
+    timer = TimeMeasure()
+    with timer:
+        print("Experiment loaded with:", sys.argv)
+        parser = argparse.ArgumentParser()
+        parser.add_argument(
+            "--work-dir",
+            help="Working directory (must be able to store files there).",
+            required=True,
+            type=Path,
+        )
+        parser.add_argument("--title", help="Experiment title", required=True)
+        parser.add_argument(
+            "--python", help="Path to the Python interpreter.", required=True, type=Path
+        )
+        parser.add_argument(
+            "--ara", help="Path to the ARA script.", required=True, type=Path
+        )
+        parser.add_argument(
+            "--jobs",
+            type=int,
+            default=multiprocessing.cpu_count(),
+            help="Maximal number of parallel SIA executions.",
+        )
+        extra_args(parser)
+        args, unknown = parser.parse_known_args()
 
-    assert args.python.is_file(), "--python must be a file"
-    assert args.ara.is_file(), "--ara must be a file"
+        assert args.python.is_file(), "--python must be a file"
+        assert args.ara.is_file(), "--ara must be a file"
 
-    # create new work_dir folder and delete old one only when created by a
-    # previous run
-    experiment_id = "experiment." + experiment_cls.__name__
-    if args.work_dir.is_dir() and (args.work_dir / experiment_id).is_file():
-        shutil.rmtree(args.work_dir)
-    args.work_dir.mkdir(exist_ok=False)
-    open(args.work_dir / experiment_id, "a").close()
+        # create new work_dir folder and delete old one only when created by a
+        # previous run
+        experiment_id = "experiment." + experiment_cls.__name__
+        if args.work_dir.is_dir() and (args.work_dir / experiment_id).is_file():
+            shutil.rmtree(args.work_dir)
+        args.work_dir.mkdir(exist_ok=False)
+        open(args.work_dir / experiment_id, "a").close()
 
-    cwd = Path.cwd()
+        cwd = Path.cwd()
 
-    experiment = experiment_cls(
-        python=args.python,
-        ara=args.ara,
-        job_count=args.jobs,
-        run_dir=args.work_dir,
-        title=args.title,
-        cwd=cwd,
-        side_args=args,
-    )
-    dirname = experiment(unknown)
+        experiment = experiment_cls(
+            python=args.python,
+            ara=args.ara,
+            job_count=args.jobs,
+            run_dir=args.work_dir,
+            title=args.title,
+            cwd=cwd,
+            side_args=args,
+        )
+        dirname = experiment(unknown)
 
-    print("Working directory:", args.work_dir.absolute())
-    print("Result stored in:", dirname)
+        print("Working directory:", args.work_dir.absolute())
+        print("Result stored in:", dirname)
+    print(f"Experiment time: {timer.get_time():.1f} seconds")
