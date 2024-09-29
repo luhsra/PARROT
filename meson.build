@@ -492,7 +492,7 @@ run_target(run_sia_runtime,
     '--python', py3_inst,
     '--exclude', 'InfiniTime',
     '--exclude', 'intel-ecfw-zephyr',
-    '--iterations', '1',
+    '--iterations', '10',
     '--ara', ara.full_path()] + apps_in_json,
   depends: [ara] + deps_for_apps)
 summary('Measure SIA runtime in all modes', 'meson compile ' + run_sia_runtime, section: 'experiments')
