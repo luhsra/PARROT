@@ -212,6 +212,7 @@ class ARAExperiment(Experiment):
 
     def run(self):
         self.outputs.results["metadata"]["cmdline"] = "meson compile " + self.title
+        app_names = set()
         with ThreadPoolExecutor(max_workers=self.job_count) as executor:
             pool = set()
 
@@ -222,9 +223,12 @@ class ARAExperiment(Experiment):
             includes = set([x.value for x in self.inputs.include])
             for application_info in self.inputs.applications:
                 app_info = json.loads(application_info.value)
-                if app_info["name"] in excludes:
+                app_name = app_info["name"]
+                assert app_name not in app_names, f"Duplicated {app_name=}"
+                app_names.add(app_name)
+                if app_name in excludes:
                     continue
-                if includes and app_info["name"] not in includes:
+                if includes and app_name not in includes:
                     continue
                 self.prepare_application(submit, app_info)
 

@@ -426,7 +426,12 @@ summary('Build all application to LLVM IR', 'meson compile ' + build_all_lls, se
 # experiments
 apps_in_json = []
 deps_for_apps = []
+all_app_names = []
 foreach app : all_apps
+  if app['name'] in all_app_names
+    error('Duplicated app @0@'.format(app['name']))
+  endif
+  all_app_names += [app['name']]
   corrections = files('settings' / 'no_corrections.json')[0]
   if 'va_corrections' in app
     corrections = app['va_corrections']
