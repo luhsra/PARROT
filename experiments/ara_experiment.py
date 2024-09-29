@@ -182,7 +182,7 @@ class ARAExperiment(Experiment):
         app_ll = app_info["ll"]
         app_os = app_info["os"]
 
-        extra_config = []
+        extra_config = ['--va-corrections', app_info["va_corrections"]]
         for setng in settings:
             app_cfg = self.cwd / app_info[setng] if setng in app_info else None
 

@@ -171,7 +171,7 @@ if build_infinitime
     'os': 'FreeRTOS',
     'll': infinitime_gllvm.get_variable('infinitime_app'),
     'sia_settings': sia_settings,
-    'ina_settings': ina_settings,
+    # 'ina_settings': ina_settings,  # runs too long currently
     'freertos_config': infinitime_gllvm.get_variable('freertos_config'),
     'cloc_app': infinitime_gllvm.get_variable('cloc_app'),
     'cloc_lib': infinitime_gllvm.get_variable('cloc_lib'),
@@ -179,7 +179,7 @@ if build_infinitime
   }
   all_lls += [infinitime['ll']]
   sia_targets += [infinitime]
-  ina_targets += [infinitime]
+  # ina_targets += [infinitime]
   all_apps += [infinitime]
 endif
 
@@ -432,9 +432,9 @@ foreach app : all_apps
     error('Duplicated app @0@'.format(app['name']))
   endif
   all_app_names += [app['name']]
-  corrections = files('settings' / 'no_corrections.json')[0]
+  corrections = files('settings' / 'no_corrections.json')[0].full_path()
   if 'va_corrections' in app
-    corrections = app['va_corrections']
+    corrections = app['va_corrections'].full_path()
   endif
   app_settings = ''
   if 'sia_settings' in app
