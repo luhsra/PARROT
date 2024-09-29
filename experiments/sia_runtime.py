@@ -9,12 +9,14 @@ from ara_experiment import (
     run_ara_experiment,
     ARAExperiment,
     run_ara,
-    ExperimentResult
+    ExperimentResult,
+    get_file_loader,
 )
 
 from versuchung.types import String, List, Integer
 
-ARA_CONFIG = {"steps": ["SIA"], "SIA": {"traversal_mode": "TBD"}, "logger": {}}
+ARA_CONFIG = {"steps": ["SIA", {"name": "InstanceGraphStats", "dump": True}],
+              "SIA": {"traversal_mode": "TBD"}, "logger": {}}
 
 
 @dataclass
@@ -24,6 +26,7 @@ class SiaRuntimeResult(ExperimentResult):
     index: int
     ara_time: float
     sia_time: float
+    instances: dict
 
 
 class SiaRuntimeExperiment(ARAExperiment):
@@ -49,11 +52,14 @@ class SiaRuntimeExperiment(ARAExperiment):
         if failed:
             return ExperimentResult(app_name=app_name, failed=True)
 
+        file_load = get_file_loader(work_dir)
+
         sia_time = 0
-        with open(work_dir / "ARA.-.runtime_stats.json") as stats_file:
-            for step in json.load(stats_file):
-                if step[0] == "SIA":
-                    sia_time += step[2]
+        ara_stats = file_load("ARA.-.runtime_stats.json")
+        for step in filter(lambda x: x[0] == "SIA", ara_stats):
+            sia_time += step[2]
+
+        instance_graph_stats = file_load("InstanceGraphStats.*.json")
 
         return SiaRuntimeResult(
             app_name=app_name,
@@ -63,6 +69,7 @@ class SiaRuntimeExperiment(ARAExperiment):
             index=idx,
             ara_time=time,
             sia_time=sia_time,
+            instances=instance_graph_stats["instances"],
         )
 
     def prepare_application(self, submit, application_info):
@@ -99,13 +106,11 @@ class SiaRuntimeExperiment(ARAExperiment):
                 )
 
     def fill_output(self, res):
-        self.outputs.results[res.app_name]["os"] = res.os
-        self.outputs.results[res.app_name][res.mode]["sia_runtime"][
-            res.index
-        ] = res.sia_time
-        self.outputs.results[res.app_name][res.mode]["ara_runtime"][
-            res.index
-        ] = res.ara_time
+        results = self.outputs.results[res.app_name]
+        results["os"] = res.os
+        results[res.mode]["sia_runtime"][res.index] = res.sia_time
+        results[res.mode]["ara_runtime"][res.index] = res.ara_time
+        self.assign_dict(results["instances"], res.instances)
 
 
 if __name__ == "__main__":
