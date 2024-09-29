@@ -34,7 +34,7 @@ def gen_config(main_analysis):
 
 
 sia_config = gen_config("SIA")
-ina_config = gen_config("INA")
+ina_config = gen_config("InteractionAnalysis")
 sse_config = {"steps": ["SSE", {"name": "SSTGStats", "dump": True}]}
 multisse_config = {"steps": ["MultiSSE", {"name": "MSTGStats", "dump": True}]}
 
