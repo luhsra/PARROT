@@ -10,7 +10,8 @@ from ara_experiment import (
     ExperimentResult,
     get_file_loader,
     run_cmd,
-    SaveTimer
+    SaveTimer,
+    assign_dict
 )
 
 
@@ -148,21 +149,21 @@ class AppStatsExperiment(ARAExperiment):
     def fill_output(self, res):
         results = self.outputs.results[res.app_name]
         if res.cfg_stats:
-            self.assign_dict(results["CFGStats"], res.cfg_stats)
+            assign_dict(results["CFGStats"], res.cfg_stats)
         if res.call_graph_stats:
-            self.assign_dict(results["CallGraphStats"], res.call_graph_stats)
+            assign_dict(results["CallGraphStats"], res.call_graph_stats)
         if res.instances:
-            self.assign_dict(results["instances"], res.instances)
+            assign_dict(results["instances"], res.instances)
         if res.interactions:
-            self.assign_dict(results["interactions"], res.interactions)
+            assign_dict(results["interactions"], res.interactions)
         if res.sstg:
-            self.assign_dict(results["sstg"], res.sstg)
+            assign_dict(results["sstg"], res.sstg)
         if res.mstg:
-            self.assign_dict(results["mstg"], res.mstg)
+            assign_dict(results["mstg"], res.mstg)
         if res.cloc_app:
-            self.assign_dict(results["cloc"]["app"], res.cloc_app)
+            assign_dict(results["cloc"]["app"], res.cloc_app)
         if res.cloc_lib:
-            self.assign_dict(results["cloc"]["lib"], res.cloc_lib)
+            assign_dict(results["cloc"]["lib"], res.cloc_lib)
 
 
 def extra_args(parser):

@@ -11,6 +11,7 @@ from ara_experiment import (
     run_ara,
     ExperimentResult,
     get_file_loader,
+    assign_dict,
 )
 
 from versuchung.types import String, List, Integer
@@ -112,7 +113,7 @@ class SiaRuntimeExperiment(ARAExperiment):
         results["os"] = res.os
         results[res.mode]["sia_runtime"][res.index] = res.sia_time
         results[res.mode]["ara_runtime"][res.index] = res.ara_time
-        self.assign_dict(results["instances"], res.instances)
+        assign_dict(results["instances"], res.instances)
 
 
 if __name__ == "__main__":

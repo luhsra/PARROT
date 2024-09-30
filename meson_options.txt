@@ -14,3 +14,5 @@ option('offline', type: 'boolean', value: 'false', yield: true,
   description: 'Do not download anything (this is independent of Meson\'s internal subproject mechanisms).')
 
 option('execute_ara', type: 'boolean', value: true, description: 'Build targets which execute ARA')
+
+option('rpi_host', type: 'string', value: 'lab-pc67', description: 'PC that it connected via serial to the Raspberry Pi measurement PC.')

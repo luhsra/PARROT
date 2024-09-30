@@ -130,6 +130,17 @@ def run_ara(work_dir, cmd, idx=None):
     return work_dir, time, False
 
 
+def assign_dict(luatable, data):
+    for key, value in data.items():
+        if isinstance(value, dict):
+            assign_dict(luatable[key], value)
+        elif isinstance(value, list):
+            fake_dict = {idx: elem for idx, elem in enumerate(value)}
+            assign_dict(luatable[key], fake_dict)
+        else:
+            luatable[key] = value
+
+
 @dataclass
 class ExperimentResult:
     app_name: str
@@ -191,16 +202,6 @@ class ARAExperiment(Experiment):
 
         cmd = [self.python, self.ara, app_ll, "--os", app_os, *extra_config]
         return cmd
-
-    def assign_dict(self, luatable, data):
-        for key, value in data.items():
-            if isinstance(value, dict):
-                self.assign_dict(luatable[key], value)
-            elif isinstance(value, list):
-                fake_dict = {idx: elem for idx, elem in enumerate(value)}
-                self.assign_dict(luatable[key], fake_dict)
-            else:
-                luatable[key] = value
 
     def write_extra_config(self, subdir, config, suffix):
         step_data = subdir / f"step_data_{suffix}.json"

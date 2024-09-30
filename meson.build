@@ -518,3 +518,19 @@ run_target(instance_graph_stats,
     '--ara', ara.full_path()] + apps_in_json,
   depends: [ara] + deps_for_apps)
 summary('Get app statistics', 'meson compile ' + instance_graph_stats, section: 'experiments')
+
+ninja = find_program('ninja')
+ssh = find_program('ssh')
+multisse_synthesis_exp = 'run-multisse-synthesis'
+run_target(multisse_synthesis_exp,
+  command: [
+    py3_inst, multisse_synthesis,
+    '--ninja', ninja.full_path(),  # this should be meson directly but not possible currently
+    '--build-dir', meson.build_root(),
+    '--title', multisse_synthesis_exp,
+    '--rpi-host', get_option('rpi_host'),
+    '--ssh', ssh.full_path(),
+    '--iterations', '3',
+  ]
+)
+summary('Run synthesis for MultiSSE', 'meson compile ' + multisse_synthesis_exp, section: 'experiments')
