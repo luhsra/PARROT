@@ -13,21 +13,80 @@ from versuchung.tex import LuaTable
 
 from ara_experiment import assign_dict
 
+T11_vals = {
+    "type": "values",
+    "mapping": [
+        [1, "p09"],
+        [2, "p11"],
+        [3, "p13"],
+        [4, "p15"],
+        [5, "p17"],
+    ],
+}
+
+T01_vals = {
+    "type": "diffs",
+    "mapping": [
+        ["0>1", "all"],
+    ],
+}
+
+T02_vals = {
+    "type": "diffs",
+    "mapping": [
+        ["0>1", "all"],
+    ],
+}
+
+copter_vals = {
+    "type": "diffs",
+    "mapping": [
+        ["0>1", "SignalGather"],
+        ["1>2", "ignore"],
+        ["2>3", "MavlinkSend"],
+    ],
+}
 
 measurements = {
     "example": {
-        "T11_noopt": "autosar_multicore_paper_running_pmu_T11_noopt_pi4",
-        "T11_opt": "autosar_multicore_paper_running_pmu_T11_opt_pi4",
-        "T01_noopt": "autosar_multicore_paper_running_pmu_T01_noopt_pi4",
-        "T01_opt": "autosar_multicore_paper_running_pmu_T01_opt_pi4",
-        "T02_noopt": "autosar_multicore_paper_running_pmu_T02_noopt_pi4",
-        "T02_opt": "autosar_multicore_paper_running_pmu_T02_opt_pi4",
+        "T11_noopt": {
+            "target": "autosar_multicore_paper_running_pmu_T11_noopt_pi4",
+            "values": T11_vals,
+        },
+        "T11_opt": {
+            "target": "autosar_multicore_paper_running_pmu_T11_opt_pi4",
+            "values": T11_vals,
+        },
+        "T01_noopt": {
+            "target": "autosar_multicore_paper_running_pmu_T01_noopt_pi4",
+            "values": T01_vals,
+        },
+        "T01_opt": {
+            "target": "autosar_multicore_paper_running_pmu_T01_opt_pi4",
+            "values": T01_vals,
+        },
+        "T02_noopt": {
+            "target": "autosar_multicore_paper_running_pmu_T02_noopt_pi4",
+            "values": T02_vals,
+        },
+        "T02_opt": {
+            "target": "autosar_multicore_paper_running_pmu_T02_opt_pi4",
+            "values": T02_vals,
+        },
     },
     "i4copter": {
-        "noopt": "autosar_multicore_complex_copter_autostart_pmu_noopt_pi4",
-        "opt": "autosar_multicore_complex_copter_autostart_pmu_opt_pi4",
-    }
+        "noopt": {
+            "target": "autosar_multicore_complex_copter_autostart_pmu_noopt_pi4",
+            "values": copter_vals,
+        },
+        "opt": {
+            "target": "autosar_multicore_complex_copter_autostart_pmu_opt_pi4",
+            "values": copter_vals,
+        },
+    },
 }
+
+translation = {}
 
 VAL = re.compile(r"(?P<type>[a-z]+)\[(?P<idx>.*?)\]=(?P<value>\d+)")
 
@@ -73,16 +132,16 @@ class MultiSSESynthesis(Experiment):
         for run in runs:
             for value in run:
                 reg = VAL.fullmatch(value)
-                type = reg['type']
-                idx = reg['idx']
-                val = int(reg['value'])
-                if type == 'val':
+                type = reg["type"]
+                idx = reg["idx"]
+                val = int(reg["value"])
+                if type == "val":
                     values[int(idx)].append(val)
-                elif type == 'd':
+                elif type == "d":
                     diffs[idx].append(val)
                 else:
                     assert False
-        return values, diffs
+        return {"values": values, "diffs": diffs}
 
     def measure(self, target):
         # normally we would call meson directly, but meson compile seems not
@@ -96,14 +155,14 @@ class MultiSSESynthesis(Experiment):
         except subprocess.CalledProcessError as e:
             print("SSH FAILED", e.stderr)
             raise (e)
-        outp = output.stdout.decode('UTF-8').split('NEWRUN')[1:-1]
+        outp = output.stdout.decode("UTF-8").split("NEWRUN")[1:-1]
         runs = []
         for idx, run in enumerate(outp):
             print("Run", idx)
-            lines = run.split('\n')
+            lines = run.split("\n")
             runo = []
             for line in lines:
-                if line.startswith('RAW'):
+                if line.startswith("RAW"):
                     continue
                 if not line:
                     continue
@@ -112,24 +171,47 @@ class MultiSSESynthesis(Experiment):
         return self.evaluate(runs)
 
     def run(self):
+        self.outputs.results["metadata"]["cmdline"] = "meson compile " + self.title
         self.remote_serial = self.remote_serial.replace(
             "REPLACE_WITH_RUNS", str(self.inputs.iterations.value)
         )
         print("Run on remote host:")
         print(self.remote_serial)
-        for app, meas in measurements.items():
-            for name, target in meas.items():
-                values, diffs = self.measure(target)
-                print(values, diffs)
-                res = self.outputs.results[app][name]
-                results = {}
-                for key, value in values.items():
-                    results[f"p{key}"] = {
-                        "raw": list(value),
-                        "mean": round(numpy.mean(numpy.array(value))),
-                        "std": numpy.std(numpy.array(value)),
-                    }
-                assign_dict(res, results)
+        # keep the session open
+        cmd = [
+            self.ssh,
+            self.rpi_host,
+            "while true; do echo 'session open'; sleep 5; done",
+        ]
+        try:
+            with subprocess.Popen(cmd) as proc:
+                std_devs = []
+                for app, meas in measurements.items():
+                    for name, target in meas.items():
+                        measured = self.measure(target["target"])
+                        vals = target["values"]
+                        print(f"Measured {app}, {name}: {vals}")
+                        res = self.outputs.results[app][name]
+                        results = {}
+                        for elem in vals["mapping"]:
+                            value = measured[vals["type"]][elem[0]]
+                            std = numpy.std(numpy.array(value))
+                            results[elem[1]] = {
+                                "raw": list(value),
+                                "mean": round(numpy.mean(numpy.array(value))),
+                                "std": std,
+                            }
+                            std_devs.append(std)
+                        assign_dict(res, results)
+                proc.terminate()
+                std_dev = {
+                    "mean": numpy.mean(numpy.array(std_devs)),
+                    "max": numpy.max(numpy.array(std_devs)),
+                }
+                assign_dict(self.outputs.results["std_dev"], std_dev)
+        except subprocess.CalledProcessError as e:
+            print("SSH SESSION OPENER FAILED", e.stderr)
+            raise (e)
 
 
 if __name__ == "__main__":
