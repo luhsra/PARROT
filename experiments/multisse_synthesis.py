@@ -22,6 +22,10 @@ measurements = {
         "T01_opt": "autosar_multicore_paper_running_pmu_T01_opt_pi4",
         "T02_noopt": "autosar_multicore_paper_running_pmu_T02_noopt_pi4",
         "T02_opt": "autosar_multicore_paper_running_pmu_T02_opt_pi4",
+    },
+    "i4copter": {
+        "noopt": "autosar_multicore_complex_copter_autostart_pmu_noopt_pi4",
+        "opt": "autosar_multicore_complex_copter_autostart_pmu_opt_pi4",
     }
 }
 
@@ -34,7 +38,7 @@ class MultiSSESynthesis(Experiment):
     }
     outputs = {
         "results": LuaTable(
-            filename="autosar_synthesis_running.lua",
+            filename="multisse_synthesis.lua",
             experiment_name="experiments.multisse_synthesis",
         ),
     }
@@ -117,7 +121,7 @@ class MultiSSESynthesis(Experiment):
             for name, target in meas.items():
                 values, diffs = self.measure(target)
                 print(values, diffs)
-                res = self.outputs.results['app'][name]
+                res = self.outputs.results[app][name]
                 results = {}
                 for key, value in values.items():
                     results[f"p{key}"] = {
