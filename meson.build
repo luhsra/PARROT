@@ -220,7 +220,7 @@ if build_i4copter
     }
 
     if copter['code']['core'] == 'singlecore'
-      conf_data.set('zero_round_limit', 5000)
+      conf_data.set('zero_round_limit', 30000)
       sse_settings = configure_file(input : files('settings' / 'sse_i4copter.json.in'),
                                     output : 'sse_' + copter['name'].underscorify() + '.json',
                                     configuration : conf_data)
@@ -530,7 +530,7 @@ run_target(multisse_synthesis_exp,
     '--title', multisse_synthesis_exp,
     '--rpi-host', get_option('rpi_host'),
     '--ssh', ssh.full_path(),
-    '--iterations', '3',
+    '--iterations', '10',
   ]
 )
 summary('Run synthesis for MultiSSE', 'meson compile ' + multisse_synthesis_exp, section: 'experiments')
