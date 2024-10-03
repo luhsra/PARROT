@@ -1,0 +1,16 @@
+{
+	"steps": [
+		"MultiSSE",
+		"MSTGStats"
+	],
+
+	"LoadOIL": {
+		"oilfile": "@oil_file@"
+	},
+
+	"logger": {
+		"StepManager": "info",
+		"AUTOSAR": "info",
+		"ara": "info"
+	}
+}

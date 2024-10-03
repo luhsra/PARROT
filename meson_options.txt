@@ -7,6 +7,7 @@ option('build_ironos', type: 'boolean', value: true)
 option('build_infinitime', type: 'boolean', value: true)
 option('build_i4copter', type: 'boolean', value: true)
 option('build_posix_apps', type: 'boolean', value: true, description: 'Create SIA and INA targets for several POSIX apps.')
+option('build_autosar_apps', type: 'boolean', value: true, description: 'Create SSE and MultiSSE targets for several AUTOSAR apps.')
 option('build_libmicrohttpd', type: 'boolean', value: true, description: 'Include libmicrohttpd in the POSIX apps.')
 
 

@@ -12,6 +12,8 @@ from ara_experiment import (
     ExperimentResult,
     get_file_loader,
     assign_dict,
+    get_runtime_stats,
+    get_runtime_args
 )
 
 from versuchung.types import String, List, Integer
@@ -57,9 +59,7 @@ class SiaRuntimeExperiment(ARAExperiment):
         file_load = get_file_loader(work_dir)
 
         sia_time = 0
-        ara_stats = file_load("ARA.-.runtime_stats.json")
-        for step in filter(lambda x: x[0] == "SIA", ara_stats):
-            sia_time += step[2]
+        sia_time += get_runtime_stats(file_load, ["SIA"])
 
         instance_graph_stats = file_load("InstanceGraphStats.*.json")
 
@@ -91,11 +91,7 @@ class SiaRuntimeExperiment(ARAExperiment):
             cmd += self.write_extra_config(
                 cur_dir, cur_config, f"sia_{app_name}_{mode}"
             )
-            cmd += [
-                "--runtime-stats",
-                "--runtime-stats-file", "dump",
-                "--runtime-stats-format", "json",
-            ]
+            cmd += get_runtime_args()
 
             for i in range(self.iterations.value):
                 submit(

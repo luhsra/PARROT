@@ -74,6 +74,22 @@ class TimeMeasure:
         return self._end - self._start
 
 
+def get_runtime_args():
+    return [
+        "--runtime-stats",
+        "--runtime-stats-file", "dump",
+        "--runtime-stats-format", "json",
+    ]
+
+
+def get_runtime_stats(file_load, steps):
+    runtime = 0
+    ara_stats = file_load("ARA.-.runtime_stats.json")
+    for step in filter(lambda x: x[0] in steps, ara_stats):
+        runtime += step[2]
+    return runtime
+
+
 def get_file_loader(dir):
     def file_load(pattern):
         with open(single_check(dir.glob(pattern))) as f:

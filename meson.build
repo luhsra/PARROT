@@ -36,6 +36,7 @@ endif
 build_librepilot = get_option('build_librepilot')
 build_gpslogger = get_option('build_gpslogger')
 build_infinitime = get_option('build_infinitime')
+build_autosar_apps = get_option('build_autosar_apps')
 build_i4copter = get_option('build_i4copter')
 build_zephyr = get_option('build_zephyr')
 build_intel_ecfw = get_option('build_intel_ecfw')
@@ -48,6 +49,7 @@ summary({
   'GPSLogger (build_gpslogger)': build_gpslogger,
   'InfiniTime (build_infinitime)': build_infinitime,
   'i4copter (build_i4copter)': build_i4copter,
+  'AUTOSAR applications (build_autosar_apps)': build_autosar_apps,
   'sys_kernel/app_kernel (build_zephyr)': build_zephyr,
   'Intel ECFW Zephyr (build_intel_ecfw)': build_intel_ecfw,
   'POSIX applications (build_posix_apps)': build_posix_apps,
@@ -202,6 +204,54 @@ if build_ironos
   all_apps += [ironos]
 endif
 
+if build_autosar_apps
+  autosar_targets = ara_proj.get_variable('autosar_targets')
+  foreach app : autosar_targets
+    if not (app.has_key('use_in_parrot') and app['use_in_parrot'])
+      continue
+    endif
+
+    conf_data = configuration_data()
+    conf_data.set('oil_file', app['oil'].full_path())
+
+
+    p_app = {
+      'name': 'autosar_app_' + app['name'],
+      'os': 'AUTOSAR',
+      'll': app['ll'],
+      'summary_section': 'AUTOSAR apps',
+    }
+
+    if app.has_key('sys_timings')
+      p_app = p_app + {
+        'sys_timings': app['sys_timings']
+      }
+    endif
+
+    if app['core'] == 'singlecore'
+      sse_settings = configure_file(input : files('settings' / 'sse_autosar_apps.json.in'),
+                                    output : 'sse_' + p_app['name'].underscorify() + '.json',
+                                    configuration : conf_data)
+      p_app = p_app + {'sse_settings': sse_settings}
+    endif
+
+    ina_settings = configure_file(input : files('settings' / 'ina_autosar_apps.json.in'),
+                                  output : 'ina_' + p_app['name'].underscorify() + '.json',
+                                  configuration : conf_data)
+    multisse_settings = configure_file(input : files('settings' / 'multisse_autosar_apps.json.in'),
+                                       output : 'multisse_' + p_app['name'].underscorify() + '.json',
+                                       configuration : conf_data)
+    p_app = p_app + {
+      'ina_settings': ina_settings,
+      'multisse_settings': multisse_settings,
+    }
+
+    all_lls += [p_app['ll']]
+    ina_targets += [p_app]
+    all_apps += [p_app]
+  endforeach
+endif
+
 if build_i4copter
   copters = [
     {'name': 'i4copter', 'code': ara_proj.get_variable('autosar_singlecore_complex_isorc')},
@@ -218,6 +268,12 @@ if build_i4copter
       'll': copter['code']['ll'],
       'summary_section': 'i4copter (AUTOSAR)',
     }
+
+    if copter['code'].has_key('sys_timings')
+      app = app + {
+        'sys_timings': copter['code']['sys_timings']
+      }
+    endif
 
     if copter['code']['core'] == 'singlecore'
       conf_data.set('zero_round_limit', 30000)
@@ -415,6 +471,7 @@ foreach app : ina_targets
   summary('Run INA on ' + app['name'], 'meson compile ' + run_ina, section: app['summary_section'])
 endforeach
 
+# TODO: add SSE and MultiSSE
 
 build_all_lls = 'build-all-lls'
 run_target(build_all_lls,
@@ -448,6 +505,14 @@ foreach app : all_apps
   endif
   if 'multisse_settings' in app
     app_settings += ', "multisse_settings": "@0@"'.format(app['multisse_settings'].full_path())
+  endif
+  if 'sys_timings' in app
+    timings = app['sys_timings']
+    if timings == 'BB'
+      app_settings += ', "timings": "BB"'
+    else
+      app_settings += ', "timings": "@0@"'.format(timings.full_path())
+    endif
   endif
   if 'cloc_app' in app
     paths = []
@@ -519,6 +584,7 @@ run_target(instance_graph_stats,
   depends: [ara] + deps_for_apps)
 summary('Get app statistics', 'meson compile ' + instance_graph_stats, section: 'experiments')
 
+# TODO, give targets with Meson and not automagically
 ninja = find_program('ninja')
 ssh = find_program('ssh')
 multisse_synthesis_exp = 'run-multisse-synthesis'
@@ -534,3 +600,16 @@ run_target(multisse_synthesis_exp,
   ]
 )
 summary('Run synthesis for MultiSSE', 'meson compile ' + multisse_synthesis_exp, section: 'experiments')
+
+run_multisse = 'run-multisse-results'
+run_target(run_multisse,
+  command: [
+    py3_inst, multisse_results,
+    '--work-dir', meson.current_build_dir() / 'multisse-results',
+    '--title', run_multisse,
+    '--python', py3_inst,
+    '--exclude', 'i4copter',
+    '--iterations', '1',
+    '--ara', ara.full_path()] + apps_in_json,
+  depends: [ara] + deps_for_apps)
+summary('Get MultiSSE statistics', 'meson compile ' + run_multisse, section: 'experiments')
