@@ -15,4 +15,4 @@ option('offline', type: 'boolean', value: 'false', yield: true,
 
 option('execute_ara', type: 'boolean', value: true, description: 'Build targets which execute ARA')
 
-option('rpi_host', type: 'string', value: 'lab-pc67', description: 'PC that it connected via serial to the Raspberry Pi measurement PC.')
+option('rpi_host', type: 'string', value: 'lab-pc67', description: 'SSH host for PC that it connected via serial to the Raspberry Pi measurement PC.')
