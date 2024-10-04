@@ -1,0 +1,5 @@
+{
+	"LoadOIL": {
+		"oilfile": "@oil_file@"
+	}
+}

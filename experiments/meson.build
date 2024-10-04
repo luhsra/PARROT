@@ -5,6 +5,7 @@ sia_runtime_experiment = files('sia_runtime.py')
 instance_graph_experiment = files('instance_graph_experiment.py')
 multisse_synthesis = files('multisse_synthesis.py')
 multisse_results = files('multisse_results.py')
+multisse_synthetic_test = files('multisse_synthetic_test.py')
 
 # # run_sia_runtime
 # sia_runtime_experiments = []

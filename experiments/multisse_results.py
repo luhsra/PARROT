@@ -90,7 +90,7 @@ class MultiSSEResultsExperiment(ARAExperiment):
             if mode == "with_timings":
                 if "timings" not in application_info:
                     continue
-                cmd += "--timings", application_info["timings"]
+                cmd += ["--timings", application_info["timings"]]
                 cur_config["MultiSSE"]["with_times"] = True
 
             cur_dir = self.run_dir / f"{app_name}.{mode}"

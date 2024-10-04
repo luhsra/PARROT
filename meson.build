@@ -430,7 +430,6 @@ if build_posix_apps and build_libmicrohttpd
 endif
 
 
-
 # actual processing
 if arm_freertos_apps.length() > 0
   subdir('arm_freertos_synthesis')
@@ -613,3 +612,49 @@ run_target(run_multisse,
     '--ara', ara.full_path()] + apps_in_json,
   depends: [ara] + deps_for_apps)
 summary('Get MultiSSE statistics', 'meson compile ' + run_multisse, section: 'experiments')
+
+run_autosar_gen = 'run-autosar-generator'
+generated_autosar_apps = subproject('generated-autosar-apps', required: false)
+if generated_autosar_apps.found()
+  gen_apps = []
+  gen_deps = []
+  foreach app : generated_autosar_apps.get_variable('apps')
+    gen_apps += [
+      '--applications',
+      '{"name": "@0@", "ll": "@1@", "multisse_settings": "@2@"}'.format(
+        app['name'],
+        app['ll'].full_path(),
+        app['settings'].full_path(),
+      )
+    ]
+    gen_deps += [app['ll']]
+  endforeach
+  run_multisse_syn_test = 'run-multisse-synthetic-tests'
+  run_target(run_multisse_syn_test,
+    command: [
+      py3_inst, multisse_synthetic_test,
+      '--work-dir', meson.current_build_dir() / 'multisse-synthetic-tests',
+      '--title', run_multisse_syn_test,
+      '--python', py3_inst,
+      '--exclude', 'i4copter',
+      '--iterations', '3',
+      '--ara', ara.full_path()] + gen_apps,
+    depends: [ara] + gen_deps)
+  summary('Get MultiSSE synthetic tests results', 'meson compile ' + run_multisse_syn_test, section: 'experiments')
+else
+  message(f'Subproject generated-autosar-apps does not exist. Run "meson compile {run_autosar_gen}" to generate it.')
+endif
+
+# arbitrary tools
+run_target(run_autosar_gen,
+  command: [
+    py3_inst, autosar_app_generator,
+    '--subproject-dir', meson.current_source_dir() / 'subprojects' / 'generated-autosar-apps',
+    '--seed', '42',
+    '--benchmark-gen', ara_proj.get_variable('benchmark_gen').full_path(),
+    '--benchmark-gen-template', ara_proj.get_variable('benchmark_gen_jinja').full_path(),
+    '--multisse-settings', files('settings' / 'multisse_synthetic_app.json.in')[0].full_path(),
+    '--toolchains-wrap', meson.current_source_dir() / 'subprojects' / 'toolchains.wrap',
+    '--ara-wrap', meson.current_source_dir() / 'subprojects' / 'ara.wrap',
+  ])
+summary('Generate AUTOSAR apps', 'meson compile ' + run_autosar_gen, section: 'tools')

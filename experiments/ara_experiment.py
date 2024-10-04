@@ -99,29 +99,36 @@ def get_file_loader(dir):
 
 
 class SaveTimer(Exception):
-    def __init__(self, time):
+    def __init__(self, time, reason):
         self.time = time
+        self.reason = reason
 
 
-def run_cmd(cmd, save_log=lambda x: x, save_cmd=lambda x: x):
+def run_cmd(cmd, timeout=None, save_log=lambda x: x, save_cmd=lambda x: x):
     pretty_cmd = " ".join([f"'{x}'" for x in cmd])
     print(yellow("Executing:"), pretty_cmd)
     save_cmd(pretty_cmd)
     timer = TimeMeasure()
     try:
         with timer:
-            output = subprocess.run(cmd, check=True, capture_output=True)
+            output = subprocess.run(
+                cmd, check=True, timeout=timeout, capture_output=True
+            )
             save_log(output)
     except subprocess.CalledProcessError as e:
         print(red("-> ERROR: Execution failed:"), pretty_cmd)
         save_log(e)
-        raise SaveTimer(timer.get_time())
+        raise SaveTimer(timer.get_time(), "Generic")
+    except subprocess.TimeoutExpired as e:
+        print(red("-> ERROR: Timeout:"), pretty_cmd)
+        save_log(e)
+        raise SaveTimer(timer.get_time(), "Timeout")
 
     print(green("Finished:"), pretty_cmd)
     return output, timer.get_time()
 
 
-def run_ara(work_dir, cmd, idx=None):
+def run_ara(work_dir, cmd, idx=None, timeout=None):
     if idx is not None:
         work_dir = work_dir / str(idx)
     work_dir.mkdir(exist_ok=True)
@@ -140,9 +147,9 @@ def run_ara(work_dir, cmd, idx=None):
             f.write(cmd)
 
     try:
-        _, time = run_cmd(cmd, save_log=save_log, save_cmd=save_cmd)
+        _, time = run_cmd(cmd, save_log=save_log, timeout=timeout, save_cmd=save_cmd)
     except SaveTimer as e:
-        return work_dir, e.time, True
+        return work_dir, e.time, e
     return work_dir, time, False
 
 
@@ -209,7 +216,9 @@ class ARAExperiment(Experiment):
         app_ll = app_info["ll"]
         app_os = app_info["os"]
 
-        extra_config = ['--va-corrections', app_info["va_corrections"]]
+        extra_config = []
+        if "va_corrections" in app_info:
+            extra_config = ["--va-corrections", app_info["va_corrections"]]
         for setng in settings:
             app_cfg = self.cwd / app_info[setng] if setng in app_info else None
 
@@ -228,10 +237,14 @@ class ARAExperiment(Experiment):
     def prepare_application(self, pool, executor, application_info):
         raise NotImplementedError
 
+    def after_runs(self, data):
+        pass
+
     def run(self):
         self.outputs.results["metadata"]["cmdline"] = "meson compile " + self.title
         app_names = set()
         failed_apps = []
+        global_data = []
         with ThreadPoolExecutor(max_workers=self.job_count) as executor:
             pool = set()
 
@@ -257,7 +270,8 @@ class ARAExperiment(Experiment):
                 if res.failed:
                     failed_apps.append(res)
                     continue
-                self.fill_output(res)
+                global_data.append(self.fill_output(res))
+        self.after_runs(global_data)
         for app in sorted(failed_apps, key=lambda x: x.id):
             print(f"Failed app {app.app_name} (ID: {app.id})")
 
