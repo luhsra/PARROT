@@ -5,6 +5,7 @@ import time
 import shutil
 import subprocess
 import json
+import os
 
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -113,7 +114,11 @@ def run_cmd(cmd, timeout=None, save_log=lambda x: x, save_cmd=lambda x: x):
     try:
         with timer:
             output = subprocess.run(
-                cmd, check=True, timeout=timeout, capture_output=True
+                cmd,
+                check=True,
+                timeout=timeout,
+                capture_output=True,
+                preexec_fn=lambda: os.nice(10),
             )
             save_log(output)
     except subprocess.CalledProcessError as e:
