@@ -121,7 +121,6 @@ class MultiSSEResultsExperiment(ARAExperiment):
         ent = []
         for app, result in apps.items():
             for mode in modes:
-                print("RES", result[mode])
                 ent.append(val(result[mode]))
         table[key] = sum(ent)
         table[f"{key}_min"] = min(ent)
@@ -134,10 +133,6 @@ class MultiSSEResultsExperiment(ARAExperiment):
         for result in data:
             apps[result.app_name][result.mode].append(result)
         apps = {x: dict(y) for x, y in apps.items() if len(y) == 2}
-        import pprint
-
-        print("APPS")
-        pprint.pprint(apps, indent=2)
 
         count = self.outputs.results["all"]
         count["apps"] = len(apps)
