@@ -615,11 +615,28 @@ summary('Get MultiSSE statistics', 'meson compile ' + run_multisse, section: 'ex
 
 run_autosar_gen = 'run-autosar-generator'
 generated_autosar_apps = subproject('generated-autosar-apps', required: false)
+append = '''
+import sys
+with open(sys.argv[1], "w") as f:
+    f.write(sys.argv[2])
+'''
+combine = '''
+import sys
+import glob
+parts = []
+for part in glob.glob("json_part*.json"):
+    with open(part) as fp:
+        parts.append(fp.read())
+with open(sys.argv[1], "w") as tgt:
+    inner = ", ".join(parts)
+    tgt.write(f"[{inner}]")
+'''
 if generated_autosar_apps.found()
-  gen_apps = []
   gen_deps = []
+  parts = []
+  app_counter = 0
   foreach app : generated_autosar_apps.get_variable('apps')
-    gen_apps += [
+    gen_app = [
       '{"name": "@0@", "ll": "@1@", "multisse_settings": "@2@"}'.format(
         app['name'],
         app['ll'].full_path(),
@@ -627,7 +644,21 @@ if generated_autosar_apps.found()
       )
     ]
     gen_deps += [app['ll']]
+    file_part = custom_target('add_' + app['name'].underscorify(),
+      input: [],
+      output: f'json_part@app_counter@.json',
+      command: [py3_inst, '-c', append, '@OUTPUT@', gen_app],
+    )
+    parts += [file_part]
+    app_counter += 1
   endforeach
+  synthesis_apps = custom_target('gen_synthesis_apps',
+    input: [],
+    output: 'synthesis_apps.json',
+    command: [py3_inst, '-c', combine, '@OUTPUT@'],
+    depends: parts,
+  )
+
   run_multisse_syn_test = 'run-multisse-synthetic-tests'
   run_target(run_multisse_syn_test,
     command: [
@@ -638,9 +669,9 @@ if generated_autosar_apps.found()
       '--exclude', 'i4copter',
       '--iterations', '3',
       '--ara', ara.full_path(),
-      '--applications', '[' + ', '.join(gen_apps) + ']',
+      '--applications', synthesis_apps.full_path(),
     ],
-    depends: [ara] + gen_deps)
+    depends: [ara, synthesis_apps] + gen_deps)
   summary('Get MultiSSE synthetic tests results', 'meson compile ' + run_multisse_syn_test, section: 'experiments')
 else
   message(f'Subproject generated-autosar-apps does not exist. Run "meson compile {run_autosar_gen}" to generate it.')

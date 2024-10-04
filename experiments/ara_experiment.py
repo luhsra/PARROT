@@ -13,6 +13,7 @@ from collections.abc import Iterator
 
 from versuchung.experiment import Experiment
 from versuchung.types import String, List
+from versuchung.files import File
 from versuchung.tex import LuaTable
 
 
@@ -184,7 +185,7 @@ class ARAExperiment(Experiment):
 
     @staticmethod
     def default_input(json_direct=False):
-        apps = String() if json_direct else List(String)
+        apps = File() if json_direct else List(String)
         return {
             "applications": apps,
             "exclude": List(String),
