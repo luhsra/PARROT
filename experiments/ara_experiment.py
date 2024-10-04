@@ -172,6 +172,10 @@ class ExperimentResult:
 
 
 class ARAExperiment(Experiment):
+    # if the amount of apps gets to big, it is not possible to give them as
+    # single arguments anymore, set this to true in this case.
+    JSON_DIRECT = False
+
     @staticmethod
     def default_output(filename, experiment_name):
         return {
@@ -179,9 +183,10 @@ class ARAExperiment(Experiment):
         }
 
     @staticmethod
-    def default_input():
+    def default_input(json_direct=False):
+        apps = String() if json_direct else List(String)
         return {
-            "applications": List(String),
+            "applications": apps,
             "exclude": List(String),
             "include": List(String),
         }
@@ -240,6 +245,14 @@ class ARAExperiment(Experiment):
     def after_runs(self, data):
         pass
 
+    def load_app_info(self):
+        if self.JSON_DIRECT:
+            for app_info in json.loads(self.inputs.applications.value):
+                yield app_info
+        else:
+            for application_info in self.inputs.applications:
+                yield json.loads(application_info.value)
+
     def run(self):
         self.outputs.results["metadata"]["cmdline"] = "meson compile " + self.title
         app_names = set()
@@ -253,8 +266,7 @@ class ARAExperiment(Experiment):
 
             excludes = set([x.value for x in self.inputs.exclude])
             includes = set([x.value for x in self.inputs.include])
-            for application_info in self.inputs.applications:
-                app_info = json.loads(application_info.value)
+            for app_info in self.load_app_info():
                 app_name = app_info["name"]
                 assert app_name not in app_names, f"Duplicated {app_name=}"
                 app_names.add(app_name)

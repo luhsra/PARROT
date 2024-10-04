@@ -46,8 +46,10 @@ class MultiSSEResult(ExperimentResult):
 
 
 class MultiSSEResultsExperiment(ARAExperiment):
+    JSON_DIRECT = True
+
     inputs = {
-        **ARAExperiment.default_input(),
+        **ARAExperiment.default_input(json_direct=True),
         "iterations": Integer(default_value=10),
     }
     outputs = {

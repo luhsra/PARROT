@@ -620,7 +620,6 @@ if generated_autosar_apps.found()
   gen_deps = []
   foreach app : generated_autosar_apps.get_variable('apps')
     gen_apps += [
-      '--applications',
       '{"name": "@0@", "ll": "@1@", "multisse_settings": "@2@"}'.format(
         app['name'],
         app['ll'].full_path(),
@@ -638,7 +637,9 @@ if generated_autosar_apps.found()
       '--python', py3_inst,
       '--exclude', 'i4copter',
       '--iterations', '3',
-      '--ara', ara.full_path()] + gen_apps,
+      '--ara', ara.full_path(),
+      '--applications', '[' + ', '.join(gen_apps) + ']',
+    ],
     depends: [ara] + gen_deps)
   summary('Get MultiSSE synthetic tests results', 'meson compile ' + run_multisse_syn_test, section: 'experiments')
 else
