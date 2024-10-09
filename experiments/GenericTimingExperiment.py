@@ -73,8 +73,11 @@ class GenericTimingExperiment(Experiment):
         self.title = title
         self.meson_cmd = meson_cmd
         self.dummys = dummys
-        self.results_lua = self.outputs.results_lua[title]
-        self.raw_lua = self.outputs.raw_lua[title]
+        lua_title = title.replace('-', '_')
+        self.outputs.results_lua.experiment_name = "instance_specialization_" + lua_title
+        self.outputs.raw_lua.experiment_name = "instance_specialization_raw_" + lua_title
+        self.results_lua = self.outputs.results_lua[lua_title]
+        self.raw_lua = self.outputs.raw_lua[lua_title]
 
     def get_size(self, profile):
         print("retrieving size of ", profile)

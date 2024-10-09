@@ -292,17 +292,17 @@ if build_i4copter
       app = app + {'sse_settings': sse_settings}
     else
       conf_data.set('zero_round_limit', -1)
+      multisse_settings = configure_file(input : files('settings' / 'multisse_i4copter.json.in'),
+                                         output : 'multisse_' + copter['name'].underscorify() + '.json',
+                                         configuration : conf_data)
+      app = app + {'multisse_settings': multisse_settings}
     endif
 
     ina_settings = configure_file(input : files('settings' / 'ina_i4copter.json.in'),
                                   output : 'ina_' + copter['name'].underscorify() + '.json',
                                   configuration : conf_data)
-    multisse_settings = configure_file(input : files('settings' / 'multisse_i4copter.json.in'),
-                                       output : 'multisse_' + copter['name'].underscorify() + '.json',
-                                       configuration : conf_data)
     app = app + {
       'ina_settings': ina_settings,
-      'multisse_settings': multisse_settings,
     }
 
     run_multisse = 'multisse-' + app['name'].to_lower()
@@ -567,7 +567,7 @@ run_target(instance_graph_stats,
   command: [
     py3_inst, instance_graph_experiment,
     '--work-dir', meson.current_build_dir() / 'app-stats',
-    '--title', run_sia_runtime,
+    '--title', instance_graph_stats,
     '--python', py3_inst,
     '--cloc', cloc,
     '--include', 'i4copter',

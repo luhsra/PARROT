@@ -83,6 +83,7 @@ class MultiSSEResultsExperiment(ARAExperiment):
         if "multisse_settings" not in application_info:
             return
         for mode in ["with_timings", "without_timings"]:
+            application_info["name"] = application_info["name"].replace('-', '_')
             app_name = application_info["name"]
             cmd = self.prepare_ara(application_info, settings=["multisse_settings"])
 
