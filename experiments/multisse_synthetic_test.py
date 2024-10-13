@@ -45,6 +45,18 @@ class MultiSSEResult(ExperimentResult):
     lock_elision: dict
 
 
+@dataclass
+class MultiSSETimeout(ExperimentResult):
+    mode: str
+    index: int
+
+
+@dataclass
+class MultiSSEFailed(ExperimentResult):
+    mode: str
+    index: int
+
+
 class MultiSSEResultsExperiment(ARAExperiment):
     JSON_DIRECT = True
 
@@ -63,7 +75,19 @@ class MultiSSEResultsExperiment(ARAExperiment):
         id = f"{app_name}.{mode}.{idx}"
         work_dir, time, failed = run_ara(cur_dir, cmd, idx=idx, timeout=14400)
         if failed:
-            return ExperimentResult(app_name=app_name, id=id, failed=True)
+            if failed.reason == "Generic":
+                ret_cls = MultiSSEFailed
+            elif failed.reason == "Timeout":
+                ret_cls = MultiSSETimeout
+            else:
+                assert False, "Not possible"
+            return ret_cls(
+                app_name=app_name,
+                id=id,
+                failed=False,
+                mode=str(mode),
+                index=idx,
+            )
 
         file_load = get_file_loader(work_dir)
 
@@ -129,13 +153,43 @@ class MultiSSEResultsExperiment(ARAExperiment):
         table[f"{key}_mean"] = rou(mean(ent))
 
     def after_runs(self, data):
+        all = defaultdict(lambda: defaultdict(list))
         apps = defaultdict(lambda: defaultdict(list))
+        outcome = defaultdict(dict)
         for result in data:
-            apps[result.app_name][result.mode].append(result)
-        apps = {x: dict(y) for x, y in apps.items() if len(y) == 2}
+            all[result.app_name][result.mode].append(result)
+            oc = outcome[result.app_name]
+            mode = result.mode
+            if isinstance(result, MultiSSEFailed):
+                oc[mode] = "failed"
+            elif isinstance(result, MultiSSETimeout):
+                if oc.get(mode, "") != "failed":
+                    oc[mode] = "timeout"
+            else:
+                if mode not in oc:
+                    oc[mode] = "success"
+                apps[result.app_name][result.mode].append(result)
+
+        failed_apps = [
+            x for x, y in outcome.items()
+            if y["with_timings"] == "failed" or y["without_timings"] == "failed"
+        ]
+        timeout_apps = [
+            x for x, y in outcome.items()
+            if ((y["with_timings"] == "timeout" or y["without_timings"] == "timeout") and x not in failed_apps)
+        ]
+        running_apps = [
+            x for x, y in outcome.items()
+            if (x not in failed_apps and x not in timeout_apps)
+        ]
+
+        apps = {x: dict(y) for x, y in apps.items() if x in running_apps}
 
         count = self.outputs.results["all"]
-        count["apps"] = len(apps)
+        count["apps"] = len(all)
+        count["failed_apps"] = len(failed_apps)
+        count["timeout_apps"] = len(timeout_apps)
+        count["running_apps"] = len(running_apps)
         assign = partial(
             self.assign,
             apps=apps,
@@ -170,6 +224,37 @@ class MultiSSEResultsExperiment(ARAExperiment):
                 lambda x: mean([y.multisse_time for y in x]),
                 time=True
             )
+
+        def assign_details(mode):
+            res = []
+            for result in mode:
+                if isinstance(result, MultiSSEFailed):
+                    res.append({"result": "failed"})
+                elif isinstance(result, MultiSSETimeout):
+                    res.append({"result": "timeout"})
+                elif isinstance(result, MultiSSEResult):
+                    res.append({
+                        "result": "success",
+                        "ara_time": result.ara_time,
+                        "multisse_time": result.multisse_time,
+                        "cfg_stats": result.cfg_stats,
+                        "mstg_stats": result.mstg_stats,
+                        "ipi_avoidance": result.ipi_avoidance,
+                        "lock_elision": result.lock_elision,
+                    })
+                else:
+                    assert False, "Not possible"
+                print(result)
+            return res
+
+        all_apps = {"details": []}
+        for app, modes in all.items():
+            all_apps["details"].append({
+                "app_name": app,
+                "with": assign_details(modes["with_timings"]),
+                "no": assign_details(modes["without_timings"]),
+            })
+        assign_dict(self.outputs.results, all_apps)
 
 
 if __name__ == "__main__":
