@@ -1,6 +1,14 @@
 {
 	"steps": [
-		"MultiSSE",
+		"LoadOIL",
+		"Syscall",
+		"DumpCFG",
+		{
+			"name": "MultiSSE",
+			"per_round_dump": false,
+			"log_level": "info",
+			"dump": true
+		},
 		"MSTGStats"
 	],
 
@@ -9,7 +17,8 @@
 	},
 
 	"MultiSSE": {
-		"zero_round_limit": @zero_round_limit@
+		"zero_round_limit": @zero_round_limit@,
+		"log_level": "info"
 	},
 
 	"logger": {
