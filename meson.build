@@ -255,7 +255,8 @@ endif
 if build_i4copter
   copters = [
     {'name': 'i4copter', 'code': ara_proj.get_variable('autosar_singlecore_complex_isorc')},
-    {'name': 'i4copter-mc', 'code': ara_proj.get_variable('autosar_multicore_complex_copter_autostart')},
+    {'name': 'i4copter_mc', 'code': ara_proj.get_variable('autosar_multicore_complex_copter_autostart')},
+    {'name': 'i4copter_mco', 'code': ara_proj.get_variable('autosar_multicore_complex_copter_single_alarm')},
   ]
 
   foreach copter : copters
@@ -571,7 +572,7 @@ run_target(instance_graph_stats,
     '--python', py3_inst,
     '--cloc', cloc,
     '--include', 'i4copter',
-    '--include', 'i4copter-mc',
+    '--include', 'i4copter_mc',
     '--include', 'GPSLogger',
     '--include', 'LibrePilot',
     '--include', 'IronOS',
