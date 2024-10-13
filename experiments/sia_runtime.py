@@ -82,7 +82,7 @@ class SiaRuntimeExperiment(ARAExperiment):
             app_name = application_info['name']
             cmd = self.prepare_ara(application_info, settings=['sia_settings'])
 
-            cur_config = copy.copy(ARA_CONFIG)
+            cur_config = copy.deepcopy(ARA_CONFIG)
             cur_config["SIA"]["traversal_mode"] = mode.value
 
             cur_dir = self.run_dir / f"{app_name}.{mode}"

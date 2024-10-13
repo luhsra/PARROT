@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 import copy
-import json
 
 from dataclasses import dataclass
 
@@ -16,7 +15,7 @@ from ara_experiment import (
     get_runtime_stats,
 )
 
-from versuchung.types import String, List, Integer
+from versuchung.types import Integer
 
 ARA_CONFIG = {
     "steps": [
@@ -87,7 +86,7 @@ class MultiSSEResultsExperiment(ARAExperiment):
             app_name = application_info["name"]
             cmd = self.prepare_ara(application_info, settings=["multisse_settings"])
 
-            cur_config = copy.copy(ARA_CONFIG)
+            cur_config = copy.deepcopy(ARA_CONFIG)
             if mode == "with_timings":
                 if "timings" not in application_info:
                     continue
@@ -98,7 +97,7 @@ class MultiSSEResultsExperiment(ARAExperiment):
             cur_dir.mkdir(exist_ok=True)
 
             cmd += self.write_extra_config(
-                cur_dir, cur_config, f"sia_{app_name}_{mode}"
+                cur_dir, cur_config, f"multisse_{app_name}_{mode}"
             )
             cmd += get_runtime_args()
 
