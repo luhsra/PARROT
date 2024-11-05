@@ -1,0 +1,31 @@
+{
+	"steps": [
+		"ZephyrThreadEntry",
+		"SIA",
+		"SSE",
+		"DumpCFG",
+		"DumpInstances"
+	],
+
+	"SIA": {
+		"dump": true
+	},
+	
+	"SSE": {
+		"dump": true
+	},
+
+	"ZephyrStaticPost": {
+		"kconfigfile": "@kconfig_file@"
+	},
+	
+	"LoadKernelLL": {
+		"kernel_ll": "@kernel_ll_file@"
+	},
+
+	"logger": {
+		"StepManager": "info",
+		"Zephyr": "debug",
+		"ara": "info"
+	}
+}
