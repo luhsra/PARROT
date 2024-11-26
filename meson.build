@@ -1,7 +1,9 @@
 project('parrot', 'cpp',
   default_options : ['warning_level=3',
                      'cpp_std=c++17',
-                     'buildtype=debugoptimized'])
+                     'buildtype=debugoptimized'],
+  meson_version: '>=1.4.0',
+)
 
 # There is no way to check this in a meson script:
 warning('installation of parrot is not supported. Do not invoke "meson install" or "ninja install".')
