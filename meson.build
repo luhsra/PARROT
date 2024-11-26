@@ -614,6 +614,7 @@ run_target(run_multisse,
   depends: [ara] + deps_for_apps)
 summary('Get MultiSSE statistics', 'meson compile ' + run_multisse, section: 'experiments')
 
+multisse_synthetic_settings = files('settings' / 'multisse_synthetic_app.json.in')[0]
 run_autosar_gen = 'run-autosar-generator'
 generated_autosar_apps = subproject('generated-autosar-apps', required: false)
 append = '''
@@ -632,51 +633,55 @@ with open(sys.argv[1], "w") as tgt:
     inner = ", ".join(parts)
     tgt.write(f"[{inner}]")
 '''
-if generated_autosar_apps.found()
-  gen_deps = []
-  parts = []
-  app_counter = 0
-  foreach app : generated_autosar_apps.get_variable('apps')
-    gen_app = [
-      '{"name": "@0@", "ll": "@1@", "multisse_settings": "@2@"}'.format(
-        app['name'],
-        app['ll'].full_path(),
-        app['settings'].full_path(),
-      )
-    ]
-    gen_deps += [app['ll']]
-    file_part = custom_target('add_' + app['name'].underscorify(),
-      input: [],
-      output: f'json_part@app_counter@.json',
-      command: [py3_inst, '-c', append, '@OUTPUT@', gen_app],
-    )
-    parts += [file_part]
-    app_counter += 1
-  endforeach
-  synthesis_apps = custom_target('gen_synthesis_apps',
-    input: [],
-    output: 'synthesis_apps.json',
-    command: [py3_inst, '-c', combine, '@OUTPUT@'],
-    depends: parts,
-  )
+subdir('generated_apps')  # generated and tested apps
+gen_apps = []
+gen_apps += sane_generated_autosar_apps
 
-  run_multisse_syn_test = 'run-multisse-synthetic-tests'
-  run_target(run_multisse_syn_test,
-    command: [
-      py3_inst, multisse_synthetic_test,
-      '--work-dir', meson.current_build_dir() / 'multisse-synthetic-tests',
-      '--title', run_multisse_syn_test,
-      '--python', py3_inst,
-      '--exclude', 'i4copter',
-      '--iterations', '3',
-      '--ara', ara.full_path(),
-      '--applications', synthesis_apps.full_path(),
-    ],
-    depends: [ara, synthesis_apps] + gen_deps)
-  summary('Get MultiSSE synthetic tests results', 'meson compile ' + run_multisse_syn_test, section: 'experiments')
-else
-  message(f'Subproject generated-autosar-apps does not exist. Run "meson compile {run_autosar_gen}" to generate it.')
+if generated_autosar_apps.found()
+  gen_apps += generated_autosar_apps.get_variable('apps')
 endif
+
+gen_deps = []
+parts = []
+app_counter = 0
+foreach app : gen_apps
+  gen_app = [
+    '{"name": "@0@", "ll": "@1@", "multisse_settings": "@2@"}'.format(
+      app['name'],
+      app['ll'].full_path(),
+      app['settings'].full_path(),
+    )
+  ]
+  gen_deps += [app['ll']]
+  file_part = custom_target('add_' + app['name'].underscorify(),
+    input: [],
+    output: f'json_part@app_counter@.json',
+    command: [py3_inst, '-c', append, '@OUTPUT@', gen_app],
+  )
+  parts += [file_part]
+  app_counter += 1
+endforeach
+synthetic_apps = custom_target('gen_synthesis_apps',
+  input: [],
+  output: 'synthetic_apps.json',
+  command: [py3_inst, '-c', combine, '@OUTPUT@'],
+  depends: parts,
+)
+
+run_multisse_syn_test = 'run-multisse-synthetic-tests'
+run_target(run_multisse_syn_test,
+  command: [
+    py3_inst, multisse_synthetic_test,
+    '--work-dir', meson.current_build_dir() / 'multisse-synthetic-tests',
+    '--title', run_multisse_syn_test,
+    '--python', py3_inst,
+    '--iterations', '3',
+    '--ara', ara.full_path(),
+    '--applications', synthetic_apps.full_path(),
+  ],
+  depends: [ara, synthetic_apps] + gen_deps)
+summary('Get MultiSSE synthetic tests results', 'meson compile ' + run_multisse_syn_test, section: 'experiments')
+
 
 # arbitrary tools
 run_target(run_autosar_gen,
@@ -686,7 +691,7 @@ run_target(run_autosar_gen,
     '--seed', '42',
     '--benchmark-gen', ara_proj.get_variable('benchmark_gen').full_path(),
     '--benchmark-gen-template', ara_proj.get_variable('benchmark_gen_jinja').full_path(),
-    '--multisse-settings', files('settings' / 'multisse_synthetic_app.json.in')[0].full_path(),
+    '--multisse-settings', multisse_synthetic_settings.full_path(),
     '--toolchains-wrap', meson.current_source_dir() / 'subprojects' / 'toolchains.wrap',
     '--ara-wrap', meson.current_source_dir() / 'subprojects' / 'ara.wrap',
   ])

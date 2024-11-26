@@ -18,7 +18,7 @@ from ara_experiment import (
     get_runtime_stats,
 )
 
-from versuchung.types import String, List, Integer
+from versuchung.types import Integer
 
 ARA_CONFIG = {
     "steps": [
@@ -73,7 +73,7 @@ class MultiSSEResultsExperiment(ARAExperiment):
     @staticmethod
     def run_multisse(app_name, cur_dir, cmd, mode, idx):
         id = f"{app_name}.{mode}.{idx}"
-        work_dir, time, failed = run_ara(cur_dir, cmd, idx=idx, timeout=14400)
+        work_dir, time, failed = run_ara(cur_dir, cmd, idx=idx, timeout=57600)
         if failed:
             if failed.reason == "Generic":
                 ret_cls = MultiSSEFailed
