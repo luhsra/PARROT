@@ -34,17 +34,17 @@ if not ara.found()
   ara = ara_proj.get_variable('ara_py')
 endif
 
-
-build_librepilot = get_option('build_librepilot')
-build_gpslogger = get_option('build_gpslogger')
-build_infinitime = get_option('build_infinitime')
 build_autosar_apps = get_option('build_autosar_apps')
+build_gpslogger = get_option('build_gpslogger')
 build_i4copter = get_option('build_i4copter')
-build_zephyr = get_option('build_zephyr')
+build_infinitime = get_option('build_infinitime')
 build_intel_ecfw = get_option('build_intel_ecfw')
-build_posix_apps = get_option('build_posix_apps')
-build_libmicrohttpd = get_option('build_libmicrohttpd')
 build_ironos = get_option('build_ironos')
+build_libmicrohttpd = get_option('build_libmicrohttpd')
+build_librepilot = get_option('build_librepilot')
+build_posix_apps = get_option('build_posix_apps')
+build_synthetic_apps = get_option('build_synthetic_apps')
+build_zephyr = get_option('build_zephyr')
 
 summary({
   'LibrePilot (build_librepilot)': build_librepilot,
@@ -57,6 +57,7 @@ summary({
   'POSIX applications (build_posix_apps)': build_posix_apps,
   'Including libmicrohttpd (build_libmicrohttpd)': build_libmicrohttpd,
   'IronOS (build_ironos)': build_ironos,
+  'Synthetic apps (build_synthetic_apps)': build_synthetic_apps,
 }, bool_yn: true, section: 'Wanted applications')
 
 subdir('tools')
@@ -635,9 +636,12 @@ with open(sys.argv[1], "w") as tgt:
     inner = ", ".join(parts)
     tgt.write(f"[{inner}]")
 '''
-subdir('generated_apps')  # generated and tested apps
 gen_apps = []
-gen_apps += sane_generated_autosar_apps
+
+if build_synthetic_apps
+  subdir('generated_apps')  # generated and tested apps
+  gen_apps += sane_generated_autosar_apps
+endif
 
 if generated_autosar_apps.found()
   gen_apps += generated_autosar_apps.get_variable('apps')
