@@ -1,5 +1,5 @@
 [wrap-git]
-url = ssh://git@scm.sra.uni-hannover.de/misc/IronOS.git
+url = ssh://git@scm.sra.uni-hannover.de/research/parrot-projects/IronOS.git
 revision = ara
 depth = 1
 clone-recursive = true
