@@ -1,4 +1,4 @@
 [wrap-git]
 url = ssh://git@scm.sra.uni-hannover.de/research/ara-zephyr-apps.git
-revision = zephyr-v3.7.0
+revision = thesis/sse_zephyr
 depth = 1
