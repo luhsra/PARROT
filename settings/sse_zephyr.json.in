@@ -1,10 +1,16 @@
 {
 	"steps": [
+		"MergeStructs",
+		"RemoveSysfuncBody",
 		"ZephyrThreadEntry",
+		"IRWriter",
 		"SIA",
+		"IRWriter",
 		"SSE",
 		"DumpCFG",
-		"DumpInstances"
+		"DumpInstances",
+		"SSTGStats",
+		"ReduceSSTG"
 	],
 
 	"SIA": {
@@ -12,6 +18,10 @@
 	},
 	
 	"SSE": {
+		"dump": true
+	},
+	
+	"ReduceSSTG": {
 		"dump": true
 	},
 
@@ -27,5 +37,14 @@
 		"StepManager": "info",
 		"Zephyr": "debug",
 		"ara": "info"
+	},
+	
+	"RemoveSysfuncBody": {
+		"drop_llvm_suffix": true,
+		"disable": false
+	},
+	
+	"IRWriter": {
+		"ir_file": "sse_zephyr.ll"
 	}
 }
