@@ -1,4 +1,4 @@
 [wrap-git]
 url = ssh://git@scm.sra.uni-hannover.de/research/ara-libplatforms.git
-revision = main
+revision = e4287cd804a0c3011282e34ac72085c8ceb8090d
 depth = 1
