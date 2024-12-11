@@ -6,6 +6,7 @@
 		"IRWriter",
 		"SIA",
 		"IRWriter",
+		"LoadKernelLL",
 		"SSE",
 		"DumpCFG",
 		"DumpInstances",
