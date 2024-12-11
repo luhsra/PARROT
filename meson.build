@@ -76,6 +76,7 @@ freertos_gen_instances_full_initialized = files('settings' / 'freertos_gen_insta
 arm_freertos_apps = []
 sia_targets = []
 ina_targets = []
+sse_targets = []
 all_lls = []
 all_apps = []
 
@@ -342,28 +343,36 @@ if build_intel_ecfw or build_zephyr
   foreach tgt : zephyr_targets
     ll = tgt['ll']
     config = tgt['config']
+    kernel_ll = tgt['kernel_ll']
     name = fs.stem(ll.full_path())
 
     conf_data = configuration_data()
     conf_data.set('kconfig_file', config.full_path())
+    conf_data.set('kernel_ll_file', kernel_ll.full_path())
     sia_settings = configure_file(input : files('settings' / f'sia_zephyr.json.in'),
                                   output : f'sia_@name@.json',
                                   configuration : conf_data)
     ina_settings = configure_file(input : files('settings' / f'ina_zephyr.json.in'),
                                   output : f'ina_@name@.json',
                                   configuration : conf_data)
+    sse_settings = configure_file(input : files('settings' / f'sse_zephyr.json.in'),
+                                  output : f'sse_@name@.json',
+                                  configuration : conf_data)
     zephyr_app = {
       'name': name,
       'os': 'Zephyr',
       'll': ll,
+      'kernel_ll': kernel_ll,
       'sia_settings': sia_settings,
       'ina_settings': ina_settings,
+      'sse_settings': sse_settings,
       'cloc_app': tgt['cloc_app'],
       'summary_section': 'ARA Zephyr Apps',
     }
     all_lls += [ll]
     sia_targets += [zephyr_app]
     ina_targets += [zephyr_app]
+    sse_targets += [zephyr_app]
     all_apps += [zephyr_app]
 
     zephyr_test_apps += [zephyr_app]
@@ -455,6 +464,25 @@ foreach app : sia_targets
       '--va-corrections', corrections.full_path(),
       '--step-settings', app['sia_settings']])
   summary('Run SIA on ' + app['name'], 'meson compile ' + run_sia, section: app['summary_section'])
+endforeach
+
+# sse targets
+foreach app : sse_targets
+  corrections = files('settings' / 'no_corrections.json')[0]
+  if 'va_corrections' in app
+    corrections = app['va_corrections']
+  endif
+  run_sse = 'sse-' + app['name'].to_lower()
+  run_target(run_sse,
+    command: [
+      py3_inst, ara, app['ll'],
+      '--os', app['os'],
+      '--log-level', 'info',
+      '--with-stubs',
+      '--va-corrections', corrections.full_path(),
+      '--step-settings', app['sse_settings']],
+      depends: [app['kernel_ll'], subproject('irx').get_variable('native_simulator_llvmir')])
+  summary('Run SSE on ' + app['name'], 'meson compile ' + run_sse, section: app['summary_section'])
 endforeach
 
 # ina targets

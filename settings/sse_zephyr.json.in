@@ -1,0 +1,51 @@
+{
+	"steps": [
+		"MergeStructs",
+		"RemoveSysfuncBody",
+		"ZephyrThreadEntry",
+		"IRWriter",
+		"SIA",
+		"IRWriter",
+		"LoadKernelLL",
+		"SSE",
+		"DumpCFG",
+		"DumpInstances",
+		"SSTGStats",
+		"ReduceSSTG"
+	],
+
+	"SIA": {
+		"dump": true
+	},
+	
+	"SSE": {
+		"dump": true
+	},
+	
+	"ReduceSSTG": {
+		"dump": true
+	},
+
+	"ZephyrStaticPost": {
+		"kconfigfile": "@kconfig_file@"
+	},
+	
+	"LoadKernelLL": {
+		"kernel_ll": "@kernel_ll_file@"
+	},
+
+	"logger": {
+		"StepManager": "info",
+		"Zephyr": "debug",
+		"ara": "info"
+	},
+	
+	"RemoveSysfuncBody": {
+		"drop_llvm_suffix": true,
+		"disable": false
+	},
+	
+	"IRWriter": {
+		"ir_file": "sse_zephyr.ll"
+	}
+}

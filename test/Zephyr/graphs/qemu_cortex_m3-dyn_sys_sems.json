@@ -1,5 +1,56 @@
 [
   {
+    "label": "IRQ",
+    "id": "IRQ_sys_clock_announce",
+    "branch": 0,
+    "usually_taken": 1,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 0,
+    "unique": 1,
+    "is_control": 1,
+    "file": "",
+    "line": 0,
+    "specialization_level": "",
+    "type": "instance",
+    "symbol": null
+  },
+  {
+    "label": "IRQ",
+    "id": "IRQ_z_time_slicing",
+    "branch": 0,
+    "usually_taken": 1,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 0,
+    "unique": 1,
+    "is_control": 1,
+    "file": "",
+    "line": 0,
+    "specialization_level": "",
+    "type": "instance",
+    "symbol": null
+  },
+  {
+    "label": "ISR",
+    "id": "ISR_sys_clock_announce",
+    "branch": 0,
+    "usually_taken": 1,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 0,
+    "unique": 1,
+    "is_control": 1,
+    "file": "",
+    "line": 0,
+    "specialization_level": "",
+    "type": "instance",
+    "entry_name": "sys_clock_announce",
+    "flags": 0,
+    "irq_number": 0,
+    "priority": 0
+  },
+  {
     "label": "Zephyr",
     "id": "__kernel",
     "branch": 0,
@@ -34,6 +85,26 @@
     "options": 0,
     "priority": 0,
     "stack_size": 1024
+  },
+  {
+    "label": "Thread",
+    "id": "idle 00",
+    "branch": 0,
+    "usually_taken": 1,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 1,
+    "unique": 1,
+    "is_control": 1,
+    "file": "",
+    "line": 0,
+    "specialization_level": "",
+    "type": "instance",
+    "delay": 0,
+    "entry_name": "idle",
+    "options": 0,
+    "priority": 15,
+    "stack_size": 256
   },
   {
     "label": "Thread",
@@ -165,7 +236,7 @@
   },
   {
     "source": "threadB_data",
-    "target": "threadB_sem",
+    "target": "threadA_sem",
     "label": "sys_sem_give",
     "type": "interaction"
   },
@@ -177,7 +248,7 @@
   },
   {
     "source": "threadB_data",
-    "target": "threadA_sem",
+    "target": "threadB_sem",
     "label": "sys_sem_take",
     "type": "interaction"
   }

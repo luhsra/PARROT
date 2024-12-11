@@ -83,6 +83,41 @@
     "type": "instance"
   },
   {
+    "label": "IRQ",
+    "id": "IRQ_sys_clock_announce",
+    "branch": 0,
+    "usually_taken": 1,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 0,
+    "unique": 1,
+    "is_control": 1,
+    "file": "",
+    "line": 0,
+    "specialization_level": "",
+    "type": "instance",
+    "symbol": null
+  },
+  {
+    "label": "ISR",
+    "id": "ISR_sys_clock_announce",
+    "branch": 0,
+    "usually_taken": 1,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 0,
+    "unique": 1,
+    "is_control": 1,
+    "file": "",
+    "line": 0,
+    "specialization_level": "",
+    "type": "instance",
+    "entry_name": "sys_clock_announce",
+    "flags": 0,
+    "irq_number": 0,
+    "priority": 0
+  },
+  {
     "label": "MSGQ",
     "id": "MB_COMM",
     "branch": 0,
@@ -284,6 +319,26 @@
     "options": 0,
     "priority": 6,
     "stack_size": 1024
+  },
+  {
+    "label": "Thread",
+    "id": "idle 00",
+    "branch": 0,
+    "usually_taken": 1,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 1,
+    "unique": 1,
+    "is_control": 1,
+    "file": "",
+    "line": 0,
+    "specialization_level": "",
+    "type": "instance",
+    "delay": 0,
+    "entry_name": "idle",
+    "options": 0,
+    "priority": 15,
+    "stack_size": 256
   },
   {
     "label": "Thread",
@@ -615,8 +670,26 @@
   },
   {
     "source": "__main",
+    "target": "__main",
+    "label": "k_thread_abort",
+    "type": "interaction"
+  },
+  {
+    "source": "__main",
     "target": "test_thread",
     "label": "k_thread_join",
+    "type": "interaction"
+  },
+  {
+    "source": "__main",
+    "target": "__main",
+    "label": "k_thread_start",
+    "type": "interaction"
+  },
+  {
+    "source": "__main",
+    "target": "__main",
+    "label": "k_thread_start",
     "type": "interaction"
   }
 ]

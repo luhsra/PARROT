@@ -3,7 +3,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from debian:bookworm-backports
+FROM debian:bookworm-backports
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Europe/Berlin
 
@@ -23,18 +23,19 @@ RUN apt update && apt-get install -qq\
 	python3-serial python3-matplotlib python3-pydot python3-pykwalify python3-pyelftools\
 	npm device-tree-compiler autoconf file golang\
 	stlink-tools qemu-system\
+	cloc lsb-release libelf-dev binutils-dev\
 	python3-graph-tool -t bookworm-backports
 
 # https://peps.python.org/pep-0668/
 RUN	rm /usr/lib/python3.11/EXTERNALLY-MANAGED
 
-# meson version in debian is too old
-RUN pip3 install meson==1.5.1 versuchung Cython
+# outdated versions in debian
+RUN pip3 install versuchung Cython meson
+
 # compatibility with apt installed cython
 RUN ln -s /usr/local/bin/cython /usr/bin/cython3
 
 # gllvm must be installed via go package manager
 RUN go install github.com/SRI-CSL/gllvm/cmd/...@master
 
-RUN apt-get install -qq cloc
 CMD ["bash"]
