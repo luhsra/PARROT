@@ -1,5 +1,56 @@
 [
   {
+    "label": "IRQ",
+    "id": "IRQ_sys_clock_announce",
+    "branch": 0,
+    "usually_taken": 1,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 0,
+    "unique": 1,
+    "is_control": 1,
+    "file": "",
+    "line": 0,
+    "specialization_level": "",
+    "type": "instance",
+    "symbol": null
+  },
+  {
+    "label": "IRQ",
+    "id": "IRQ_z_time_slicing",
+    "branch": 0,
+    "usually_taken": 1,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 0,
+    "unique": 1,
+    "is_control": 1,
+    "file": "",
+    "line": 0,
+    "specialization_level": "",
+    "type": "instance",
+    "symbol": null
+  },
+  {
+    "label": "ISR",
+    "id": "ISR_sys_clock_announce",
+    "branch": 0,
+    "usually_taken": 1,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 0,
+    "unique": 1,
+    "is_control": 1,
+    "file": "",
+    "line": 0,
+    "specialization_level": "",
+    "type": "instance",
+    "entry_name": "sys_clock_announce",
+    "flags": 0,
+    "irq_number": 0,
+    "priority": 0
+  },
+  {
     "label": "Zephyr",
     "id": "__kernel",
     "branch": 0,
@@ -16,25 +67,28 @@
     "heap_size": 0
   },
   {
-    "label": "KernelSemaphore",
-    "id": "my_sem",
+    "label": "Thread",
+    "id": "idle 00",
     "branch": 0,
-    "usually_taken": 0,
+    "usually_taken": 1,
     "loop": 0,
     "recursive": 0,
     "after_scheduler": 1,
     "unique": 1,
-    "is_control": 0,
-    "file": "../../ara-zephyr-apps/appl/static_threads/src/main.c",
-    "line": 25,
+    "is_control": 1,
+    "file": "",
+    "line": 0,
     "specialization_level": "",
     "type": "instance",
-    "count": 0,
-    "limit": 1
+    "delay": 0,
+    "entry_name": "idle",
+    "options": 0,
+    "priority": 15,
+    "stack_size": 256
   },
   {
     "label": "KernelSemaphore",
-    "id": "my_sem.1",
+    "id": "my_sem",
     "branch": 0,
     "usually_taken": 0,
     "loop": 0,
@@ -94,17 +148,5 @@
     "target": "my_sem",
     "label": "k_sem_init",
     "type": "create"
-  },
-  {
-    "source": "thread_b",
-    "target": "my_sem.1",
-    "label": "k_sem_init",
-    "type": "create"
-  },
-  {
-    "source": "my_sem.1",
-    "target": "my_sem",
-    "label": "same symbol than",
-    "type": "same_symbol_than"
   }
 ]

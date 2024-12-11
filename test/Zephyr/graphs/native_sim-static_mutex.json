@@ -67,26 +67,6 @@
     "heap_size": 0
   },
   {
-    "label": "Thread",
-    "id": "__main",
-    "branch": 0,
-    "usually_taken": 1,
-    "loop": 0,
-    "recursive": 0,
-    "after_scheduler": 1,
-    "unique": 1,
-    "is_control": 1,
-    "file": "",
-    "line": 0,
-    "specialization_level": "",
-    "type": "instance",
-    "delay": 0,
-    "entry_name": "main",
-    "options": 0,
-    "priority": 0,
-    "stack_size": 1024
-  },
-  {
     "label": "Mutex",
     "id": "guard",
     "branch": 0,
@@ -96,8 +76,8 @@
     "after_scheduler": 0,
     "unique": 1,
     "is_control": 0,
-    "file": "../../ara-zephyr-apps/appl/static_queue/src/main.c",
-    "line": 17,
+    "file": "../../ara-zephyr-apps/appl/static_mutex/src/main.c",
+    "line": 3,
     "specialization_level": "",
     "type": "instance"
   },
@@ -122,80 +102,129 @@
     "stack_size": 256
   },
   {
-    "label": "Queue",
-    "id": "work",
+    "label": "Thread",
+    "id": "tcb_H0",
     "branch": 0,
     "usually_taken": 0,
     "loop": 0,
     "recursive": 0,
     "after_scheduler": 0,
     "unique": 1,
-    "is_control": 0,
-    "file": "../../ara-zephyr-apps/appl/static_queue/src/main.c",
-    "line": 15,
+    "is_control": 1,
+    "file": "../../ara-zephyr-apps/appl/static_mutex/src/main.c",
+    "line": 10,
     "specialization_level": "",
-    "type": "instance"
+    "type": "instance",
+    "delay": -1,
+    "entry_name": "thread_H0",
+    "options": 0,
+    "priority": 1,
+    "stack_size": 128
   },
   {
     "label": "Thread",
-    "id": "worker",
+    "id": "tcb_H1",
     "branch": 0,
     "usually_taken": 0,
     "loop": 0,
     "recursive": 0,
-    "after_scheduler": 1,
+    "after_scheduler": 0,
     "unique": 1,
     "is_control": 1,
-    "file": "../../ara-zephyr-apps/appl/static_queue/src/main.c",
-    "line": 31,
+    "file": "../../ara-zephyr-apps/appl/static_mutex/src/main.c",
+    "line": 11,
     "specialization_level": "",
     "type": "instance",
     "delay": -1,
-    "entry_name": "do_work",
+    "entry_name": "thread_H1",
     "options": 0,
     "priority": 1,
-    "stack_size": 1024
+    "stack_size": 128
   },
   {
-    "source": "__main",
-    "target": "worker",
-    "label": "k_thread_create",
-    "type": "create"
+    "label": "Thread",
+    "id": "tcb_L0",
+    "branch": 0,
+    "usually_taken": 0,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 0,
+    "unique": 1,
+    "is_control": 1,
+    "file": "../../ara-zephyr-apps/appl/static_mutex/src/main.c",
+    "line": 9,
+    "specialization_level": "",
+    "type": "instance",
+    "delay": 0,
+    "entry_name": "thread_L0",
+    "options": 0,
+    "priority": 7,
+    "stack_size": 128
   },
   {
-    "source": "__main",
+    "source": "tcb_H0",
     "target": "guard",
     "label": "k_mutex_lock",
     "type": "interaction"
   },
   {
-    "source": "worker",
+    "source": "tcb_L0",
     "target": "guard",
     "label": "k_mutex_lock",
     "type": "interaction"
   },
   {
-    "source": "__main",
+    "source": "tcb_H0",
     "target": "guard",
     "label": "k_mutex_unlock",
     "type": "interaction"
   },
   {
-    "source": "worker",
+    "source": "tcb_H1",
     "target": "guard",
     "label": "k_mutex_unlock",
     "type": "interaction"
   },
   {
-    "source": "worker",
-    "target": "work",
-    "label": "k_queue_get",
+    "source": "tcb_L0",
+    "target": "guard",
+    "label": "k_mutex_unlock",
     "type": "interaction"
   },
   {
-    "source": "__main",
-    "target": "work",
-    "label": "k_queue_prepend",
+    "source": "tcb_L0",
+    "target": "__kernel",
+    "label": "k_sched_lock",
+    "type": "interaction"
+  },
+  {
+    "source": "tcb_L0",
+    "target": "__kernel",
+    "label": "k_sched_unlock",
+    "type": "interaction"
+  },
+  {
+    "source": "tcb_L0",
+    "target": "tcb_L0",
+    "label": "k_thread_start",
+    "type": "interaction"
+  },
+  {
+    "source": "tcb_L0",
+    "target": "tcb_L0",
+    "label": "k_thread_start",
+    "type": "interaction"
+  },
+  {
+    "source": "tcb_H0",
+    "target": "tcb_H0",
+    "label": "k_yield",
+    "type": "interaction"
+  },
+  {
+    "source": "tcb_H1",
+    "target": "tcb_H1",
+    "label": "k_yield",
     "type": "interaction"
   }
 ]

@@ -87,21 +87,6 @@
     "stack_size": 1024
   },
   {
-    "label": "Mutex",
-    "id": "guard",
-    "branch": 0,
-    "usually_taken": 0,
-    "loop": 0,
-    "recursive": 0,
-    "after_scheduler": 0,
-    "unique": 1,
-    "is_control": 0,
-    "file": "../../ara-zephyr-apps/appl/static_queue/src/main.c",
-    "line": 17,
-    "specialization_level": "",
-    "type": "instance"
-  },
-  {
     "label": "Thread",
     "id": "idle 00",
     "branch": 0,
@@ -122,7 +107,7 @@
     "stack_size": 256
   },
   {
-    "label": "Queue",
+    "label": "MSGQ",
     "id": "work",
     "branch": 0,
     "usually_taken": 0,
@@ -131,10 +116,12 @@
     "after_scheduler": 0,
     "unique": 1,
     "is_control": 0,
-    "file": "../../ara-zephyr-apps/appl/static_queue/src/main.c",
-    "line": 15,
+    "file": "../../ara-zephyr-apps/appl/static_msgq2/src/main.c",
+    "line": 11,
     "specialization_level": "",
-    "type": "instance"
+    "type": "instance",
+    "max_msgs": 16,
+    "msg_size": 4
   },
   {
     "label": "Thread",
@@ -146,14 +133,14 @@
     "after_scheduler": 1,
     "unique": 1,
     "is_control": 1,
-    "file": "../../ara-zephyr-apps/appl/static_queue/src/main.c",
-    "line": 31,
+    "file": "../../ara-zephyr-apps/appl/static_msgq2/src/main.c",
+    "line": 28,
     "specialization_level": "",
     "type": "instance",
-    "delay": -1,
+    "delay": "@unknown@",
     "entry_name": "do_work",
     "options": 0,
-    "priority": 1,
+    "priority": 0,
     "stack_size": 1024
   },
   {
@@ -163,39 +150,21 @@
     "type": "create"
   },
   {
-    "source": "__main",
-    "target": "guard",
-    "label": "k_mutex_lock",
-    "type": "interaction"
-  },
-  {
-    "source": "worker",
-    "target": "guard",
-    "label": "k_mutex_lock",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "guard",
-    "label": "k_mutex_unlock",
-    "type": "interaction"
-  },
-  {
-    "source": "worker",
-    "target": "guard",
-    "label": "k_mutex_unlock",
-    "type": "interaction"
-  },
-  {
     "source": "worker",
     "target": "work",
-    "label": "k_queue_get",
+    "label": "k_msgq_get",
     "type": "interaction"
   },
   {
     "source": "__main",
     "target": "work",
-    "label": "k_queue_prepend",
+    "label": "k_msgq_put",
+    "type": "interaction"
+  },
+  {
+    "source": "worker",
+    "target": "worker",
+    "label": "k_yield",
     "type": "interaction"
   }
 ]
