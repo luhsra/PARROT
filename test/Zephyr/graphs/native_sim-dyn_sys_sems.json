@@ -236,7 +236,7 @@
   },
   {
     "source": "threadB_data",
-    "target": "threadA_sem",
+    "target": "threadB_sem",
     "label": "sys_sem_give",
     "type": "interaction"
   },
@@ -248,7 +248,7 @@
   },
   {
     "source": "threadB_data",
-    "target": "threadB_sem",
+    "target": "threadA_sem",
     "label": "sys_sem_take",
     "type": "interaction"
   }
