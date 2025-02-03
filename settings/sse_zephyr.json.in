@@ -26,6 +26,10 @@
 		"dump": true
 	},
 
+	"ZephyrStatic": {
+		"log_level": "debug"
+	},
+
 	"ZephyrStaticPost": {
 		"kconfigfile": "@kconfig_file@"
 	},

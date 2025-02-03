@@ -68,26 +68,6 @@
   },
   {
     "label": "Thread",
-    "id": "__main",
-    "branch": 0,
-    "usually_taken": 1,
-    "loop": 0,
-    "recursive": 0,
-    "after_scheduler": 1,
-    "unique": 1,
-    "is_control": 1,
-    "file": "",
-    "line": 0,
-    "specialization_level": "",
-    "type": "instance",
-    "delay": 0,
-    "entry_name": "main",
-    "options": 0,
-    "priority": 0,
-    "stack_size": 1024
-  },
-  {
-    "label": "Thread",
     "id": "idle 00",
     "branch": 0,
     "usually_taken": 1,
@@ -117,31 +97,11 @@
     "unique": 1,
     "is_control": 0,
     "file": "../../ara-zephyr-apps/appl/static_sys_sems/src/main.c",
-    "line": 39,
+    "line": 17,
     "specialization_level": "",
     "type": "instance",
     "count": 1,
     "limit": 1
-  },
-  {
-    "label": "Thread",
-    "id": "threadB_data",
-    "branch": 0,
-    "usually_taken": 0,
-    "loop": 0,
-    "recursive": 0,
-    "after_scheduler": 1,
-    "unique": 1,
-    "is_control": 1,
-    "file": "../../ara-zephyr-apps/appl/static_sys_sems/src/main.c",
-    "line": 61,
-    "specialization_level": "",
-    "type": "instance",
-    "delay": "@unknown@",
-    "entry_name": "threadB",
-    "options": 0,
-    "priority": 7,
-    "stack_size": 1024
   },
   {
     "label": "UserSemaphore",
@@ -154,7 +114,7 @@
     "unique": 1,
     "is_control": 0,
     "file": "../../ara-zephyr-apps/appl/static_sys_sems/src/main.c",
-    "line": 40,
+    "line": 18,
     "specialization_level": "",
     "type": "instance",
     "count": 0,
@@ -171,7 +131,7 @@
     "unique": 1,
     "is_control": 1,
     "file": "../../ara-zephyr-apps/appl/static_sys_sems/src/main.c",
-    "line": 70,
+    "line": 55,
     "specialization_level": "",
     "type": "instance",
     "delay": 0,
@@ -181,51 +141,47 @@
     "stack_size": 1024
   },
   {
-    "source": "thread_a",
-    "target": "threadB_data",
-    "label": "k_thread_create",
-    "type": "create"
+    "label": "Thread",
+    "id": "thread_b",
+    "branch": 0,
+    "usually_taken": 0,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 0,
+    "unique": 1,
+    "is_control": 1,
+    "file": "../../ara-zephyr-apps/appl/static_sys_sems/src/main.c",
+    "line": 57,
+    "specialization_level": "",
+    "type": "instance",
+    "delay": 0,
+    "entry_name": "threadB",
+    "options": 0,
+    "priority": 7,
+    "stack_size": 1024
   },
   {
-    "source": "threadB_data",
-    "target": "threadB_data",
+    "source": "thread_a",
+    "target": "thread_a",
+    "label": "k_current_get",
+    "type": "interaction"
+  },
+  {
+    "source": "thread_b",
+    "target": "thread_b",
     "label": "k_current_get",
     "type": "interaction"
   },
   {
     "source": "thread_a",
     "target": "thread_a",
-    "label": "k_current_get",
-    "type": "interaction"
-  },
-  {
-    "source": "threadB_data",
-    "target": "threadB_data",
     "label": "k_msleep",
     "type": "interaction"
   },
   {
-    "source": "thread_a",
-    "target": "thread_a",
+    "source": "thread_b",
+    "target": "thread_b",
     "label": "k_msleep",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "threadB_data",
-    "label": "k_thread_join",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "thread_a",
-    "label": "k_thread_join",
-    "type": "interaction"
-  },
-  {
-    "source": "threadB_data",
-    "target": "threadB_sem",
-    "label": "sys_sem_give",
     "type": "interaction"
   },
   {
@@ -235,13 +191,19 @@
     "type": "interaction"
   },
   {
-    "source": "threadB_data",
+    "source": "thread_b",
+    "target": "threadB_sem",
+    "label": "sys_sem_give",
+    "type": "interaction"
+  },
+  {
+    "source": "thread_a",
     "target": "threadA_sem",
     "label": "sys_sem_take",
     "type": "interaction"
   },
   {
-    "source": "thread_a",
+    "source": "thread_b",
     "target": "threadA_sem",
     "label": "sys_sem_take",
     "type": "interaction"
