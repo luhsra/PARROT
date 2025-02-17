@@ -5,22 +5,23 @@
 path="build/dumps/"
 graphs=(
 	"DumpCFG*..abbs.dot"
-	"DumpCFG*..bbs.dot"
-	"DumpCallgraph*..complete.dot"
-	"DumpCallgraph*..syscalls.dot"
-	"DumpInstances*..dot"
+	# "DumpCFG*..bbs.dot"
+	# "DumpCallgraph*..complete.dot"
+	# "DumpCallgraph*..syscalls.dot"
+	# "DumpInstances*..dot"
 	"MultiSSE*.mstg.dot"
 	"MultiSSE*.reduced.dot"
 	"MultiSSE*.sps.dot"
 )
 echo "$(pwd)"
-echo "Trying to open: ${graphs[@]}"
+echo "Trying to open: ${graphs[@]}\n"
 for i in "${!graphs[@]}"; do
 	graph=${graphs[$i]}
 	echo "${path}${graph}"
 	most_recent=$(ls -t ${path}${graph} 2>/dev/null | head -n 1)
 	if [ -n "$most_recent" ]; then
 		xdot "$most_recent" &
+		echo "$most_recent"
 	else
 		echo "No file found matching pattern $graph"
 	fi
