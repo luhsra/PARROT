@@ -369,6 +369,10 @@ if build_intel_ecfw or build_zephyr
       'cloc_app': tgt['cloc_app'],
       'summary_section': 'ARA Zephyr Apps',
     }
+    if tgt.has_key('va_corrections')
+      zephyr_app += {'va_corrections': tgt['va_corrections']}
+    endif
+
     all_lls += [ll]
     sia_targets += [zephyr_app]
     ina_targets += [zephyr_app]
