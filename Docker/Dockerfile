@@ -24,7 +24,8 @@ RUN apt update && apt-get install -qq\
 	npm device-tree-compiler autoconf file golang\
 	stlink-tools qemu-system\
 	cloc lsb-release libelf-dev binutils-dev\
-	python3-graph-tool -t bookworm-backports
+	wget
+	#python3-graph-tool -t bookworm-backports
 
 # https://peps.python.org/pep-0668/
 RUN	rm /usr/lib/python3.11/EXTERNALLY-MANAGED
@@ -37,5 +38,12 @@ RUN ln -s /usr/local/bin/cython /usr/bin/cython3
 
 # gllvm must be installed via go package manager
 RUN go install github.com/SRI-CSL/gllvm/cmd/...@master
+
+# install graph-tool from upstream repo because debian/ubuntu versions are old
+RUN wget https://downloads.skewed.de/skewed-keyring/skewed-keyring_1.1_all_$(lsb_release -s -c).deb\
+	&& dpkg -i skewed-keyring_1.1_all_$(lsb_release -s -c).deb\
+	&& echo "deb [signed-by=/usr/share/keyrings/skewed-keyring.gpg] https://downloads.skewed.de/apt $(lsb_release -s -c) main" > \
+    /etc/apt/sources.list.d/skewed.list\
+	&& apt update && apt-get install -qq python3-graph-tool
 
 CMD ["bash"]
