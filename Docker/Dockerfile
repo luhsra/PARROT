@@ -8,7 +8,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Europe/Berlin
 
 # graph tool is not installed to /usr/include
-ENV CPATH=/usr/lib/python3/dist-packages/graph_tool/include
+ENV CPATH=/usr/local/lib/python3.11/dist-packages/graph_tool/include
 
 # go packages go here
 ENV GOBIN=/usr/local/bin/
