@@ -21,6 +21,10 @@
 	"SSE": {
 		"dump": true
 	},
+
+	"SSTGStats": {
+		"dump": true
+	},
 	
 	"ReduceSSTG": {
 		"dump": true
