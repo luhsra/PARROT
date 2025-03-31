@@ -792,5 +792,11 @@
     "target": "test_thread_id",
     "label": "k_thread_start",
     "type": "interaction"
+  },
+  {
+    "source": "alt_thread",
+    "target": "alt_thread",
+    "label": "k_thread_suspend",
+    "type": "interaction"
   }
 ]
