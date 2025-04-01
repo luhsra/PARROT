@@ -13,10 +13,6 @@
 		"SSTGStats",
 		"ReduceSSTG"
 	],
-
-	"SIA": {
-		"dump": true
-	},
 	
 	"SSE": {
 		"dump": true
@@ -31,7 +27,7 @@
 	},
 
 	"ZephyrStatic": {
-		"log_level": "debug"
+		"log_level": "info"
 	},
 
 	"ZephyrStaticPost": {
@@ -44,7 +40,7 @@
 
 	"logger": {
 		"StepManager": "info",
-		"Zephyr": "debug",
+		"Zephyr": "info",
 		"ara": "info"
 	},
 	
