@@ -5,12 +5,13 @@
 
 # Function to display usage information
 usage() {
-    echo "Usage: $0 [-svf] [-sse] [-dump] [-hyper]"
+    echo "Usage: $0 [-svf] [-mstg] [-abbs] [-bbs] [-inst] [-call] [-2]"
 }
 
 path="../build/dumps/"
 graphs=()
 show_second=false
+show_third=false
 # Check arguments
 for arg in "$@"; do
     case $arg in
@@ -18,20 +19,34 @@ for arg in "$@"; do
             graphs+=("SVFAnalyses*.svfg.dot" "SVFAnalyses*.svf-callgraph.dot" "SVFAnalyses*.svf-icfg.dot")
             shift
             ;;
-		-sse)
+		-mstg)
             graphs+=("MultiSSE*.mstg.dot")
             # graphs+=("MultiSSE*.reduced.dot" "MultiSSE*.sps.dot")
             shift
             ;;
-		-dump)
-			graphs+=("DumpCFG*..abbs.dot" "DumpCFG*..bbs.dot" "DumpCallgraph*..complete.dot"
-					"DumpCallgraph*..syscalls.dot" "DumpInstances*..dot")
+		-bbs)
+			graphs+=("DumpCFG*.bbs.dot")
             shift
             ;;
-		-hyper)
-			# graphs+=("DumpCFG*..bbs.dot")
-            graphs+=("MultiSSE*.mstg.dot")
+        -abbs)
+			graphs+=("DumpCFG*.abbs.dot")
+            shift
+            ;;
+        -inst)
+			graphs+=("DumpInstances*.dot")
+            shift
+            ;;
+        -call)
+			graphs+=("DumpCallgraph*..complete.dot" "DumpCallgraph*..syscalls.dot")
+            shift
+            ;;
+		-2)
 			show_second=true
+            shift
+            ;;
+		-3)
+			show_second=true
+			show_third=true
             shift
             ;;
         -h|--help)
@@ -46,7 +61,7 @@ for arg in "$@"; do
     esac
 done
 
-count = 0
+count=0
 for i in "${!graphs[@]}"; do
 	graph=${graphs[$i]}
 	echo "${path}${graph}"
@@ -62,6 +77,13 @@ for i in "${!graphs[@]}"; do
 			second_most_recent=${recent_files[1]}
 			xdot "$second_most_recent" > /dev/null 2>&1 &
 			echo "2: $second_most_recent"
+			count=$((count + 1))
+		fi
+
+		if $show_third && [ ${#recent_files[@]} -gt 2 ]; then
+			third_most_recent=${recent_files[2]}
+			xdot "$third_most_recent" > /dev/null 2>&1 &
+			echo "3: $third_most_recent"
 			count=$((count + 1))
 		fi
 	else
