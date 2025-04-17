@@ -24,6 +24,11 @@ for arg in "$@"; do
             # graphs+=("MultiSSE*.reduced.dot" "MultiSSE*.sps.dot")
             shift
             ;;
+		-mstg+)
+            graphs+=("MultiSSE*.mstg.dot")
+            graphs+=("MultiSSE*.reduced.dot" "MultiSSE*.sps.dot")
+            shift
+            ;;
 		-bbs)
 			graphs+=("DumpCFG*.bbs.dot")
             shift
