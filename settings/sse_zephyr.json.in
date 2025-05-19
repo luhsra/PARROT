@@ -7,22 +7,17 @@
 		"SIA",
 		"IRWriter",
 		"LoadKernelLL",
-		"SSE",
+		"MultiSSE",
+		"MSTGStats",
 		"DumpCFG",
-		"DumpInstances",
-		"SSTGStats",
-		"ReduceSSTG"
+		"DumpInstances"
 	],
 	
-	"SSE": {
+	"MultiSSE": {
 		"dump": true
 	},
 
-	"SSTGStats": {
-		"dump": true
-	},
-	
-	"ReduceSSTG": {
+	"MSTGStats": {
 		"dump": true
 	},
 
