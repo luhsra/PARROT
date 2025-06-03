@@ -3,6 +3,7 @@
 		"MergeStructs",
 		"RemoveSysfuncBody",
 		"ZephyrThreadEntry",
+		"ApplyTimings",
 		"IRWriter",
 		"SIA",
 		"IRWriter",
@@ -14,6 +15,7 @@
 	],
 	
 	"MultiSSE": {
+		"with_times": true,
 		"dump": true
 	},
 
@@ -32,6 +34,11 @@
 	"LoadKernelLL": {
 		"kernel_ll": "@kernel_ll_file@"
 	},
+
+	"ApplyTimings": {
+		"timings": "test/timing.json"
+	},
+
 
 	"logger": {
 		"StepManager": "info",
