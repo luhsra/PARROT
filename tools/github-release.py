@@ -70,7 +70,6 @@ class RepoBranch:
 
 # list of subprojects that should be excluded
 excludes = [
-    "intel-ecfw-zephyr",
     "libmicrohttpd_orig",
 ]
 
@@ -87,7 +86,9 @@ mapping = [
     Rewrite(scm="research/parrot-projects/GPSLogger", gh="luhsra/GPSLogger"),
     Rewrite(scm="research/parrot-projects/InfiniTime", gh="luhsra/InfiniTime"),
     Rewrite(scm="research/parrot-projects/infinitime-gllvm", gh="luhsra/infinitime-gllvm"),
+    Rewrite(scm="research/parrot-projects/intel-ecfw-zephyr", gh="luhsra/intel-ecfw-zephyr"),
     Rewrite(scm="research/parrot-projects/IronOS", gh="luhsra/IronOS"),
+    Rewrite(scm="research/parrot-projects/irx", gh="luhsra/irx"),
     Rewrite(scm="research/parrot-projects/libmicrohttpd", gh="luhsra/libmicrohttpd"),
     Rewrite(scm="research/parrot-projects/librepilot", gh="luhsra/LibrePilot"),
     Rewrite(scm="research/parrot-projects/musl", gh="luhsra/musl-libc"),
