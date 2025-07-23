@@ -39,7 +39,7 @@ cd build
 meson compile
 ```
 
-## Docker
+## Docker/Podman
 
 All build dependencies including clang, toolchains etc. are preinstalled in the Docker file.
 
@@ -49,4 +49,4 @@ cd Docker
 docker login scm.sra.uni-hannover.de:5050
 docker build -t scm.sra.uni-hannover.de:5050/research/parrot .
 # run the container and attach to it
-./run_docker.sh
+./Docker/run_docker.sh
