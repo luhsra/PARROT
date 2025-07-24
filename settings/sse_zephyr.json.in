@@ -8,18 +8,28 @@
 		"SIA",
 		"IRWriter",
 		"LoadKernelLL",
+		"SSE",
+		"ReduceSSTG",
 		"MultiSSE",
 		"MSTGStats",
 		"DumpCFG",
 		"DumpInstances"
 	],
-	
+
+	"SSE": {
+		"dump": true
+	},
+
 	"MultiSSE": {
-		"with_times": true,
+		"with_times": false,
 		"dump": true
 	},
 
 	"MSTGStats": {
+		"dump": true
+	},
+
+	"ReduceSSTG": {
 		"dump": true
 	},
 
@@ -34,11 +44,6 @@
 	"LoadKernelLL": {
 		"kernel_ll": "@kernel_ll_file@"
 	},
-
-	"ApplyTimings": {
-		"timings": "test/timing.json"
-	},
-
 
 	"logger": {
 		"StepManager": "info",
