@@ -481,7 +481,7 @@ foreach app : sse_targets
     command: [
       py3_inst, ara, app['ll'],
       '--os', app['os'],
-      '--log-level', 'info',
+      '--log-level', 'debug',
       '--with-stubs',
       '--va-corrections', corrections.full_path(),
       '--step-settings', app['sse_settings']],

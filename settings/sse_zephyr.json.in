@@ -3,25 +3,32 @@
 		"MergeStructs",
 		"RemoveSysfuncBody",
 		"ZephyrThreadEntry",
+		"ApplyTimings",
 		"IRWriter",
 		"SIA",
 		"IRWriter",
 		"LoadKernelLL",
 		"SSE",
+		"ReduceSSTG",
+		"MultiSSE",
+		"MSTGStats",
 		"DumpCFG",
-		"DumpInstances",
-		"SSTGStats",
-		"ReduceSSTG"
+		"DumpInstances"
 	],
-	
+
 	"SSE": {
 		"dump": true
 	},
 
-	"SSTGStats": {
+	"MultiSSE": {
+		"with_times": false,
 		"dump": true
 	},
-	
+
+	"MSTGStats": {
+		"dump": true
+	},
+
 	"ReduceSSTG": {
 		"dump": true
 	},
