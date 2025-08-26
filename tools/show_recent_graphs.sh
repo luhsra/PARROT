@@ -26,6 +26,10 @@ while [[ $# -gt 0 ]]; do
             # graphs+=("MultiSSE*.reduced.dot" "MultiSSE*.sps.dot")
             shift
             ;;
+		-hstg)
+            graphs+=("HyperSSE*.hstg.dot")
+            shift
+            ;;
 		-mstg+)
             graphs+=("MultiSSE*.mstg.dot")
             graphs+=("MultiSSE*.reduced.dot" "MultiSSE*.sps.dot")
