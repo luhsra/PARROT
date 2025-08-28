@@ -1,21 +1,9 @@
 {
 	"steps": [
-		"MergeStructs",
-		"RemoveSysfuncBody",
-		"ZephyrThreadEntry",
-		"IRWriter",
-		"SIA",
-		"IRWriter",
-		"LoadKernelLL",
-		"SSE",
-		"DumpCFG",
-		"DumpInstances",
-		"SSTGStats",
-		"ReduceSSTG"
 	],
 
 	"SIA": {
-		"dump": true
+		"dump": false
 	},
 	
 	"SSE": {

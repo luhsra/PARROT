@@ -55,7 +55,7 @@
             "args": [
                 "-C",
                 "${workspaceFolder}/build",
-                "subprojects/ara/appl/AUTOSAR/autosar_singlecore_xen_hypercall_a_noopt_mod.pi4.ll"
+                "subprojects/ara/appl/AUTOSAR/autosar_singlecore_xen_hypercall_a.pi4.ll"
             ],
             "group": {
                 "kind": "build",
@@ -69,7 +69,7 @@
             "args": [
                 "-C",
                 "${workspaceFolder}/build",
-                "subprojects/ara/appl/AUTOSAR/autosar_singlecore_xen_hypercall_b_noopt_mod.pi4.ll"
+                "subprojects/ara/appl/AUTOSAR/autosar_singlecore_xen_hypercall_b.pi4.ll"
             ],
             "group": {
                 "kind": "build",
@@ -83,7 +83,7 @@
             "args": [
                 "-C",
                 "${workspaceFolder}/build",
-                "subprojects/ara/appl/AUTOSAR/autosar_singlecore_xen_hypercomplex_loop_noopt_mod.pi4.ll"
+                "subprojects/ara/appl/AUTOSAR/autosar_singlecore_xen_hypercomplex_loop.pi4.ll"
             ],
             "group": {
                 "kind": "build",
@@ -97,7 +97,7 @@
             "args": [
                 "-C",
                 "${workspaceFolder}/build",
-                "subprojects/ara/appl/AUTOSAR/autosar_singlecore_xen_hypercomplex_worker_noopt_mod.pi4.ll"
+                "subprojects/ara/appl/AUTOSAR/autosar_singlecore_xen_hypercomplex_worker.pi4.ll"
             ],
             "group": {
                 "kind": "build",
@@ -111,7 +111,52 @@
             "args": [
                 "-C",
                 "${workspaceFolder}/build",
-                "subprojects/ara/appl/AUTOSAR/autosar_singlecore_xen_hypercomplex_a_noopt_mod.pi4.ll"
+                "subprojects/ara/appl/AUTOSAR/autosar_singlecore_xen_hypercomplex_a.pi4.ll"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },{
+            "label": "Run Ninja Xen Alarm",
+            "type": "shell",
+            "command": "ninja",
+            "args": [
+                "-C",
+                "${workspaceFolder}/build",
+                "subprojects/ara/appl/AUTOSAR/autosar_singlecore_xen_alarm_a.pi4.ll"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },{
+            "label": "Run Ninja Xen CrossOS-Autosar",
+            "type": "shell",
+            "command": "ninja",
+            "args": [
+                "-C",
+                "${workspaceFolder}/build",
+                "subprojects/ara/appl/AUTOSAR/autosar_singlecore_xen_zephyr_autosar.pi4.ll"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },{
+            // Not ideal, only need the build process
+            "label": "Run Ninja Xen CrossOS-Zephyr",
+            "type": "shell",
+            "command": "ninja",
+            "args": [
+                "-C",
+                "${workspaceFolder}/build",
+                // want something like this
+                // "subprojects/ara-zephyr-apps/appl/native_sim-static_msgq-kernel.ll"
+                "sse-native_sim-static_msgq"
             ],
             "group": {
                 "kind": "build",
@@ -123,8 +168,11 @@
             "label": "Run all Ninja Xen",
             "dependsOrder": "sequence",
             "dependsOn": [
-                "Run Ninja Xen Hypercall-A",
-                "Run Ninja Xen Hypercall-B",
+                // "Run Ninja Xen Alarm",
+                // "Run Ninja Xen Hypercall-A",
+                // "Run Ninja Xen Hypercall-B",
+                "Run Ninja Xen CrossOS-Autosar",
+                "Run Ninja Xen CrossOS-Zephyr",
                 // "Run Ninja Xen Hypercomplex-A",
                 // "Run Ninja Xen Hypercomplex-B",
                 // "Run Ninja Xen Hypercomplex-C",
