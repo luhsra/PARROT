@@ -11,13 +11,13 @@
             "program": "/usr/bin/python3",
             "additionalSOLibSearchPath": "${workspaceRoot}/build/subprojects/ara/ara/steps/native/step.cpython-310-x86_64-linux-gnu.so",
             "args": [
-                "subprojects/ara/ara.py", "subprojects/ara/appl/AUTOSAR/autosar_singlecore_xen_single_core.pi4.ll", 
-                "--os", "AUTOSAR", "--log-level", "debug", 
-                "--oilfile", "../subprojects/ara/appl/AUTOSAR/singlecore/xen/single_core.json",
-                "--step-settings", "../subprojects/ara/settings/hypersse.json"
+                "ignored", "--os", "XEN", "--log-level", "warn", 
+                // First generate step-settings with: ninja subprojects/ara/appl/Xen/complex
+                // then use it like: "subprojects/ara/appl/Xen/hypersse-complex.json"
+                "--step-settings", "subprojects/ara/appl/Xen/hypersse-complex.json"
             ],
             "miDebuggerPath": "/usr/bin/gdb",
-            //"preLaunchTask": "Run all Ninja Xen"
+            "preLaunchTask": "Run all Ninja Xen"
         },
         {
             "name": "Python Debugger: ARA XEN",
@@ -28,15 +28,15 @@
             "justMyCode": false,
             "console": "integratedTerminal",
             "args": [
-                "subprojects/ara/appl/AUTOSAR/autosar_singlecore_xen_single_core.pi4.ll", 
-                "--os", "AUTOSAR", "--log-level", "warn", 
-                "--oilfile", "../subprojects/ara/appl/AUTOSAR/singlecore/xen/single_core.json",
-                "--step-settings", "../subprojects/ara/settings/hypersse.json"
-                //,"--timing", "BB"
+                "ignored", "--os", "XEN", "--log-level", "warn", 
+                // First generate step-settings with: ninja subprojects/ara/appl/Xen/complex
+                // then use it like: "subprojects/ara/appl/Xen/hypersse-complex.json"
+                "--step-settings", "subprojects/ara/appl/Xen/hypersse-complex.json"
             ],
             "preLaunchTask": "Run all Ninja Xen"
         },
         {
+            // Legacy Target
             "name": "Python Debugger: ARA Hypercall Multicore",
             "type": "debugpy",
             "request": "launch",
@@ -54,24 +54,6 @@
                 //,"--timing", "BB"
             ],
             // "preLaunchTask": "Run all Ninja Xen"
-        },
-        {
-            "name": "Python Debugger: ARA Bugfix",
-            "type": "debugpy",
-            "request": "launch",
-            "cwd": "${workspaceFolder}/build/",
-            "program": "subprojects/ara/ara.py",
-            "justMyCode": false,
-            "console": "integratedTerminal",
-            "args": [
-                "subprojects/ara/appl/AUTOSAR/autosar_singlecore_xen_bugfix_a.pi4.ll", "--os", "AUTOSAR",
-                "--oilfile", "../subprojects/ara/appl/AUTOSAR/singlecore/xen/bugfix/a.json", "--ir_output",
-                "subprojects/ara/appl/AUTOSAR/autosar_singlecore_xen_bugfix_a_noopt_mod.pi4.ll", "--step-settings",
-                "../subprojects/ara/settings/autosar_generator_arm.json", "--generator_output", "subprojects/ara/appl/AUTOSAR/autosar_singlecore_xen_bugfix_a_noopt_autosar.pi4.cc",
-                "--timing", "BB"
-            ],
-            
-            // "preLaunchTask": "Run Ninja Xen Multi Core"
         }
     ]
 }
