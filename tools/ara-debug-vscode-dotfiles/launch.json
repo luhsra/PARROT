@@ -31,7 +31,7 @@
                 "ignored", "--os", "XEN", "--log-level", "warn", 
                 // First generate step-settings with: ninja subprojects/ara/appl/Xen/complex
                 // then use it like: "subprojects/ara/appl/Xen/hypersse-complex.json"
-                "--step-settings", "subprojects/ara/appl/Xen/hypersse-complex.json"
+                "--step-settings", "subprojects/ara/appl/Xen/hypersse-zephyr-hc.json"
             ],
             "preLaunchTask": "Run all Ninja Xen"
         },
