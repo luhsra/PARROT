@@ -12,7 +12,7 @@ path="../build/dumps/"
 graphs=()
 show_second=false
 show_third=false
-copy_path="../../ma_mareike_burg/fig"   # hardcoded!
+copy_path="../../ma_mareike_burg/fig/sendrecv"   # hardcoded!
 # Check arguments
 while [[ $# -gt 0 ]]; do
     arg="$1"
@@ -28,6 +28,11 @@ while [[ $# -gt 0 ]]; do
             ;;
 		-hstg)
             graphs+=("HyperSSE*.hstg.dot")
+            shift
+            ;;
+		-hstg+)
+            graphs+=("HyperSSE*.hstg.dot")
+            graphs+=("HyperSSE*.reduced.dot" "HyperSSE*.sps.dot")
             shift
             ;;
 		-mstg+)
@@ -48,7 +53,7 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
         -call)
-			graphs+=("DumpCallgraph*..complete.dot" "DumpCallgraph*..syscalls.dot")
+			graphs+=("DumpCallgraph*.complete.dot" "DumpCallgraph*.syscalls.dot")
             shift
             ;;
 		-2)

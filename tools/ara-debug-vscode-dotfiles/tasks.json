@@ -39,7 +39,7 @@
             "dependsOrder": "sequence",
             "dependsOn": [
                 "Ninja Xen all ll-Autosar",
-                "Ninja Xen all ll-Zephyr"
+                // "Ninja Xen all ll-Zephyr"
             ],
             "problemMatcher": []
         }
