@@ -2,3 +2,4 @@ native.txt
 .cache
 __pycache__
 .vscode
+.wraplock
