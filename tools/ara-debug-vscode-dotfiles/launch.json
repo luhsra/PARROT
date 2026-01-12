@@ -1,0 +1,59 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+    // Adds Debug+Run configurations:
+    // Create symlink with: ln tools/ara-debug-vscode-dotfiles/launch.json vscode/.
+        {
+            "type": "cppdbg",
+            "request": "launch",
+            "name": "C++ Debugger: ARA XEN",
+            "cwd": "${workspaceRoot}/build/",
+            "program": "/usr/bin/python3",
+            "additionalSOLibSearchPath": "${workspaceRoot}/build/subprojects/ara/ara/steps/native/step.cpython-310-x86_64-linux-gnu.so",
+            "args": [
+                "ignored", "--os", "XEN", "--log-level", "warn", 
+                // First generate step-settings with: ninja subprojects/ara/appl/Xen/complex
+                // then use it like: "subprojects/ara/appl/Xen/hypersse-complex.json"
+                "--step-settings", "subprojects/ara/appl/Xen/hypersse-complex.json"
+            ],
+            "miDebuggerPath": "/usr/bin/gdb",
+            "preLaunchTask": "Run all Ninja Xen"
+        },
+        {
+            "name": "Python Debugger: ARA XEN",
+            "type": "debugpy",
+            "request": "launch",
+            "cwd": "${workspaceFolder}/build/",
+            "program": "subprojects/ara/ara.py",
+            "justMyCode": false,
+            "console": "integratedTerminal",
+            "args": [
+                "ignored", "--os", "XEN", "--log-level", "warn", 
+                // First generate step-settings with: ninja subprojects/ara/appl/Xen/complex
+                // then use it like: "subprojects/ara/appl/Xen/hypersse-complex.json"
+                "--step-settings", "subprojects/ara/appl/Xen/automotiveBshared.json"
+            ],
+            "preLaunchTask": "Run all Ninja Xen"
+        },
+        {
+            // Legacy Target
+            "name": "Python Debugger: ARA Hypercall Multicore",
+            "type": "debugpy",
+            "request": "launch",
+            "cwd": "${workspaceFolder}/build/",
+            "program": "subprojects/ara/ara.py",
+            "justMyCode": false,
+            "console": "integratedTerminal",
+            "args": [
+                "subprojects/ara/appl/AUTOSAR/autosar_singlecore_xen_hypercall_multi_core.pi4.ll", 
+                "--os", "AUTOSAR", "--log-level", "warn", 
+                "--oilfile", "../subprojects/ara/appl/AUTOSAR/singlecore/xen/hypercall/multi_core.json",
+                "--step-settings", "../subprojects/ara/settings/autosar_generator_arm.json",
+                "--ir_output", "subprojects/ara/appl/AUTOSAR/autosar_singlecore_xen_hypercall_multi_core_noopt_mod.pi4.ll",
+                "--generator_output", "subprojects/ara/appl/AUTOSAR/autosar_singlecore_xen_hypercall_multi_core_noopt_autosar.pi4.cc"
+                //,"--timing", "BB"
+            ],
+            // "preLaunchTask": "Run all Ninja Xen"
+        }
+    ]
+}

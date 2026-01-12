@@ -24,6 +24,10 @@
 		"with_times": false,
 		"dump": true
 	},
+	
+	"SIA": {
+		"dump": false
+	},
 
 	"MSTGStats": {
 		"dump": true

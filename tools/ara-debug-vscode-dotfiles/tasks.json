@@ -1,0 +1,47 @@
+{
+    // Adds automatic ninja tasks that are autostarted before Debugconfigs from launch.json:
+    // Create symlink with: ln tools/ara-debug-vscode-dotfiles/tasks.json vscode/.
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run Ninja all ll-Zephyr",
+            "type": "shell",
+            "command": "ninja",
+            "args": [
+                "-C",
+                "${workspaceFolder}/build", "-j", "10",
+                // want something like this
+                // "subprojects/ara-zephyr-apps/appl/native_sim-static_msgq-kernel.ll"
+                "ara-zephyr-apps@@build-zephyr-apps"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },{
+            "label": "Ninja Xen all ll-Autosar",
+            "type": "shell",
+            "command": "ninja",
+            "args": [
+                "-C",
+                "${workspaceFolder}/build", "-j", "10",
+                "subprojects/ara/appl/Xen/xen-ara-autosar"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Run all Ninja Xen",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Ninja Xen all ll-Autosar",
+                // "Ninja Xen all ll-Zephyr"
+            ],
+            "problemMatcher": []
+        }
+    ]
+}
