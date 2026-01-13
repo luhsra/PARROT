@@ -3,7 +3,6 @@
 		"MergeStructs",
 		"RemoveSysfuncBody",
 		"ZephyrThreadEntry",
-		"ApplyTimings",
 		"IRWriter",
 		"SIA",
 		"IRWriter",
@@ -21,7 +20,7 @@
 	},
 
 	"MultiSSE": {
-		"with_times": false,
+		"with_times": true,
 		"dump": true
 	},
 	
