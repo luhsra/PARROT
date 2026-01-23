@@ -16,7 +16,7 @@ foreach zephyr_test_app : zephyr_test_apps
     endif
 
     # Instance-Graph Test cases
-    warning('@0@'.format(zephyr_test_app['name']))
+    # warning('@0@'.format(zephyr_test_app['name']))
     test(zephyr_test_app['name'],
         py3_inst,
         # The json object is not a files() object to allow paths to non existing json files.

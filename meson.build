@@ -292,7 +292,7 @@ if build_i4copter
           '--os', app['os'],
           '--log-level', 'info',
           '--step-settings', sse_settings])
-      summary('Run SSE on ' + app['name'], 'meson compile ' + run_sse, section: app['summary_section'])
+      # summary('Run SSE on ' + app['name'], 'meson compile ' + run_sse, section: app['summary_section'])
 
       app = app + {'sse_settings': sse_settings}
     else
@@ -467,7 +467,7 @@ foreach app : sia_targets
       '--with-stubs',
       '--va-corrections', corrections.full_path(),
       '--step-settings', app['sia_settings']])
-  summary('Run SIA on ' + app['name'], 'meson compile ' + run_sia, section: app['summary_section'])
+  # summary('Run SIA on ' + app['name'], 'meson compile ' + run_sia, section: app['summary_section'])
 endforeach
 
 # sse targets
@@ -486,7 +486,7 @@ foreach app : sse_targets
       '--va-corrections', corrections.full_path(),
       '--step-settings', app['sse_settings']],
       depends: [app['kernel_ll'], subproject('irx').get_variable('native_simulator_llvmir')])
-  summary('Run SSE on ' + app['name'], 'meson compile ' + run_sse, section: app['summary_section'])
+  # summary('Run SSE on ' + app['name'], 'meson compile ' + run_sse, section: app['summary_section'])
 endforeach
 
 # ina targets
@@ -503,7 +503,7 @@ foreach app : ina_targets
       '--log-level', 'info',
       '--va-corrections', corrections.full_path(),
       '--step-settings', app['ina_settings']])
-  summary('Run INA on ' + app['name'], 'meson compile ' + run_ina, section: app['summary_section'])
+  # summary('Run INA on ' + app['name'], 'meson compile ' + run_ina, section: app['summary_section'])
 endforeach
 
 # TODO: add SSE and MultiSSE
@@ -574,13 +574,13 @@ foreach app : all_apps
     )
   ]
   deps_for_apps += [app['ll']]
-  summary(app['name'], 'OS: @0@, SIA: @1@, INA: @2@, SSE: @3@, MultiSSE: @4@, LL: @5@'.format(
-    app['os'],
-    'sia_settings' in app,
-    'ina_settings' in app,
-    'sse_settings' in app,
-    'multisse_settings' in app,
-    app['ll'].full_path()), section: 'Enabled Apps')
+  # summary(app['name'], 'OS: @0@, SIA: @1@, INA: @2@, SSE: @3@, MultiSSE: @4@, LL: @5@'.format(
+  #   app['os'],
+  #   'sia_settings' in app,
+  #   'ina_settings' in app,
+  #   'sse_settings' in app,
+  #   'multisse_settings' in app,
+  #   app['ll'].full_path()), section: 'Enabled Apps')
 endforeach
 
 run_sia_runtime = 'run-sia-runtime'

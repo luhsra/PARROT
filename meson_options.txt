@@ -12,7 +12,7 @@ option('build_libmicrohttpd', type: 'boolean', value: true, description: 'Includ
 option('build_synthetic_apps', type: 'boolean', value: true, description: 'Include pregenerated synthetic_apps.')
 
 
-option('offline', type: 'boolean', value: 'false', yield: true,
+option('offline', type: 'boolean', value: false, yield: true,
   description: 'Do not download anything (this is independent of Meson\'s internal subproject mechanisms).')
 
 option('execute_ara', type: 'boolean', value: true, description: 'Build targets which execute ARA')
