@@ -24,7 +24,7 @@ RUN apt update && apt-get install -qq\
 	npm device-tree-compiler autoconf file golang\
 	stlink-tools qemu-system\
 	cloc lsb-release libelf-dev binutils-dev\
-	wget
+	wget zsh
 	#python3-graph-tool -t bookworm-backports
 
 # https://peps.python.org/pep-0668/

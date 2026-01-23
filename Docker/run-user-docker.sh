@@ -19,4 +19,5 @@ docker run --rm -it \
 	--volume "/etc/shadow:/etc/shadow:ro"\
 	--volume "$HOME:$HOME:rw" \
 	--name parrot-dev \
-	scm.sra.uni-hannover.de:5050/research/parrot
+	scm.sra.uni-hannover.de:5050/research/parrot \
+	"$(echo $SHELL)"
