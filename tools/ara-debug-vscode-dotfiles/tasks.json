@@ -1,47 +1,36 @@
 {
-    // Adds automatic ninja tasks that are autostarted before Debugconfigs from launch.json:
-    // Create symlink with: ln tools/ara-debug-vscode-dotfiles/tasks.json vscode/.
     "version": "2.0.0",
     "tasks": [
+        // Part of ARA VSCode Debug configuration
+        // Create symlink with: ln tools/ara-debug-vscode-dotfiles/tasks.json vscode/.
+        // Can be used to auto-build dependencies to debug later.
+        // Because the debugger only starts ara.py, this tasks provide
+        //  system compilation that is usually done by meson.
         {
-            "label": "Run Ninja all ll-Zephyr",
+            "label": "Ninja-Zephyr",
             "type": "shell",
             "command": "ninja",
             "args": [
-                "-C",
-                "${workspaceFolder}/build", "-j", "10",
-                // want something like this
-                // "subprojects/ara-zephyr-apps/appl/native_sim-static_msgq-kernel.ll"
+                "-C", "${workspaceFolder}/build",
                 "ara-zephyr-apps@@build-zephyr-apps"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "problemMatcher": []
-        },{
-            "label": "Ninja Xen all ll-Autosar",
-            "type": "shell",
-            "command": "ninja",
-            "args": [
-                "-C",
-                "${workspaceFolder}/build", "-j", "10",
-                "subprojects/ara/appl/Xen/xen-ara-autosar"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "problemMatcher": []
+            ]
         },
         {
-            "label": "Run all Ninja Xen",
+            "label": "Ninja Xen-Autosar",
+            "type": "shell",
+            "command": "ninja",
+            "args": [
+                "-C", "${workspaceFolder}/build",
+                "subprojects/ara/appl/Xen/xen-ara-autosar"
+            ]
+        },
+        {
+            "label": "Ninja all",
             "dependsOrder": "sequence",
             "dependsOn": [
-                "Ninja Xen all ll-Autosar",
-                // "Ninja Xen all ll-Zephyr"
-            ],
-            "problemMatcher": []
+                "Ninja-Zephyr",
+                "Ninja Xen-Autosar"
+            ]
         }
     ]
 }
