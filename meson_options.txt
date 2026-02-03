@@ -10,6 +10,7 @@ option('build_posix_apps', type: 'boolean', value: true, description: 'Create SI
 option('build_autosar_apps', type: 'boolean', value: true, description: 'Create SSE and MultiSSE targets for several AUTOSAR apps.')
 option('build_libmicrohttpd', type: 'boolean', value: true, description: 'Include libmicrohttpd in the POSIX apps.')
 option('build_synthetic_apps', type: 'boolean', value: true, description: 'Include pregenerated synthetic_apps.')
+option('include_xen', type: 'boolean', value: true, description: 'If ara/appl/Xen apps should be included, needed for HyperSSE and ara-xen-eval.')
 
 
 option('offline', type: 'boolean', value: false, yield: true,
