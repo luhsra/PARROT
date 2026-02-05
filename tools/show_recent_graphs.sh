@@ -5,14 +5,16 @@
 
 # Function to display usage information
 usage() {
-    echo "Usage: $0 [-svf] [-mstg] [-abbs] [-bbs] [-inst] [-call] [-2] [-3] [-cp <directory>]"
+    echo "Usage: $0 [-svf] [-mstg] [-abb] [-bb] [-inst] [-call] [-2] [-3] [-many <#>] [-cp <target-dir>]"
 }
 
+# allows to be run from build folder where ninja cmds are executed
 path="../build/dumps/"
 graphs=()
-show_second=false
-show_third=false
-copy_path="../../ma_mareike_burg/fig/sendrecv"   # hardcoded!
+many=1
+count=0
+do_cp=false
+
 # Check arguments
 while [[ $# -gt 0 ]]; do
     arg="$1"
@@ -40,11 +42,11 @@ while [[ $# -gt 0 ]]; do
             graphs+=("MultiSSE*.reduced.dot" "MultiSSE*.sps.dot")
             shift
             ;;
-		-bbs)
+		-bb)
 			graphs+=("DumpCFG*.bbs.dot")
             shift
             ;;
-        -abbs)
+        -abb)
 			graphs+=("DumpCFG*.abbs.dot")
             shift
             ;;
@@ -57,23 +59,42 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
 		-2)
-			show_second=true
+			many=2
             shift
             ;;
 		-3)
-			show_second=true
-			show_third=true
+			many=3
+            shift
+            ;;
+        -many)
+            shift
+            if [[ $# -eq 0 ]]; then
+                echo "-many: needs number of most recent files!"
+                usage
+                exit 1
+            fi
+            many="$1"
+            if [[ many -le 0 ]]; then
+                echo "-many: $many is invalid!"
+                usage
+                exit 1
+            fi
             shift
             ;;
         -cp)
             shift # Get to next param
             if [[ $# -eq 0 ]]; then
-                echo "No directory for -cp"
+                echo "-cp: need target param (e.g. ~/Desktop/sra-repos/parrot/subprojects/ara/appl/AUTOSAR/singlecore/examples/)!"
                 usage
                 exit 1
             fi
-            copy_name="$1"
-            full_copy_path="${copy_path}/${copy_name}/"
+            target="$1"
+            if [[ ! -d $target ]]; then
+                echo "-cp: $target does not exist!"
+                usage
+                exit 1
+            fi
+            do_cp=true
             shift
             ;;
         -h|--help)
@@ -89,69 +110,31 @@ while [[ $# -gt 0 ]]; do
 done
 
 
-echo "Current path is: $(pwd)"
-if [[ -n "${full_copy_path}" ]]; then
-    echo "Copy to $full_copy_path"
-    mkdir -p "$full_copy_path"
-fi
-
 echo ""
-
-count=0
 for i in "${!graphs[@]}"; do
 	graph=${graphs[$i]}
 	echo "Matching: ${path}${graph}"
 	read -d '' -r -a recent_files < <(ls -t ${path}${graph} 2>/dev/null)
 
-	if [ ${#recent_files[@]} -gt 0 ]; then
-		most_recent=${recent_files[0]}
-		xdot "$most_recent" > /dev/null 2>&1 &
-		echo "1: $most_recent"
-		count=$((count + 1))
+    for (( m=0; m<many; m++ )); do
 
-        if [[ -n "${full_copy_path}" ]]; then
-            modified_name_a=$(echo "$most_recent" | cut -d '/' -f4 | cut -d '.' -f1)
-            modified_name_b=$(echo "$most_recent" | cut -d '/' -f4 | cut -d '.' -f3,4,5,6,7,8)
-            trimmed_name=$(echo "$copy_name" | tr -d "/")
-            new_name="${modified_name_a}.${trimmed_name}.${modified_name_b}"
-            cp "$most_recent" "${copy_path}/${copy_name}/${new_name}"
-            echo "Copied to ${new_name}"
-        fi
+        if [ ${#recent_files[@]} -gt $m ]; then
+            most_recent=${recent_files[$m]}
+            echo "$m: $most_recent"
+            count=$((count + 1))
 
-		if $show_second && [ ${#recent_files[@]} -gt 1 ]; then
-			second_most_recent=${recent_files[1]}
-			xdot "$second_most_recent" > /dev/null 2>&1 &
-			echo "2: $second_most_recent"
-			count=$((count + 1))
-
-            if [[ -n "${full_copy_path}" ]]; then
-                modified_name_a=$(echo "$second_most_recent" | cut -d '/' -f4 | cut -d '.' -f1)
-                modified_name_b=$(echo "$second_most_recent" | cut -d '/' -f4 | cut -d '.' -f3,4,5,6,7,8)
-                trimmed_name=$(echo "$copy_name" | tr -d "/")
-                new_name="${modified_name_a}.${trimmed_name}.${modified_name_b}"
-                cp "$second_most_recent" "${copy_path}/${copy_name}/${new_name}"
-                echo "Copied to ${new_name}"
+            if $do_cp; then
+                trimmed="${most_recent%.*}"
+                dot -Tsvg "$most_recent" > "$trimmed.svg"
+                cp $trimmed.* "$target"
+                echo "Copied to $target"
+            else
+                xdot "$most_recent" > /dev/null 2>&1 &
             fi
-		fi
-
-		if $show_third && [ ${#recent_files[@]} -gt 2 ]; then
-			third_most_recent=${recent_files[2]}
-			xdot "$third_most_recent" > /dev/null 2>&1 &
-			echo "3: $third_most_recent"
-			count=$((count + 1))
-
-            if [[ -n "${full_copy_path}" ]]; then
-                modified_name_a=$(echo "$third_most_recent" | cut -d '/' -f4 | cut -d '.' -f1)
-                modified_name_b=$(echo "$third_most_recent" | cut -d '/' -f4 | cut -d '.' -f3,4,5,6,7,8)
-                trimmed_name=$(echo "$copy_name" | tr -d "/")
-                new_name="${modified_name_a}.${trimmed_name}.${modified_name_b}"
-                cp "$third_most_recent" "${copy_path}/${copy_name}/${new_name}"
-                echo "Copied to ${new_name}"
-            fi
-		fi
-	else
-		echo "No file found matching pattern $graph"
-	fi
+        else
+            echo "$m: no file found matching pattern $graph"
+	    fi
+    done
 done
 
 echo ""
