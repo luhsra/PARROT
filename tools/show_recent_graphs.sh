@@ -29,12 +29,12 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
 		-hstg)
-            graphs+=("HyperSSE*.hstg.dot")
+            graphs+=("*.hstg.dot")
             shift
             ;;
 		-hstg+)
-            graphs+=("HyperSSE*.hstg.dot")
-            graphs+=("HyperSSE*.reduced.dot" "HyperSSE*.sps.dot")
+            graphs+=("*.hstg.dot")
+            graphs+=("*.reduced.dot" "*.sps.dot")
             shift
             ;;
 		-mstg+)

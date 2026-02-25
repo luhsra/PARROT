@@ -11,7 +11,7 @@
             "type": "shell",
             "command": "ninja",
             "args": [
-                "-C", "${workspaceFolder}/build",
+                "-C", "${workspaceFolder}/build", "-j", "20",
                 "ara-zephyr-apps@@build-zephyr-apps"
             ]
         },
@@ -20,7 +20,7 @@
             "type": "shell",
             "command": "ninja",
             "args": [
-                "-C", "${workspaceFolder}/build",
+                "-C", "${workspaceFolder}/build", "-j", "20",
                 "subprojects/ara/appl/Xen/xen-ara-autosar"
             ]
         },
@@ -28,7 +28,7 @@
             "label": "Ninja all",
             "dependsOrder": "sequence",
             "dependsOn": [
-                "Ninja-Zephyr",
+                // "Ninja-Zephyr",
                 "Ninja Xen-Autosar"
             ]
         }

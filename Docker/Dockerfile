@@ -20,7 +20,7 @@ RUN apt update && apt-get install -qq\
 	binutils-riscv64-unknown-elf gcc-riscv64-unknown-elf libstdc++-12-dev-riscv64-cross\
 	bash-completion gdb-multiarch pkg-config z3 graphviz\
 	libsparsehash-dev gperf cmake g++-multilib libboost-python-dev libboost-graph-dev\
-	python3-serial python3-matplotlib python3-pydot python3-pykwalify python3-pyelftools\
+	python3-serial python3-matplotlib python3-pykwalify python3-pyelftools\
 	npm device-tree-compiler autoconf file golang\
 	stlink-tools qemu-system\
 	cloc lsb-release libelf-dev binutils-dev\
@@ -31,7 +31,7 @@ RUN apt update && apt-get install -qq\
 RUN	rm /usr/lib/python3.11/EXTERNALLY-MANAGED
 
 # outdated versions in debian
-RUN pip3 install versuchung Cython meson
+RUN pip3 install versuchung cython meson pydot==4.0.1
 
 # compatibility with apt installed cython
 RUN ln -s /usr/local/bin/cython /usr/bin/cython3
