@@ -485,7 +485,7 @@ foreach app : sse_targets
       '--with-stubs',
       '--va-corrections', corrections.full_path(),
       '--step-settings', app['sse_settings']],
-      depends: [app['kernel_ll'], subproject('irx').get_variable('native_simulator_llvmir')])
+      depends: [app['kernel_ll']])
   # summary('Run SSE on ' + app['name'], 'meson compile ' + run_sse, section: app['summary_section'])
 endforeach
 
