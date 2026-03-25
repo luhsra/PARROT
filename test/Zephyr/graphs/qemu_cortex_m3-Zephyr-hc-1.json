@@ -101,7 +101,7 @@
     "specialization_level": "",
     "type": "instance",
     "delay": 0,
-    "entry_name": "sender",
+    "entry_name": "a",
     "options": 0,
     "priority": 1,
     "stack_size": 1024

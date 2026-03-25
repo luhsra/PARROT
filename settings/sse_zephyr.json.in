@@ -20,7 +20,7 @@
 	},
 
 	"MultiSSE": {
-		"with_times": true,
+		"with_times": false,
 		"dump": true
 	},
 	

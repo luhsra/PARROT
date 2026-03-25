@@ -88,7 +88,7 @@
   },
   {
     "label": "Thread",
-    "id": "thread_a",
+    "id": "thread_b",
     "branch": 0,
     "usually_taken": 0,
     "loop": 0,
@@ -96,20 +96,20 @@
     "after_scheduler": 0,
     "unique": 1,
     "is_control": 1,
-    "file": "../appl/Xen/min-1/Zephyr-min-3/src/main.c",
-    "line": 19,
+    "file": "../appl/Xen/min-az/Zephyr-min-3/src/main.c",
+    "line": 23,
     "specialization_level": "",
     "type": "instance",
     "delay": 0,
-    "entry_name": "do_1",
+    "entry_name": "b",
     "options": 0,
     "priority": 1,
     "stack_size": 1024
   },
   {
-    "source": "thread_a",
-    "target": "thread_a",
-    "label": "k_sleep",
+    "source": "thread_b",
+    "target": "thread_b",
+    "label": "k_yield",
     "type": "interaction"
   }
 ]

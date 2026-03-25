@@ -88,7 +88,7 @@
   },
   {
     "label": "Thread",
-    "id": "thread_a",
+    "id": "thread_b",
     "branch": 0,
     "usually_taken": 0,
     "loop": 0,
@@ -101,15 +101,9 @@
     "specialization_level": "",
     "type": "instance",
     "delay": 0,
-    "entry_name": "do_2",
+    "entry_name": "b",
     "options": 0,
     "priority": 1,
     "stack_size": 1024
-  },
-  {
-    "source": "thread_a",
-    "target": "thread_a",
-    "label": "k_sleep",
-    "type": "interaction"
   }
 ]

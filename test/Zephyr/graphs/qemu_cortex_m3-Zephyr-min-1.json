@@ -101,15 +101,9 @@
     "specialization_level": "",
     "type": "instance",
     "delay": 0,
-    "entry_name": "do_1",
+    "entry_name": "a",
     "options": 0,
     "priority": 1,
     "stack_size": 1024
-  },
-  {
-    "source": "thread_a",
-    "target": "thread_a",
-    "label": "k_sleep",
-    "type": "interaction"
   }
 ]

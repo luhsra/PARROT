@@ -96,12 +96,12 @@
     "after_scheduler": 0,
     "unique": 1,
     "is_control": 1,
-    "file": "../appl/Xen/min-2/Zephyr-min-4/src/main.c",
-    "line": 19,
+    "file": "../appl/Xen/min-zb/Zephyr-min-4/src/main.c",
+    "line": 23,
     "specialization_level": "",
     "type": "instance",
     "delay": 0,
-    "entry_name": "do_1",
+    "entry_name": "a",
     "options": 0,
     "priority": 1,
     "stack_size": 1024
@@ -109,7 +109,7 @@
   {
     "source": "thread_a",
     "target": "thread_a",
-    "label": "k_sleep",
+    "label": "k_yield",
     "type": "interaction"
   }
 ]

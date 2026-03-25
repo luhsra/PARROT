@@ -97,7 +97,7 @@
     "unique": 1,
     "is_control": 1,
     "file": "../appl/Xen/zephyr-sleep/Zephyr-sleep/src/main.c",
-    "line": 41,
+    "line": 39,
     "specialization_level": "",
     "type": "instance",
     "delay": 0,

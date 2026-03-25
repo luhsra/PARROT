@@ -96,14 +96,14 @@
     "after_scheduler": 0,
     "unique": 1,
     "is_control": 1,
-    "file": "../appl/Xen/hc-zephyr-noiit/Zephyr-hc-6/src/main.c",
-    "line": 38,
+    "file": "../appl/Xen/hc-z-b2/Zephyr-hc-6/src/main.c",
+    "line": 37,
     "specialization_level": "",
     "type": "instance",
     "delay": 0,
-    "entry_name": "recv",
+    "entry_name": "a",
     "options": 0,
-    "priority": 1,
+    "priority": 2,
     "stack_size": 1024
   },
   {
@@ -116,14 +116,14 @@
     "after_scheduler": 0,
     "unique": 1,
     "is_control": 1,
-    "file": "../appl/Xen/hc-zephyr-noiit/Zephyr-hc-6/src/main.c",
-    "line": 43,
+    "file": "../appl/Xen/hc-z-b2/Zephyr-hc-6/src/main.c",
+    "line": 42,
     "specialization_level": "",
     "type": "instance",
     "delay": -1,
     "entry_name": "event",
     "options": 0,
-    "priority": 2,
+    "priority": 1,
     "stack_size": 1024
   }
 ]

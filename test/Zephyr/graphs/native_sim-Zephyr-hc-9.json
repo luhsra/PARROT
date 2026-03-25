@@ -88,7 +88,7 @@
   },
   {
     "label": "Thread",
-    "id": "thread_b",
+    "id": "thread_a",
     "branch": 0,
     "usually_taken": 0,
     "loop": 0,
@@ -96,14 +96,14 @@
     "after_scheduler": 0,
     "unique": 1,
     "is_control": 1,
-    "file": "../appl/Xen/hc-a-z2/Zephyr-hc-5/src/main.c",
-    "line": 36,
+    "file": "../appl/Xen/hc-zephyr-notiming/Zephyr-hc-9/src/main.c",
+    "line": 35,
     "specialization_level": "",
     "type": "instance",
     "delay": 0,
-    "entry_name": "b",
+    "entry_name": "a",
     "options": 0,
-    "priority": 2,
+    "priority": 1,
     "stack_size": 1024
   }
 ]
