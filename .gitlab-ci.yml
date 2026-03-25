@@ -10,7 +10,7 @@ build:
     - meson setup build --native-file native-debian.ini
     - cd build
     - meson compile |& tee build_all.log
-    - meson test --suite parrot --timeout-multiplier 2 |& tee test.log
+    - meson test --suite parrot --suite ara-xen-eval --timeout-multiplier 2 |& tee test.log
   artifacts:
     when: always
     paths:
