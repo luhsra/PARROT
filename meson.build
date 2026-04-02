@@ -2,7 +2,7 @@ project('parrot', 'cpp',
   default_options : ['warning_level=3',
                      'cpp_std=c++17',
                      'buildtype=debugoptimized'],
-  meson_version: '>=1.4.0',
+  meson_version: '>=1.4.0', version: 'SRA\'26'
 )
 
 # There is no way to check this in a meson script:
@@ -23,17 +23,7 @@ endif
 
 nop = [py3_inst, '-c', 'pass']
 
-toolchains = subproject('toolchains')
-arm_enabled = toolchains.get_variable('arm_enabled')
-posix_enabled = toolchains.get_variable('posix_enabled')
-
-# ara
-ara_proj = subproject('ara')
-ara = find_program('ara', required: false)
-if not ara.found()
-  ara = ara_proj.get_variable('ara_py')
-endif
-
+## Eval options
 build_autosar_apps = get_option('build_autosar_apps')
 build_gpslogger = get_option('build_gpslogger')
 build_i4copter = get_option('build_i4copter')
@@ -45,6 +35,19 @@ build_librepilot = get_option('build_librepilot')
 build_posix_apps = get_option('build_posix_apps')
 build_synthetic_apps = get_option('build_synthetic_apps')
 build_zephyr = get_option('build_zephyr')
+build_hypersse_xen = get_option('build_hypersse_xen')
+
+toolchains = subproject('toolchains')
+arm_enabled = toolchains.get_variable('arm_enabled')
+posix_enabled = toolchains.get_variable('posix_enabled')
+
+# ara
+ara_proj = subproject('ara')
+ara = find_program('ara', required: false)
+if not ara.found()
+  ara = ara_proj.get_variable('ara_py')
+endif
+
 
 summary({
   'LibrePilot (build_librepilot)': build_librepilot,
@@ -58,6 +61,7 @@ summary({
   'Including libmicrohttpd (build_libmicrohttpd)': build_libmicrohttpd,
   'IronOS (build_ironos)': build_ironos,
   'Synthetic apps (build_synthetic_apps)': build_synthetic_apps,
+  'HyperSSE Xen': build_hypersse_xen
 }, bool_yn: true, section: 'Wanted applications')
 
 subdir('tools')

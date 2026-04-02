@@ -1,21 +1,21 @@
 # Parrot options
-option('build_gpslogger', type: 'boolean', value: true)
-option('build_librepilot', type: 'boolean', value: true)
+## Evaluation applications/benchmarks/testsuits/projects
+option('build_gpslogger', type: 'boolean', value: false)
+option('build_librepilot', type: 'boolean', value: false)
+option('build_ironos', type: 'boolean', value: false)
+option('build_infinitime', type: 'boolean', value: false)
+option('build_i4copter', type: 'boolean', value: false)
+option('build_libmicrohttpd', type: 'boolean', value: false, description: 'Include libmicrohttpd in the POSIX apps.')
+option('build_synthetic_apps', type: 'boolean', value: false, description: 'Include pregenerated synthetic_apps.')
+option('build_intel_ecfw', type: 'boolean', value: false, description: 'Build the Zephyr-based Intel embedded controller firmware')
+## currently used applications/projects
 option('build_zephyr', type: 'boolean', value: true, description: 'Build sys_kernel and app_kernel related targets.')
-option('build_intel_ecfw', type: 'boolean', value: true, description: 'Build the Zephyr-based Intel embedded controller firmware')
-option('build_ironos', type: 'boolean', value: true)
-option('build_infinitime', type: 'boolean', value: true)
-option('build_i4copter', type: 'boolean', value: true)
 option('build_posix_apps', type: 'boolean', value: true, description: 'Create SIA and INA targets for several POSIX apps.')
 option('build_autosar_apps', type: 'boolean', value: true, description: 'Create SSE and MultiSSE targets for several AUTOSAR apps.')
-option('build_libmicrohttpd', type: 'boolean', value: true, description: 'Include libmicrohttpd in the POSIX apps.')
-option('build_synthetic_apps', type: 'boolean', value: true, description: 'Include pregenerated synthetic_apps.')
-option('include_xen', type: 'boolean', value: true, description: 'If ara/appl/Xen apps should be included, needed for HyperSSE and ara-xen-eval.')
+option('build_hypersse_xen', type: 'boolean', value: false, description: 'Include the HyperSSE and the Xen OS model.')
 
-
+## Other options
 option('offline', type: 'boolean', value: false, yield: true,
   description: 'Do not download anything (this is independent of Meson\'s internal subproject mechanisms).')
-
 option('execute_ara', type: 'boolean', value: true, description: 'Build targets which execute ARA')
-
 option('rpi_host', type: 'string', value: 'lab-pc67', description: 'SSH host for PC that it connected via serial to the Raspberry Pi measurement PC.')
