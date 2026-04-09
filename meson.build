@@ -490,61 +490,59 @@ if arm_freertos_apps.length() > 0
   subdir('arm_freertos_synthesis')
 endif
 
-if get_option('build_step_tests')
-  # sia targets
-  foreach app : sia_targets
-    corrections = files('settings' / 'no_corrections.json')[0]
-    if 'va_corrections' in app
-      corrections = app['va_corrections']
-    endif
-    run_sia = 'sia-' + app['name'].to_lower()
-    run_target(run_sia,
-      command: [
-        py3_inst, ara, app['ll'],
-        '--os', app['os'],
-        '--log-level', 'info',
-        '--with-stubs',
-        '--va-corrections', corrections.full_path(),
-        '--step-settings', app['sia_settings']])
-    # summary('Run SIA on ' + app['name'], 'meson compile ' + run_sia, section: app['summary_section'])
-  endforeach
+# sia targets
+foreach app : sia_targets
+  corrections = files('settings' / 'no_corrections.json')[0]
+  if 'va_corrections' in app
+    corrections = app['va_corrections']
+  endif
+  run_sia = 'sia-' + app['name'].to_lower()
+  run_target(run_sia,
+    command: [
+      py3_inst, ara, app['ll'],
+      '--os', app['os'],
+      '--log-level', 'info',
+      '--with-stubs',
+      '--va-corrections', corrections.full_path(),
+      '--step-settings', app['sia_settings']])
+  # summary('Run SIA on ' + app['name'], 'meson compile ' + run_sia, section: app['summary_section'])
+endforeach
 
-  # sse targets
-  foreach app : sse_targets
-    corrections = files('settings' / 'no_corrections.json')[0]
-    if 'va_corrections' in app
-      corrections = app['va_corrections']
-    endif
-    run_sse = 'sse-' + app['name'].to_lower()
-    run_target(run_sse,
-      command: [
-        py3_inst, ara, app['ll'],
-        '--os', app['os'],
-        '--log-level', 'debug',
-        '--with-stubs',
-        '--va-corrections', corrections.full_path(),
-        '--step-settings', app['sse_settings']],
-        depends: [app['kernel_ll']])
-    # summary('Run SSE on ' + app['name'], 'meson compile ' + run_sse, section: app['summary_section'])
-  endforeach
+# sse targets
+foreach app : sse_targets
+  corrections = files('settings' / 'no_corrections.json')[0]
+  if 'va_corrections' in app
+    corrections = app['va_corrections']
+  endif
+  run_sse = 'sse-' + app['name'].to_lower()
+  run_target(run_sse,
+    command: [
+      py3_inst, ara, app['ll'],
+      '--os', app['os'],
+      '--log-level', 'debug',
+      '--with-stubs',
+      '--va-corrections', corrections.full_path(),
+      '--step-settings', app['sse_settings']],
+      depends: [app['kernel_ll']])
+  # summary('Run SSE on ' + app['name'], 'meson compile ' + run_sse, section: app['summary_section'])
+endforeach
 
-  # ina targets
-  foreach app : ina_targets
-    corrections = files('settings' / 'no_corrections.json')[0]
-    if 'va_corrections' in app
-      corrections = app['va_corrections']
-    endif
-    run_ina = 'ina-' + app['name'].to_lower()
-    run_target(run_ina,
-      command: [
-        py3_inst, ara, app['ll'],
-        '--os', app['os'],
-        '--log-level', 'info',
-        '--va-corrections', corrections.full_path(),
-        '--step-settings', app['ina_settings']])
-    # summary('Run INA on ' + app['name'], 'meson compile ' + run_ina, section: app['summary_section'])
-  endforeach
-endif
+# ina targets
+foreach app : ina_targets
+  corrections = files('settings' / 'no_corrections.json')[0]
+  if 'va_corrections' in app
+    corrections = app['va_corrections']
+  endif
+  run_ina = 'ina-' + app['name'].to_lower()
+  run_target(run_ina,
+    command: [
+      py3_inst, ara, app['ll'],
+      '--os', app['os'],
+      '--log-level', 'info',
+      '--va-corrections', corrections.full_path(),
+      '--step-settings', app['ina_settings']])
+  # summary('Run INA on ' + app['name'], 'meson compile ' + run_ina, section: app['summary_section'])
+endforeach
 
 # experiments
 if get_option('build_experiments')
