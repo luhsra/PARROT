@@ -62,44 +62,67 @@ This is a meta repository for all that is needed for ARA, the **A**utomatic **R*
 ```
 
 
-## Start the building process.
-
-The binaries and toolchain locations are managed by native files.
-
-```ini
-[binaries]
-llvm-config = '/usr/lib/llvm/14/bin/llvm-config'
-python = '/usr/bin/python3.12'
-```
-
-To use your own LLVM-Build you need these following flags for cmake for building LLVM:
-
-```
--DLLVM_ENABLE_PROJECTS="clang;lld" -DLLVM_BUILD_LLVM_DYLIB=ON -DLLVM_LINK_LLVM_DYLIB=ON
-```
-
-To build the project:
-
+## Building Parrot+ARA
+Use `meson` build system, which creates targets for `ninja`. The binaries and toolchain locations are managed by native files (e.g `native-debian.ini` or `native-arch.ini`).
 ``` bash
-# Create a Meson build directory, e.g. on Debian and Meson reports possible targets then.
+# Create a Meson build directory
 meson setup build --native-file native-debian.ini
+
+# You can enable options/applications with
+meson setup build --reconfigure -Doption=new_value
+
+# View current options
+meson configure build
 
 # Updating meson subprojects (ARA, toolchains, etc.)
 meson subprojects update --reset
-
-# You want to deactivate some applications with
-meson setup build --native-file native-debian.ini -Dbuild_gpslogger=false -Dbuild_librepilot=false -Dbuild_zephyr=false -Dbuild_ironos=false -Dbuild_infinitime=false -Dbuild_i4copter=false -Dbuild_posix_apps=false -Dbuild_libmicrohttpd=false
-
-# If you want to change meson options in an already configured directory, use
-meson configure ...
-
-# building everything
-cd build
-meson compile
 ```
 
-## Docker/Podman
 
+## Running targets
+```bash
+meson setup build --reconfigure -Dbuild_autosar_apps=true -Denable_arm=true
+# Run analysis on an Autosar application
+ninja subprojects/ara/appl/AUTOSAR/autosar_singlecore_examples_ara_loop1_noopt_mod.pi4.ll
+# Run synthesis on an Autosar application using QEMU
+ninja ara@@run_autosar_singlecore_autosar_singlecore_examples_ara_loop1_noopt_pi4
+
+meson setup build --reconfigure -Dbuild_zephyr_apps=true -Denable_posix=true
+ninja subprojects/ara-zephyr-apps/appl/native_sim-hello_world.ll
+```
+
+
+## Testing + Testsuites
+### Current evaluation applications/(micro)benchmarks/testsuits/projects
+In order to use tests, their correct meson options must be set.
+```
+📦 Parrot
+├── posix (62 tests) ~60s per test
+└── (wip) zephyr (110 = 55 for posix, 55 for arm)
+📦 ARA
+├── hypersse_xen (36) ~5s per test
+└── (wip) automotive_benchmark (wip)
+    ├── automtoive_benchmark_ara_arm
+    ├── automtoive_benchmark_ara_ricv
+    ├── automtoive_benchmark_pi
+    └── automtoive_benchmark_beagle
+```
+```bash
+# Run all currently activated tests
+meson test
+
+# Shows all tests (in the format: SUITEs - SUBPROJECT:NAME)
+meson test --list
+
+# Run all tests of a testsuite (tests can be in multiple suits)
+meson test --suite NAME
+
+# Run one test (with longer timeout)
+meson test NAME --timeout-multiplier 2
+```
+
+
+## Docker/Podman
 All build dependencies including clang, toolchains etc. are preinstalled in the Docker file.
 
 ```bash
@@ -109,3 +132,11 @@ docker login scm.sra.uni-hannover.de:5050
 docker build -t scm.sra.uni-hannover.de:5050/research/parrot .
 # run the container and attach to it
 ./Docker/run_docker.sh
+```
+
+
+## Required Versions
+- python >= 3.13.5
+- graph-tool == 2.98
+- llvm == 14
+- meson >= 1.10.0

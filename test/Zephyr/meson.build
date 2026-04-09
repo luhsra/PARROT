@@ -15,6 +15,14 @@ foreach zephyr_test_app : zephyr_test_apps
         expected_fail = true
     endif
 
+    if get_option('build_hypersse_xen')
+        # this is the path from the variable "zephyr_apps" from "subprojects/ara-zephyr-apps/appl/meson.build"
+        orig_path=zephyr_test_app['cloc_app'].get(0)
+        if orig_path.contains('Xen')
+            continue
+        endif
+    endif
+
     # Instance-Graph Test cases
     # warning('@0@'.format(zephyr_test_app['name']))
     test(zephyr_test_app['name'],

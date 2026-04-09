@@ -302,7 +302,7 @@ foreach app : arm_freertos_apps
   #       )
   #   endif
 
-  # if get_option('enable_qemu_tests') and app not in ir_apps
+  # if get_option('build_qemu_tests') and app not in ir_apps
   #     test('run_qemu_' + lto_prefix,
   #          py3_inst,
   #          args: [qemu_test_runner,

@@ -1,21 +1,46 @@
-# Parrot options
-## Evaluation applications/benchmarks/testsuits/projects
-option('build_gpslogger', type: 'boolean', value: false)
-option('build_librepilot', type: 'boolean', value: false)
-option('build_ironos', type: 'boolean', value: false)
-option('build_infinitime', type: 'boolean', value: false)
-option('build_i4copter', type: 'boolean', value: false)
-option('build_libmicrohttpd', type: 'boolean', value: false, description: 'Include libmicrohttpd in the POSIX apps.')
-option('build_synthetic_apps', type: 'boolean', value: false, description: 'Include pregenerated synthetic_apps.')
-option('build_intel_ecfw', type: 'boolean', value: false, description: 'Build the Zephyr-based Intel embedded controller firmware')
-## currently used applications/projects
-option('build_zephyr', type: 'boolean', value: true, description: 'Build sys_kernel and app_kernel related targets.')
-option('build_posix_apps', type: 'boolean', value: true, description: 'Create SIA and INA targets for several POSIX apps.')
-option('build_autosar_apps', type: 'boolean', value: true, description: 'Create SSE and MultiSSE targets for several AUTOSAR apps.')
-option('build_hypersse_xen', type: 'boolean', value: false, description: 'Include the HyperSSE and the Xen OS model.')
+# Parrot options, do not edit value, use "meson configure build -Doption=new_value"
+## Evaluation applications/(micro)benchmarks/testsuits/projects
+### With own subprojects/repo
+option('build_gpslogger', type: 'boolean', value: false, description: 'Include subproect GPSLogger')
+option('build_librepilot', type: 'boolean', value: false, description: 'Include subproect librepilot')
+option('build_ironos', type: 'boolean', value: false, description: 'Include subproect ironos')
+option('build_infinitime', type: 'boolean', value: false, description: 'Include subproect InfiniTime')
+option('build_libmicrohttpd', type: 'boolean', value: false, description: 'Include libmicrohttpd (requires POSIX apps)')
+option('build_intel_ecfw', type: 'boolean', value: false, description: 'Include intel-ecfw-zephyr (Zephyr-based Intel embedded controller firmware)')
+option('build_zephyr_apps', type: 'boolean', value: false, description: 'Include ara-zephyr-apps (Several Zephyr apps); zephyr testsuite')
+option('build_posix_apps', type: 'boolean', value: false, description: 'Include ara-posix-apps (Several POSIX apps; posix testsuite')
+option('build_ara-link-tests', type: 'boolean', value: false, description: 'Include ara-link tests')
+option('build_irx-tests', type: 'boolean', value: false, description: 'Include irx tests')
+### Without own repo
+option('build_qemu_tests', type: 'boolean', value: false, description: 'No longer working?')
+option('build_experiments', type: 'boolean', value: false, description: 'Tests coming from parrots meson.test')
+option('build_step_tests', type: 'boolean', value: false, description: 'Unit tests for ARA itself, made by Gerion. Might contain multiple different tests that originally did not belong together')
+option('build_toplevel_tests', type: 'boolean', value: false,  description: 'Not actual tests, but stored common commandlines and examples for calling ARA?')
+option('build_i4copter', type: 'boolean', value: false, description: 'Include i4copter')
+option('build_synthetic_apps', type: 'boolean', value: false, description: 'Include pregenerated synthetic_apps')
+option('build_autosar_apps', type: 'boolean', value: false, description: 'Include several AUTOSAR apps from ara/appl/AUTOSAR')
+option('build_freertos_apps', type: 'boolean', value: false, description: 'Include several FreeRTOS apps from ara/appl/FreeRTOS')
+option('build_hypersse_xen', type: 'boolean', value: false, description: 'Include the HyperSSE and several Xen apps from ara/appl/{BareMetal,Xen}; hypersse-ara testsuite')
+option('build_automotive_benchmark', type: 'boolean', value: false, description: 'Include the automotive benchmark apps for arm and riscv; ???')
+
+
+
+## Architectures, they allow fine grained control (e.g. disabling ARM autosar apps and only running RISCV ones) 
+option('enable_posix', type: 'boolean', value: false, description: 'Support analysis of POSIX apps (requires a Linux machine)')
+option('enable_arm', type: 'boolean', value: false, description: 'Support analysis of ARM apps')
+option('enable_riscv', type: 'boolean', value: false, description: 'Support analysis of RISC-V apps')
+
+
+## Features, they can be disabled if certain build tools are missing
+option('enable_irx', type: 'boolean', value: true, description: 'IRX LLVM Interpreter (needed to run SSE on Zephyr apps). Can currently not be disabled, because of python import dependencies')
+
+
+## Infrastructure
+option('rpi_host', type: 'string', value: 'lab-pc67', description: 'SSH host for PC that it connected via serial to the Raspberry Pi measurement PC.')
+option('tftp_host', type: 'string', value: 'lab-pc00', description: 'TFTP host for remote target tests')
+
 
 ## Other options
 option('offline', type: 'boolean', value: false, yield: true,
   description: 'Do not download anything (this is independent of Meson\'s internal subproject mechanisms).')
 option('execute_ara', type: 'boolean', value: true, description: 'Build targets which execute ARA')
-option('rpi_host', type: 'string', value: 'lab-pc67', description: 'SSH host for PC that it connected via serial to the Raspberry Pi measurement PC.')
