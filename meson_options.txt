@@ -18,6 +18,7 @@ option('build_step_tests', type: 'boolean', value: false, description: 'Unit tes
 option('build_toplevel_tests', type: 'boolean', value: false,  description: 'Not actual tests, but stored common commandlines and examples for calling ARA?')
 option('build_i4copter', type: 'boolean', value: false, description: 'Include i4copter')
 option('build_synthetic_apps', type: 'boolean', value: false, description: 'Include pregenerated synthetic_apps')
+option('build_generator_tests', type: 'boolean', value: false, description: 'Tests for generator/synthesis of ara')
 option('build_autosar_apps', type: 'boolean', value: false, description: 'Include several AUTOSAR apps from ara/appl/AUTOSAR')
 option('build_freertos_apps', type: 'boolean', value: false, description: 'Include several FreeRTOS apps from ara/appl/FreeRTOS')
 option('build_hypersse_xen', type: 'boolean', value: false, description: 'Include the HyperSSE and several Xen apps from ara/appl/{BareMetal,Xen}; hypersse-ara testsuite')

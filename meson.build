@@ -34,15 +34,20 @@ build_libmicrohttpd = get_option('build_libmicrohttpd')
 build_intel_ecfw = get_option('build_intel_ecfw')
 build_zephyr_apps = get_option('build_zephyr_apps')
 build_posix_apps = get_option('build_posix_apps')
+build_ara_link_tests = get_option('build_ara-link-tests')
+build_irx_tests = get_option('build_irx-tests')
+
 build_qemu_tests = get_option('build_qemu_tests')
 build_experiments = get_option('build_experiments')
 build_step_tests = get_option('build_step_tests')
 build_toplevel_tests = get_option('build_toplevel_tests')
 build_i4copter = get_option('build_i4copter')
 build_synthetic_apps = get_option('build_synthetic_apps')
+build_generator_tests = get_option('build_generator_tests')
 build_autosar_apps = get_option('build_autosar_apps')
 build_freertos_apps = get_option('build_freertos_apps')
 build_hypersse_xen = get_option('build_hypersse_xen')
+build_automotive_benchmark = get_option('build_automotive_benchmark')
 
 # Previously we checked which tools where installed and set this variable.
 # Now this (should be)) set directly in meson_options.txt.
@@ -59,6 +64,8 @@ summary({
   'Intel ECFW Zephyr': build_intel_ecfw,
   'Zephyr applications': build_zephyr_apps,
   'POSIX applications': build_posix_apps,
+  'Ara Link Tests': build_ara_link_tests,
+  'Irx Tests': build_irx_tests,
   
   'Qemu tests': build_qemu_tests,
   'Experiments': build_experiments,
@@ -66,9 +73,11 @@ summary({
   'Toplevel tests': build_toplevel_tests,
   'I4copter': build_i4copter,
   'Synthetic apps': build_synthetic_apps,
+  'Generator Tests': build_generator_tests,
   'AUTOSAR applications': build_autosar_apps,
   'FreeRTOS applications': build_freertos_apps,
-  'HyperSSE Xen': build_hypersse_xen
+  'HyperSSE Xen': build_hypersse_xen,
+  'Automotive Benchmark': build_automotive_benchmark
 }, bool_yn: true, section: 'Wanted applications')
 
 enable_posix = get_option('enable_posix')
