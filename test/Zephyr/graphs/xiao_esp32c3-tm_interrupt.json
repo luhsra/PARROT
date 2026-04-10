@@ -1,6 +1,22 @@
 [
   {
     "label": "IRQ",
+    "id": "IRQCONNECT_tm_interrupt_handler",
+    "branch": 0,
+    "usually_taken": 1,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 0,
+    "unique": 1,
+    "is_control": 1,
+    "file": "",
+    "line": 0,
+    "specialization_level": "",
+    "type": "instance",
+    "symbol": null
+  },
+  {
+    "label": "IRQ",
     "id": "IRQ_sys_clock_announce",
     "branch": 0,
     "usually_taken": 1,
@@ -68,7 +84,7 @@
     "entry_name": "main",
     "options": 0,
     "priority": 0,
-    "stack_size": 1024
+    "stack_size": 2048
   },
   {
     "label": "Thread",
@@ -88,7 +104,24 @@
     "entry_name": "idle",
     "options": 0,
     "priority": 15,
-    "stack_size": 256
+    "stack_size": 512
+  },
+  {
+    "label": "KernelSemaphore",
+    "id": "test_sem_0",
+    "branch": 0,
+    "usually_taken": 0,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 1,
+    "unique": 1,
+    "is_control": 0,
+    "file": "../../ara-zephyr-apps/appl/thread_metric/src/tm_interrupt_processing_test.c",
+    "line": 80,
+    "specialization_level": "",
+    "type": "instance",
+    "count": 1,
+    "limit": 1
   },
   {
     "label": "Thread",
@@ -100,21 +133,64 @@
     "after_scheduler": 1,
     "unique": 1,
     "is_control": 1,
-    "file": "../../ara-zephyr-apps/appl/thread_metric/src/tm_basic_processing_test.c",
-    "line": 85,
+    "file": "../../ara-zephyr-apps/appl/thread_metric/src/tm_interrupt_processing_test.c",
+    "line": 83,
     "specialization_level": "",
     "type": "instance",
     "delay": 0,
-    "entry_name": "tm_basic_processing_thread_0_entry",
+    "entry_name": "tm_interrupt_thread_0_entry",
     "options": 0,
     "priority": 10,
     "stack_size": 1024
+  },
+  {
+    "label": "ISR",
+    "id": "tm_cause_interrupt.__isr_tm_interrupt_handler_irq_1",
+    "branch": 0,
+    "usually_taken": 0,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 0,
+    "unique": 1,
+    "is_control": 1,
+    "file": "../../ara-zephyr-apps/appl/thread_metric/src/tm_porting_layer_zephyr.c",
+    "line": 74,
+    "specialization_level": "",
+    "type": "instance",
+    "entry_name": "tm_interrupt_handler",
+    "flags": 0,
+    "irq_number": 42,
+    "priority": null
+  },
+  {
+    "source": "__main",
+    "target": "test_sem_0",
+    "label": "k_sem_init",
+    "type": "create"
   },
   {
     "source": "__main",
     "target": "test_thread_0",
     "label": "k_thread_create",
     "type": "create"
+  },
+  {
+    "source": "tm_cause_interrupt.__isr_tm_interrupt_handler_irq_1",
+    "target": "test_sem_0",
+    "label": "k_sem_give",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_0",
+    "target": "test_sem_0",
+    "label": "k_sem_take",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_0",
+    "target": "test_sem_0",
+    "label": "k_sem_take",
+    "type": "interaction"
   },
   {
     "source": "__main",

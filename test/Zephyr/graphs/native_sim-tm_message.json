@@ -121,7 +121,7 @@
     "line": 79,
     "specialization_level": "",
     "type": "instance",
-    "delay": -1,
+    "delay": 0,
     "entry_name": "tm_message_processing_thread_0_entry",
     "options": 0,
     "priority": 10,
@@ -149,6 +149,12 @@
     "source": "test_thread_0",
     "target": "test_msgq_0",
     "label": "k_msgq_put",
+    "type": "interaction"
+  },
+  {
+    "source": "__main",
+    "target": "__main",
+    "label": "k_sleep",
     "type": "interaction"
   },
   {

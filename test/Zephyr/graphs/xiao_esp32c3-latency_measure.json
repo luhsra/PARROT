@@ -1,0 +1,802 @@
+[
+  {
+    "label": "IRQ",
+    "id": "IRQ_sys_clock_announce",
+    "branch": 0,
+    "usually_taken": 1,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 0,
+    "unique": 1,
+    "is_control": 1,
+    "file": "",
+    "line": 0,
+    "specialization_level": "",
+    "type": "instance",
+    "symbol": null
+  },
+  {
+    "label": "ISR",
+    "id": "ISR_sys_clock_announce",
+    "branch": 0,
+    "usually_taken": 1,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 0,
+    "unique": 1,
+    "is_control": 1,
+    "file": "",
+    "line": 0,
+    "specialization_level": "",
+    "type": "instance",
+    "entry_name": "sys_clock_announce",
+    "flags": 0,
+    "irq_number": 0,
+    "priority": 0
+  },
+  {
+    "label": "Zephyr",
+    "id": "__kernel",
+    "branch": 0,
+    "usually_taken": 1,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 0,
+    "unique": 1,
+    "is_control": 0,
+    "file": "",
+    "line": 0,
+    "specialization_level": "",
+    "type": "instance",
+    "heap_size": 2048
+  },
+  {
+    "label": "Thread",
+    "id": "__main",
+    "branch": 0,
+    "usually_taken": 1,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 1,
+    "unique": 1,
+    "is_control": 1,
+    "file": "",
+    "line": 0,
+    "specialization_level": "",
+    "type": "instance",
+    "delay": 0,
+    "entry_name": "main",
+    "options": 0,
+    "priority": 0,
+    "stack_size": 2048
+  },
+  {
+    "label": "Thread",
+    "id": "alt_thread",
+    "branch": 1,
+    "usually_taken": 0,
+    "loop": 1,
+    "recursive": 0,
+    "after_scheduler": 1,
+    "unique": 0,
+    "is_control": 1,
+    "file": "../../zephyr/tests/benchmarks/latency_measure/src/thread.c",
+    "line": 222,
+    "specialization_level": "",
+    "type": "instance",
+    "delay": -1,
+    "entry_name": "alt_thread_entry.259",
+    "options": "@unknown@",
+    "priority": "@unknown@",
+    "stack_size": 2560
+  },
+  {
+    "label": "Queue",
+    "id": "fifo",
+    "branch": 0,
+    "usually_taken": 0,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 0,
+    "unique": 1,
+    "is_control": 0,
+    "file": "../../zephyr/tests/benchmarks/latency_measure/src/fifo.c",
+    "line": 30,
+    "specialization_level": "",
+    "type": "instance"
+  },
+  {
+    "label": "Thread",
+    "id": "idle 00",
+    "branch": 0,
+    "usually_taken": 1,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 1,
+    "unique": 1,
+    "is_control": 1,
+    "file": "",
+    "line": 0,
+    "specialization_level": "",
+    "type": "instance",
+    "delay": 0,
+    "entry_name": "idle",
+    "options": 0,
+    "priority": 15,
+    "stack_size": 512
+  },
+  {
+    "label": "KernelSemaphore",
+    "id": "isr_sem",
+    "branch": 0,
+    "usually_taken": 0,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 0,
+    "unique": 1,
+    "is_control": 0,
+    "file": "../../zephyr/tests/benchmarks/latency_measure/src/int_to_thread.c",
+    "line": 31,
+    "specialization_level": "",
+    "type": "instance",
+    "count": 0,
+    "limit": 1
+  },
+  {
+    "label": "Queue",
+    "id": "lifo",
+    "branch": 0,
+    "usually_taken": 0,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 0,
+    "unique": 1,
+    "is_control": 0,
+    "file": "../../zephyr/tests/benchmarks/latency_measure/src/lifo.c",
+    "line": 30,
+    "specialization_level": "",
+    "type": "instance"
+  },
+  {
+    "label": "Mutex",
+    "id": "mutex",
+    "branch": 0,
+    "usually_taken": 0,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 0,
+    "unique": 1,
+    "is_control": 0,
+    "file": "../../zephyr/tests/benchmarks/latency_measure/src/condvar.c",
+    "line": 19,
+    "specialization_level": "",
+    "type": "instance"
+  },
+  {
+    "label": "KernelSemaphore",
+    "id": "pause_sem",
+    "branch": 0,
+    "usually_taken": 0,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 0,
+    "unique": 1,
+    "is_control": 0,
+    "file": "../../zephyr/tests/benchmarks/latency_measure/src/main.c",
+    "line": 32,
+    "specialization_level": "",
+    "type": "instance",
+    "count": 0,
+    "limit": 1
+  },
+  {
+    "label": "KernelSemaphore",
+    "id": "sem",
+    "branch": 0,
+    "usually_taken": 0,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 1,
+    "unique": 1,
+    "is_control": 0,
+    "file": "../../zephyr/tests/benchmarks/latency_measure/src/sema_test_signal_release.c",
+    "line": 246,
+    "specialization_level": "",
+    "type": "instance",
+    "count": 0,
+    "limit": "@unknown@"
+  },
+  {
+    "label": "Stack",
+    "id": "stack",
+    "branch": 0,
+    "usually_taken": 0,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 1,
+    "unique": 1,
+    "is_control": 0,
+    "file": "../../zephyr/tests/benchmarks/latency_measure/src/stack.c",
+    "line": 71,
+    "specialization_level": "",
+    "type": "instance",
+    "max_entries": 16
+  },
+  {
+    "label": "Thread",
+    "id": "start_thread",
+    "branch": 0,
+    "usually_taken": 0,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 1,
+    "unique": 1,
+    "is_control": 1,
+    "file": "../../zephyr/tests/benchmarks/latency_measure/src/timing_sc.c",
+    "line": 59,
+    "specialization_level": "",
+    "type": "instance",
+    "delay": -1,
+    "entry_name": "start_thread_entry.312",
+    "options": 0,
+    "priority": "@unknown@",
+    "stack_size": 2560
+  },
+  {
+    "label": "Mutex",
+    "id": "test_mutex",
+    "branch": 0,
+    "usually_taken": 0,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 0,
+    "unique": 1,
+    "is_control": 0,
+    "file": "../../zephyr/tests/benchmarks/latency_measure/src/mutex_lock_unlock.c",
+    "line": 20,
+    "specialization_level": "",
+    "type": "instance"
+  },
+  {
+    "label": "Thread",
+    "id": "test_thread_id",
+    "branch": 0,
+    "usually_taken": 0,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 0,
+    "unique": 1,
+    "is_control": 1,
+    "file": "../../zephyr/tests/benchmarks/latency_measure/src/main.c",
+    "line": 182,
+    "specialization_level": "",
+    "type": "instance",
+    "delay": 0,
+    "entry_name": "test_thread",
+    "options": 0,
+    "priority": 10,
+    "stack_size": 2560
+  },
+  {
+    "source": "test_thread_id",
+    "target": "sem",
+    "label": "k_sem_init",
+    "type": "create"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "stack",
+    "label": "k_stack_init",
+    "type": "create"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "alt_thread",
+    "label": "k_thread_create",
+    "type": "create"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "start_thread",
+    "label": "k_thread_create",
+    "type": "create"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "test_thread_id",
+    "label": "k_current_get",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "test_thread_id",
+    "label": "k_current_get",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "test_thread_id",
+    "label": "k_current_get",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "test_thread_id",
+    "label": "k_current_get",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "test_thread_id",
+    "label": "k_current_get",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "test_thread_id",
+    "label": "k_current_get",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "test_thread_id",
+    "label": "k_current_get",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "test_thread_id",
+    "label": "k_current_get",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "test_thread_id",
+    "label": "k_current_get",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "test_thread_id",
+    "label": "k_current_get",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "test_thread_id",
+    "label": "k_current_get",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "test_thread_id",
+    "label": "k_current_get",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "test_thread_id",
+    "label": "k_current_get",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "test_thread_id",
+    "label": "k_current_get",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "test_thread_id",
+    "label": "k_current_get",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "test_thread_id",
+    "label": "k_current_get",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "__kernel",
+    "label": "k_free",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "__kernel",
+    "label": "k_malloc",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "pause_sem",
+    "label": "k_sem_give",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "pause_sem",
+    "label": "k_sem_give",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "pause_sem",
+    "label": "k_sem_give",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "pause_sem",
+    "label": "k_sem_give",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "pause_sem",
+    "label": "k_sem_give",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "pause_sem",
+    "label": "k_sem_give",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "pause_sem",
+    "label": "k_sem_give",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "pause_sem",
+    "label": "k_sem_give",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "pause_sem",
+    "label": "k_sem_give",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "pause_sem",
+    "label": "k_sem_give",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "pause_sem",
+    "label": "k_sem_give",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "pause_sem",
+    "label": "k_sem_give",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "pause_sem",
+    "label": "k_sem_give",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "pause_sem",
+    "label": "k_sem_give",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "pause_sem",
+    "label": "k_sem_give",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "pause_sem",
+    "label": "k_sem_give",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "pause_sem",
+    "label": "k_sem_give",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "pause_sem",
+    "label": "k_sem_give",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "pause_sem",
+    "label": "k_sem_give",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "pause_sem",
+    "label": "k_sem_give",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "pause_sem",
+    "label": "k_sem_give",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "pause_sem",
+    "label": "k_sem_give",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "pause_sem",
+    "label": "k_sem_give",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "pause_sem",
+    "label": "k_sem_give",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "pause_sem",
+    "label": "k_sem_give",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "pause_sem",
+    "label": "k_sem_give",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "pause_sem",
+    "label": "k_sem_give",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "pause_sem",
+    "label": "k_sem_give",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "pause_sem",
+    "label": "k_sem_give",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "sem",
+    "label": "k_sem_give",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "sem",
+    "label": "k_sem_give",
+    "type": "interaction"
+  },
+  {
+    "source": "alt_thread",
+    "target": "pause_sem",
+    "label": "k_sem_take",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "test_thread_id",
+    "label": "k_sleep",
+    "type": "interaction"
+  },
+  {
+    "source": "__main",
+    "target": "test_thread_id",
+    "label": "k_thread_join",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "alt_thread",
+    "label": "k_thread_join",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "start_thread",
+    "label": "k_thread_join",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "start_thread",
+    "label": "k_thread_join",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "start_thread",
+    "label": "k_thread_join",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "start_thread",
+    "label": "k_thread_join",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "start_thread",
+    "label": "k_thread_join",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "start_thread",
+    "label": "k_thread_join",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "start_thread",
+    "label": "k_thread_join",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "start_thread",
+    "label": "k_thread_join",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "start_thread",
+    "label": "k_thread_join",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "start_thread",
+    "label": "k_thread_join",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "start_thread",
+    "label": "k_thread_join",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "start_thread",
+    "label": "k_thread_join",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "start_thread",
+    "label": "k_thread_join",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "test_thread_id",
+    "label": "k_thread_start",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "test_thread_id",
+    "label": "k_thread_start",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "test_thread_id",
+    "label": "k_thread_start",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "test_thread_id",
+    "label": "k_thread_start",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "test_thread_id",
+    "label": "k_thread_start",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "test_thread_id",
+    "label": "k_thread_start",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "test_thread_id",
+    "label": "k_thread_start",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "test_thread_id",
+    "label": "k_thread_start",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "test_thread_id",
+    "label": "k_thread_start",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "test_thread_id",
+    "label": "k_thread_start",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "test_thread_id",
+    "label": "k_thread_start",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "test_thread_id",
+    "label": "k_thread_start",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "test_thread_id",
+    "label": "k_thread_start",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "test_thread_id",
+    "label": "k_thread_start",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "test_thread_id",
+    "label": "k_thread_start",
+    "type": "interaction"
+  },
+  {
+    "source": "test_thread_id",
+    "target": "test_thread_id",
+    "label": "k_thread_start",
+    "type": "interaction"
+  },
+  {
+    "source": "alt_thread",
+    "target": "alt_thread",
+    "label": "k_thread_suspend",
+    "type": "interaction"
+  }
+]

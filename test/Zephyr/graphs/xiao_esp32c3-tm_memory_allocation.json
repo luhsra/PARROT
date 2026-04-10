@@ -68,7 +68,7 @@
     "entry_name": "main",
     "options": 0,
     "priority": 0,
-    "stack_size": 1024
+    "stack_size": 2048
   },
   {
     "label": "Thread",
@@ -88,7 +88,7 @@
     "entry_name": "idle",
     "options": 0,
     "priority": 15,
-    "stack_size": 256
+    "stack_size": 512
   },
   {
     "label": "Thread",
@@ -100,12 +100,12 @@
     "after_scheduler": 1,
     "unique": 1,
     "is_control": 1,
-    "file": "../../ara-zephyr-apps/appl/thread_metric/src/tm_basic_processing_test.c",
-    "line": 85,
+    "file": "../../ara-zephyr-apps/appl/thread_metric/src/tm_memory_allocation_test.c",
+    "line": 79,
     "specialization_level": "",
     "type": "instance",
     "delay": 0,
-    "entry_name": "tm_basic_processing_thread_0_entry",
+    "entry_name": "tm_memory_allocation_thread_0_entry",
     "options": 0,
     "priority": 10,
     "stack_size": 1024

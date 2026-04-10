@@ -1,7 +1,39 @@
 [
   {
     "label": "IRQ",
+    "id": "IRQCONNECT_produce_work_isr",
+    "branch": 0,
+    "usually_taken": 1,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 0,
+    "unique": 1,
+    "is_control": 1,
+    "file": "",
+    "line": 0,
+    "specialization_level": "",
+    "type": "instance",
+    "symbol": null
+  },
+  {
+    "label": "IRQ",
     "id": "IRQ_sys_clock_announce",
+    "branch": 0,
+    "usually_taken": 1,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 0,
+    "unique": 1,
+    "is_control": 1,
+    "file": "",
+    "line": 0,
+    "specialization_level": "",
+    "type": "instance",
+    "symbol": null
+  },
+  {
+    "label": "IRQ",
+    "id": "IRQ_z_time_slicing",
     "branch": 0,
     "usually_taken": 1,
     "loop": 0,
@@ -68,7 +100,7 @@
     "entry_name": "main",
     "options": 0,
     "priority": 0,
-    "stack_size": 1024
+    "stack_size": 2048
   },
   {
     "label": "Thread",
@@ -88,56 +120,73 @@
     "entry_name": "idle",
     "options": 0,
     "priority": 15,
-    "stack_size": 256
+    "stack_size": 512
   },
   {
-    "label": "Thread",
-    "id": "test_thread_0",
+    "label": "ISR",
+    "id": "main.__isr_produce_work_isr_irq_1",
     "branch": 0,
     "usually_taken": 0,
     "loop": 0,
     "recursive": 0,
-    "after_scheduler": 1,
+    "after_scheduler": 0,
     "unique": 1,
     "is_control": 1,
-    "file": "../../ara-zephyr-apps/appl/thread_metric/src/tm_basic_processing_test.c",
-    "line": 85,
+    "file": "../../ara-zephyr-apps/appl/static_isr/src/main.c",
+    "line": 17,
+    "specialization_level": "",
+    "type": "instance",
+    "entry_name": "produce_work_isr",
+    "flags": 0,
+    "irq_number": 0,
+    "priority": null
+  },
+  {
+    "label": "Thread",
+    "id": "thread_a",
+    "branch": 0,
+    "usually_taken": 0,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 0,
+    "unique": 1,
+    "is_control": 1,
+    "file": "../../ara-zephyr-apps/appl/static_isr/src/main.c",
+    "line": 30,
     "specialization_level": "",
     "type": "instance",
     "delay": 0,
-    "entry_name": "tm_basic_processing_thread_0_entry",
+    "entry_name": "do_consume",
     "options": 0,
-    "priority": 10,
+    "priority": 0,
     "stack_size": 1024
   },
   {
-    "source": "__main",
-    "target": "test_thread_0",
-    "label": "k_thread_create",
-    "type": "create"
+    "label": "Stack",
+    "id": "work",
+    "branch": 0,
+    "usually_taken": 0,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 0,
+    "unique": 1,
+    "is_control": 0,
+    "file": "../../ara-zephyr-apps/appl/static_isr/src/main.c",
+    "line": 9,
+    "specialization_level": "",
+    "type": "instance",
+    "max_entries": 256
   },
   {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_sleep",
+    "source": "thread_a",
+    "target": "work",
+    "label": "k_stack_pop",
     "type": "interaction"
   },
   {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_thread_resume",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_thread_suspend",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_wakeup",
+    "source": "main.__isr_produce_work_isr_irq_1",
+    "target": "work",
+    "label": "k_stack_push",
     "type": "interaction"
   }
 ]

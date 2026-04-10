@@ -137,7 +137,7 @@
     "line": 83,
     "specialization_level": "",
     "type": "instance",
-    "delay": -1,
+    "delay": 0,
     "entry_name": "tm_interrupt_thread_0_entry",
     "options": 0,
     "priority": 10,
@@ -190,6 +190,12 @@
     "source": "test_thread_0",
     "target": "test_sem_0",
     "label": "k_sem_take",
+    "type": "interaction"
+  },
+  {
+    "source": "__main",
+    "target": "__main",
+    "label": "k_sleep",
     "type": "interaction"
   },
   {

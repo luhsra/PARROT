@@ -16,6 +16,22 @@
     "symbol": null
   },
   {
+    "label": "IRQ",
+    "id": "IRQ_z_time_slicing",
+    "branch": 0,
+    "usually_taken": 1,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 0,
+    "unique": 1,
+    "is_control": 1,
+    "file": "",
+    "line": 0,
+    "specialization_level": "",
+    "type": "instance",
+    "symbol": null
+  },
+  {
     "label": "ISR",
     "id": "ISR_sys_clock_announce",
     "branch": 0,
@@ -48,7 +64,7 @@
     "line": 0,
     "specialization_level": "",
     "type": "instance",
-    "heap_size": 0
+    "heap_size": 4096
   },
   {
     "label": "Thread",
@@ -68,7 +84,7 @@
     "entry_name": "main",
     "options": 0,
     "priority": 0,
-    "stack_size": 1024
+    "stack_size": 2048
   },
   {
     "label": "Thread",
@@ -88,56 +104,84 @@
     "entry_name": "idle",
     "options": 0,
     "priority": 15,
-    "stack_size": 256
+    "stack_size": 512
   },
   {
-    "label": "Thread",
-    "id": "test_thread_0",
+    "label": "Heap",
+    "id": "shared_heap",
     "branch": 0,
     "usually_taken": 0,
     "loop": 0,
     "recursive": 0,
     "after_scheduler": 1,
     "unique": 1,
+    "is_control": 0,
+    "file": "../../ara-zephyr-apps/appl/dyn_heap/src/main.c",
+    "line": 31,
+    "specialization_level": "",
+    "type": "instance",
+    "limit": 2048
+  },
+  {
+    "label": "Thread",
+    "id": "thread_a",
+    "branch": 0,
+    "usually_taken": 0,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 0,
+    "unique": 1,
     "is_control": 1,
-    "file": "../../ara-zephyr-apps/appl/thread_metric/src/tm_basic_processing_test.c",
-    "line": 85,
+    "file": "../../ara-zephyr-apps/appl/dyn_heap/src/main.c",
+    "line": 24,
     "specialization_level": "",
     "type": "instance",
     "delay": 0,
-    "entry_name": "tm_basic_processing_thread_0_entry",
+    "entry_name": "do_stuff",
     "options": 0,
-    "priority": 10,
+    "priority": 7,
     "stack_size": 1024
   },
   {
     "source": "__main",
-    "target": "test_thread_0",
-    "label": "k_thread_create",
+    "target": "shared_heap",
+    "label": "k_heap_init",
     "type": "create"
   },
   {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_sleep",
+    "source": "thread_a",
+    "target": "__kernel",
+    "label": "k_calloc",
     "type": "interaction"
   },
   {
     "source": "__main",
-    "target": "__main",
-    "label": "k_thread_resume",
+    "target": "__kernel",
+    "label": "k_free",
+    "type": "interaction"
+  },
+  {
+    "source": "thread_a",
+    "target": "__kernel",
+    "label": "k_free",
     "type": "interaction"
   },
   {
     "source": "__main",
-    "target": "__main",
-    "label": "k_thread_suspend",
+    "target": "shared_heap",
+    "label": "k_heap_alloc",
+    "type": "interaction"
+  },
+  {
+    "source": "thread_a",
+    "target": "shared_heap",
+    "label": "k_heap_free",
     "type": "interaction"
   },
   {
     "source": "__main",
-    "target": "__main",
-    "label": "k_wakeup",
+    "target": "__kernel",
+    "label": "k_malloc",
     "type": "interaction"
   }
 ]

@@ -16,6 +16,22 @@
     "symbol": null
   },
   {
+    "label": "IRQ",
+    "id": "IRQ_z_time_slicing",
+    "branch": 0,
+    "usually_taken": 1,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 0,
+    "unique": 1,
+    "is_control": 1,
+    "file": "",
+    "line": 0,
+    "specialization_level": "",
+    "type": "instance",
+    "symbol": null
+  },
+  {
     "label": "ISR",
     "id": "ISR_sys_clock_announce",
     "branch": 0,
@@ -68,7 +84,7 @@
     "entry_name": "main",
     "options": 0,
     "priority": 0,
-    "stack_size": 1024
+    "stack_size": 2048
   },
   {
     "label": "Thread",
@@ -88,28 +104,11 @@
     "entry_name": "idle",
     "options": 0,
     "priority": 15,
-    "stack_size": 256
-  },
-  {
-    "label": "KernelSemaphore",
-    "id": "test_sem_0",
-    "branch": 0,
-    "usually_taken": 0,
-    "loop": 0,
-    "recursive": 0,
-    "after_scheduler": 1,
-    "unique": 1,
-    "is_control": 0,
-    "file": "../../ara-zephyr-apps/appl/thread_metric/src/tm_synchronization_processing_test.c",
-    "line": 83,
-    "specialization_level": "",
-    "type": "instance",
-    "count": 1,
-    "limit": 1
+    "stack_size": 512
   },
   {
     "label": "Thread",
-    "id": "test_thread_0",
+    "id": "threadA_data",
     "branch": 0,
     "usually_taken": 0,
     "loop": 0,
@@ -117,62 +116,140 @@
     "after_scheduler": 1,
     "unique": 1,
     "is_control": 1,
-    "file": "../../ara-zephyr-apps/appl/thread_metric/src/tm_synchronization_processing_test.c",
+    "file": "../../ara-zephyr-apps/appl/dyn_sems/src/main.c",
     "line": 77,
     "specialization_level": "",
     "type": "instance",
     "delay": 0,
-    "entry_name": "tm_synchronization_processing_thread_0_entry",
+    "entry_name": "threadA",
     "options": 0,
-    "priority": 10,
+    "priority": 7,
     "stack_size": 1024
   },
   {
-    "source": "__main",
-    "target": "test_sem_0",
+    "label": "KernelSemaphore",
+    "id": "threadA_sem",
+    "branch": 0,
+    "usually_taken": 0,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 1,
+    "unique": 1,
+    "is_control": 0,
+    "file": "../../ara-zephyr-apps/appl/dyn_sems/src/main.c",
+    "line": 59,
+    "specialization_level": "",
+    "type": "instance",
+    "count": 1,
+    "limit": 1
+  },
+  {
+    "label": "Thread",
+    "id": "threadB_data",
+    "branch": 0,
+    "usually_taken": 0,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 1,
+    "unique": 1,
+    "is_control": 1,
+    "file": "../../ara-zephyr-apps/appl/dyn_sems/src/main.c",
+    "line": 62,
+    "specialization_level": "",
+    "type": "instance",
+    "delay": 0,
+    "entry_name": "threadB",
+    "options": 0,
+    "priority": 7,
+    "stack_size": 1024
+  },
+  {
+    "label": "KernelSemaphore",
+    "id": "threadB_sem",
+    "branch": 0,
+    "usually_taken": 0,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 1,
+    "unique": 1,
+    "is_control": 0,
+    "file": "../../ara-zephyr-apps/appl/dyn_sems/src/main.c",
+    "line": 60,
+    "specialization_level": "",
+    "type": "instance",
+    "count": 0,
+    "limit": 1
+  },
+  {
+    "source": "threadA_data",
+    "target": "threadA_sem",
+    "label": "k_sem_init",
+    "type": "create"
+  },
+  {
+    "source": "threadA_data",
+    "target": "threadB_sem",
     "label": "k_sem_init",
     "type": "create"
   },
   {
     "source": "__main",
-    "target": "test_thread_0",
+    "target": "threadA_data",
     "label": "k_thread_create",
     "type": "create"
   },
   {
-    "source": "test_thread_0",
-    "target": "test_sem_0",
+    "source": "threadA_data",
+    "target": "threadB_data",
+    "label": "k_thread_create",
+    "type": "create"
+  },
+  {
+    "source": "threadA_data",
+    "target": "threadA_data",
+    "label": "k_current_get",
+    "type": "interaction"
+  },
+  {
+    "source": "threadB_data",
+    "target": "threadB_data",
+    "label": "k_current_get",
+    "type": "interaction"
+  },
+  {
+    "source": "threadA_data",
+    "target": "threadA_data",
+    "label": "k_msleep",
+    "type": "interaction"
+  },
+  {
+    "source": "threadB_data",
+    "target": "threadB_data",
+    "label": "k_msleep",
+    "type": "interaction"
+  },
+  {
+    "source": "threadA_data",
+    "target": "threadB_sem",
     "label": "k_sem_give",
     "type": "interaction"
   },
   {
-    "source": "test_thread_0",
-    "target": "test_sem_0",
+    "source": "threadB_data",
+    "target": "threadB_sem",
+    "label": "k_sem_give",
+    "type": "interaction"
+  },
+  {
+    "source": "threadA_data",
+    "target": "threadA_sem",
     "label": "k_sem_take",
     "type": "interaction"
   },
   {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_sleep",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_thread_resume",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_thread_suspend",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_wakeup",
+    "source": "threadB_data",
+    "target": "threadA_sem",
+    "label": "k_sem_take",
     "type": "interaction"
   }
 ]

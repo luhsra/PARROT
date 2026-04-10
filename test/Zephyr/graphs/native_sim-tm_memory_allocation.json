@@ -104,7 +104,7 @@
     "line": 79,
     "specialization_level": "",
     "type": "instance",
-    "delay": -1,
+    "delay": 0,
     "entry_name": "tm_memory_allocation_thread_0_entry",
     "options": 0,
     "priority": 10,
@@ -115,6 +115,12 @@
     "target": "test_thread_0",
     "label": "k_thread_create",
     "type": "create"
+  },
+  {
+    "source": "__main",
+    "target": "__main",
+    "label": "k_sleep",
+    "type": "interaction"
   },
   {
     "source": "__main",

@@ -1,7 +1,7 @@
 [
   {
     "label": "IRQ",
-    "id": "IRQCONNECT_tm_interrupt_handler",
+    "id": "IRQ_sys_clock_announce",
     "branch": 0,
     "usually_taken": 1,
     "loop": 0,
@@ -17,7 +17,7 @@
   },
   {
     "label": "IRQ",
-    "id": "IRQ_sys_clock_announce",
+    "id": "IRQ_z_time_slicing",
     "branch": 0,
     "usually_taken": 1,
     "loop": 0,
@@ -84,7 +84,7 @@
     "entry_name": "main",
     "options": 0,
     "priority": 0,
-    "stack_size": 1024
+    "stack_size": 2048
   },
   {
     "label": "Thread",
@@ -104,11 +104,11 @@
     "entry_name": "idle",
     "options": 0,
     "priority": 15,
-    "stack_size": 256
+    "stack_size": 512
   },
   {
     "label": "Thread",
-    "id": "test_thread_0",
+    "id": "threadA_data",
     "branch": 0,
     "usually_taken": 0,
     "loop": 0,
@@ -116,19 +116,36 @@
     "after_scheduler": 1,
     "unique": 1,
     "is_control": 1,
-    "file": "../../ara-zephyr-apps/appl/thread_metric/src/tm_interrupt_preemption_processing_test.c",
-    "line": 85,
+    "file": "../../ara-zephyr-apps/appl/dyn_sys_sems/src/main.c",
+    "line": 79,
     "specialization_level": "",
     "type": "instance",
     "delay": 0,
-    "entry_name": "tm_interrupt_preemption_thread_0_entry",
+    "entry_name": "threadA",
     "options": 0,
-    "priority": 3,
+    "priority": 7,
     "stack_size": 1024
   },
   {
+    "label": "UserSemaphore",
+    "id": "threadA_sem",
+    "branch": 0,
+    "usually_taken": 0,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 1,
+    "unique": 1,
+    "is_control": 0,
+    "file": "../../ara-zephyr-apps/appl/dyn_sys_sems/src/main.c",
+    "line": 61,
+    "specialization_level": "",
+    "type": "instance",
+    "count": 1,
+    "limit": 1
+  },
+  {
     "label": "Thread",
-    "id": "test_thread_1",
+    "id": "threadB_data",
     "branch": 0,
     "usually_taken": 0,
     "loop": 0,
@@ -136,93 +153,103 @@
     "after_scheduler": 1,
     "unique": 1,
     "is_control": 1,
-    "file": "../../ara-zephyr-apps/appl/thread_metric/src/tm_interrupt_preemption_processing_test.c",
-    "line": 88,
+    "file": "../../ara-zephyr-apps/appl/dyn_sys_sems/src/main.c",
+    "line": 64,
     "specialization_level": "",
     "type": "instance",
     "delay": 0,
-    "entry_name": "tm_interrupt_preemption_thread_1_entry",
+    "entry_name": "threadB",
     "options": 0,
-    "priority": 10,
+    "priority": 7,
     "stack_size": 1024
   },
   {
-    "label": "ISR",
-    "id": "tm_cause_interrupt.__isr_tm_interrupt_handler_irq_1",
+    "label": "UserSemaphore",
+    "id": "threadB_sem",
     "branch": 0,
     "usually_taken": 0,
     "loop": 0,
     "recursive": 0,
-    "after_scheduler": 0,
+    "after_scheduler": 1,
     "unique": 1,
-    "is_control": 1,
-    "file": "../../ara-zephyr-apps/appl/thread_metric/src/tm_porting_layer_zephyr.c",
-    "line": 74,
+    "is_control": 0,
+    "file": "../../ara-zephyr-apps/appl/dyn_sys_sems/src/main.c",
+    "line": 62,
     "specialization_level": "",
     "type": "instance",
-    "entry_name": "tm_interrupt_handler",
-    "flags": 0,
-    "irq_number": 42,
-    "priority": null
+    "count": 0,
+    "limit": 1
   },
   {
     "source": "__main",
-    "target": "test_thread_0",
+    "target": "threadA_data",
     "label": "k_thread_create",
     "type": "create"
   },
   {
-    "source": "__main",
-    "target": "test_thread_1",
+    "source": "threadA_data",
+    "target": "threadB_data",
     "label": "k_thread_create",
     "type": "create"
   },
   {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_sleep",
+    "source": "threadA_data",
+    "target": "threadA_sem",
+    "label": "sys_sem_init",
+    "type": "create"
+  },
+  {
+    "source": "threadA_data",
+    "target": "threadB_sem",
+    "label": "sys_sem_init",
+    "type": "create"
+  },
+  {
+    "source": "threadA_data",
+    "target": "threadA_data",
+    "label": "k_current_get",
     "type": "interaction"
   },
   {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_thread_resume",
+    "source": "threadB_data",
+    "target": "threadB_data",
+    "label": "k_current_get",
     "type": "interaction"
   },
   {
-    "source": "tm_cause_interrupt.__isr_tm_interrupt_handler_irq_1",
-    "target": "tm_cause_interrupt.__isr_tm_interrupt_handler_irq_1",
-    "label": "k_thread_resume",
+    "source": "threadA_data",
+    "target": "threadA_data",
+    "label": "k_msleep",
     "type": "interaction"
   },
   {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_thread_suspend",
+    "source": "threadB_data",
+    "target": "threadB_data",
+    "label": "k_msleep",
     "type": "interaction"
   },
   {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_thread_suspend",
+    "source": "threadA_data",
+    "target": "threadB_sem",
+    "label": "sys_sem_give",
     "type": "interaction"
   },
   {
-    "source": "test_thread_0",
-    "target": "test_thread_0",
-    "label": "k_thread_suspend",
+    "source": "threadB_data",
+    "target": "threadB_sem",
+    "label": "sys_sem_give",
     "type": "interaction"
   },
   {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_wakeup",
+    "source": "threadA_data",
+    "target": "threadA_sem",
+    "label": "sys_sem_take",
     "type": "interaction"
   },
   {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_wakeup",
+    "source": "threadB_data",
+    "target": "threadA_sem",
+    "label": "sys_sem_take",
     "type": "interaction"
   }
 ]

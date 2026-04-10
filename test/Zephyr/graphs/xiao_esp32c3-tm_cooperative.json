@@ -68,7 +68,7 @@
     "entry_name": "main",
     "options": 0,
     "priority": 0,
-    "stack_size": 1024
+    "stack_size": 2048
   },
   {
     "label": "Thread",
@@ -88,7 +88,7 @@
     "entry_name": "idle",
     "options": 0,
     "priority": 15,
-    "stack_size": 256
+    "stack_size": 512
   },
   {
     "label": "Thread",
@@ -100,14 +100,14 @@
     "after_scheduler": 1,
     "unique": 1,
     "is_control": 1,
-    "file": "../../ara-zephyr-apps/appl/thread_metric/src/tm_preemptive_scheduling_test.c",
+    "file": "../../ara-zephyr-apps/appl/thread_metric/src/tm_cooperative_scheduling_test.c",
     "line": 85,
     "specialization_level": "",
     "type": "instance",
     "delay": 0,
-    "entry_name": "tm_preemptive_thread_0_entry",
+    "entry_name": "tm_cooperative_thread_0_entry",
     "options": 0,
-    "priority": 10,
+    "priority": 3,
     "stack_size": 1024
   },
   {
@@ -120,14 +120,14 @@
     "after_scheduler": 1,
     "unique": 1,
     "is_control": 1,
-    "file": "../../ara-zephyr-apps/appl/thread_metric/src/tm_preemptive_scheduling_test.c",
-    "line": 88,
+    "file": "../../ara-zephyr-apps/appl/thread_metric/src/tm_cooperative_scheduling_test.c",
+    "line": 86,
     "specialization_level": "",
     "type": "instance",
     "delay": 0,
-    "entry_name": "tm_preemptive_thread_1_entry",
+    "entry_name": "tm_cooperative_thread_1_entry",
     "options": 0,
-    "priority": 9,
+    "priority": 3,
     "stack_size": 1024
   },
   {
@@ -140,14 +140,14 @@
     "after_scheduler": 1,
     "unique": 1,
     "is_control": 1,
-    "file": "../../ara-zephyr-apps/appl/thread_metric/src/tm_preemptive_scheduling_test.c",
-    "line": 91,
+    "file": "../../ara-zephyr-apps/appl/thread_metric/src/tm_cooperative_scheduling_test.c",
+    "line": 87,
     "specialization_level": "",
     "type": "instance",
     "delay": 0,
-    "entry_name": "tm_preemptive_thread_2_entry",
+    "entry_name": "tm_cooperative_thread_2_entry",
     "options": 0,
-    "priority": 8,
+    "priority": 3,
     "stack_size": 1024
   },
   {
@@ -160,14 +160,14 @@
     "after_scheduler": 1,
     "unique": 1,
     "is_control": 1,
-    "file": "../../ara-zephyr-apps/appl/thread_metric/src/tm_preemptive_scheduling_test.c",
-    "line": 94,
+    "file": "../../ara-zephyr-apps/appl/thread_metric/src/tm_cooperative_scheduling_test.c",
+    "line": 88,
     "specialization_level": "",
     "type": "instance",
     "delay": 0,
-    "entry_name": "tm_preemptive_thread_3_entry",
+    "entry_name": "tm_cooperative_thread_3_entry",
     "options": 0,
-    "priority": 7,
+    "priority": 3,
     "stack_size": 1024
   },
   {
@@ -180,14 +180,14 @@
     "after_scheduler": 1,
     "unique": 1,
     "is_control": 1,
-    "file": "../../ara-zephyr-apps/appl/thread_metric/src/tm_preemptive_scheduling_test.c",
-    "line": 97,
+    "file": "../../ara-zephyr-apps/appl/thread_metric/src/tm_cooperative_scheduling_test.c",
+    "line": 89,
     "specialization_level": "",
     "type": "instance",
     "delay": 0,
-    "entry_name": "tm_preemptive_thread_4_entry",
+    "entry_name": "tm_cooperative_thread_4_entry",
     "options": 0,
-    "priority": 6,
+    "priority": 3,
     "stack_size": 1024
   },
   {
@@ -233,111 +233,117 @@
     "type": "interaction"
   },
   {
+    "source": "__main",
+    "target": "__main",
+    "label": "k_thread_resume",
+    "type": "interaction"
+  },
+  {
+    "source": "__main",
+    "target": "__main",
+    "label": "k_thread_resume",
+    "type": "interaction"
+  },
+  {
+    "source": "__main",
+    "target": "__main",
+    "label": "k_thread_resume",
+    "type": "interaction"
+  },
+  {
+    "source": "__main",
+    "target": "__main",
+    "label": "k_thread_resume",
+    "type": "interaction"
+  },
+  {
+    "source": "__main",
+    "target": "__main",
+    "label": "k_thread_suspend",
+    "type": "interaction"
+  },
+  {
+    "source": "__main",
+    "target": "__main",
+    "label": "k_thread_suspend",
+    "type": "interaction"
+  },
+  {
+    "source": "__main",
+    "target": "__main",
+    "label": "k_thread_suspend",
+    "type": "interaction"
+  },
+  {
+    "source": "__main",
+    "target": "__main",
+    "label": "k_thread_suspend",
+    "type": "interaction"
+  },
+  {
+    "source": "__main",
+    "target": "__main",
+    "label": "k_thread_suspend",
+    "type": "interaction"
+  },
+  {
+    "source": "__main",
+    "target": "__main",
+    "label": "k_wakeup",
+    "type": "interaction"
+  },
+  {
+    "source": "__main",
+    "target": "__main",
+    "label": "k_wakeup",
+    "type": "interaction"
+  },
+  {
+    "source": "__main",
+    "target": "__main",
+    "label": "k_wakeup",
+    "type": "interaction"
+  },
+  {
+    "source": "__main",
+    "target": "__main",
+    "label": "k_wakeup",
+    "type": "interaction"
+  },
+  {
+    "source": "__main",
+    "target": "__main",
+    "label": "k_wakeup",
+    "type": "interaction"
+  },
+  {
     "source": "test_thread_0",
     "target": "test_thread_0",
-    "label": "k_thread_resume",
+    "label": "k_yield",
     "type": "interaction"
   },
   {
     "source": "test_thread_1",
     "target": "test_thread_1",
-    "label": "k_thread_resume",
+    "label": "k_yield",
     "type": "interaction"
   },
   {
     "source": "test_thread_2",
     "target": "test_thread_2",
-    "label": "k_thread_resume",
+    "label": "k_yield",
     "type": "interaction"
   },
   {
     "source": "test_thread_3",
     "target": "test_thread_3",
-    "label": "k_thread_resume",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_thread_suspend",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_thread_suspend",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_thread_suspend",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_thread_suspend",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_thread_suspend",
-    "type": "interaction"
-  },
-  {
-    "source": "test_thread_1",
-    "target": "test_thread_1",
-    "label": "k_thread_suspend",
-    "type": "interaction"
-  },
-  {
-    "source": "test_thread_2",
-    "target": "test_thread_2",
-    "label": "k_thread_suspend",
-    "type": "interaction"
-  },
-  {
-    "source": "test_thread_3",
-    "target": "test_thread_3",
-    "label": "k_thread_suspend",
+    "label": "k_yield",
     "type": "interaction"
   },
   {
     "source": "test_thread_4",
     "target": "test_thread_4",
-    "label": "k_thread_suspend",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_wakeup",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_wakeup",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_wakeup",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_wakeup",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_wakeup",
+    "label": "k_yield",
     "type": "interaction"
   }
 ]

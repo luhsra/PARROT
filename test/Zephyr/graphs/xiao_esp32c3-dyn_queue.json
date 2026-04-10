@@ -16,6 +16,22 @@
     "symbol": null
   },
   {
+    "label": "IRQ",
+    "id": "IRQ_z_time_slicing",
+    "branch": 0,
+    "usually_taken": 1,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 0,
+    "unique": 1,
+    "is_control": 1,
+    "file": "",
+    "line": 0,
+    "specialization_level": "",
+    "type": "instance",
+    "symbol": null
+  },
+  {
     "label": "ISR",
     "id": "ISR_sys_clock_announce",
     "branch": 0,
@@ -68,7 +84,22 @@
     "entry_name": "main",
     "options": 0,
     "priority": 0,
-    "stack_size": 1024
+    "stack_size": 2048
+  },
+  {
+    "label": "Mutex",
+    "id": "guard",
+    "branch": 0,
+    "usually_taken": 0,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 1,
+    "unique": 1,
+    "is_control": 0,
+    "file": "../../ara-zephyr-apps/appl/dyn_queue/src/main.c",
+    "line": 35,
+    "specialization_level": "",
+    "type": "instance"
   },
   {
     "label": "Thread",
@@ -88,11 +119,26 @@
     "entry_name": "idle",
     "options": 0,
     "priority": 15,
-    "stack_size": 256
+    "stack_size": 512
+  },
+  {
+    "label": "Queue",
+    "id": "work",
+    "branch": 0,
+    "usually_taken": 0,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 1,
+    "unique": 1,
+    "is_control": 0,
+    "file": "../../ara-zephyr-apps/appl/dyn_queue/src/main.c",
+    "line": 34,
+    "specialization_level": "",
+    "type": "instance"
   },
   {
     "label": "Thread",
-    "id": "test_thread_0",
+    "id": "worker",
     "branch": 0,
     "usually_taken": 0,
     "loop": 0,
@@ -100,44 +146,68 @@
     "after_scheduler": 1,
     "unique": 1,
     "is_control": 1,
-    "file": "../../ara-zephyr-apps/appl/thread_metric/src/tm_basic_processing_test.c",
-    "line": 85,
+    "file": "../../ara-zephyr-apps/appl/dyn_queue/src/main.c",
+    "line": 31,
     "specialization_level": "",
     "type": "instance",
-    "delay": 0,
-    "entry_name": "tm_basic_processing_thread_0_entry",
+    "delay": -1,
+    "entry_name": "do_work",
     "options": 0,
-    "priority": 10,
+    "priority": 1,
     "stack_size": 1024
   },
   {
     "source": "__main",
-    "target": "test_thread_0",
+    "target": "guard",
+    "label": "k_mutex_init",
+    "type": "create"
+  },
+  {
+    "source": "__main",
+    "target": "work",
+    "label": "k_queue_init",
+    "type": "create"
+  },
+  {
+    "source": "__main",
+    "target": "worker",
     "label": "k_thread_create",
     "type": "create"
   },
   {
     "source": "__main",
-    "target": "__main",
-    "label": "k_sleep",
+    "target": "guard",
+    "label": "k_mutex_lock",
+    "type": "interaction"
+  },
+  {
+    "source": "worker",
+    "target": "guard",
+    "label": "k_mutex_lock",
     "type": "interaction"
   },
   {
     "source": "__main",
-    "target": "__main",
-    "label": "k_thread_resume",
+    "target": "guard",
+    "label": "k_mutex_unlock",
+    "type": "interaction"
+  },
+  {
+    "source": "worker",
+    "target": "guard",
+    "label": "k_mutex_unlock",
+    "type": "interaction"
+  },
+  {
+    "source": "worker",
+    "target": "work",
+    "label": "k_queue_get",
     "type": "interaction"
   },
   {
     "source": "__main",
-    "target": "__main",
-    "label": "k_thread_suspend",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_wakeup",
+    "target": "work",
+    "label": "k_queue_prepend",
     "type": "interaction"
   }
 ]

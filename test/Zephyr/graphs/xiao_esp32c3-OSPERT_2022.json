@@ -16,6 +16,22 @@
     "symbol": null
   },
   {
+    "label": "IRQ",
+    "id": "IRQ_z_time_slicing",
+    "branch": 0,
+    "usually_taken": 1,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 0,
+    "unique": 1,
+    "is_control": 1,
+    "file": "",
+    "line": 0,
+    "specialization_level": "",
+    "type": "instance",
+    "symbol": null
+  },
+  {
     "label": "ISR",
     "id": "ISR_sys_clock_announce",
     "branch": 0,
@@ -68,7 +84,7 @@
     "entry_name": "main",
     "options": 0,
     "priority": 0,
-    "stack_size": 1024
+    "stack_size": 2048
   },
   {
     "label": "Thread",
@@ -88,11 +104,46 @@
     "entry_name": "idle",
     "options": 0,
     "priority": 15,
-    "stack_size": 256
+    "stack_size": 512
+  },
+  {
+    "label": "Queue",
+    "id": "q1",
+    "branch": 0,
+    "usually_taken": 0,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 0,
+    "unique": 1,
+    "is_control": 0,
+    "file": "../../ara-zephyr-apps/appl/OSPERT_2022/src/main.c",
+    "line": 32,
+    "specialization_level": "",
+    "type": "instance"
   },
   {
     "label": "Thread",
-    "id": "test_thread_0",
+    "id": "t1",
+    "branch": 0,
+    "usually_taken": 0,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 0,
+    "unique": 1,
+    "is_control": 1,
+    "file": "../../ara-zephyr-apps/appl/OSPERT_2022/src/main.c",
+    "line": 45,
+    "specialization_level": "",
+    "type": "instance",
+    "delay": 0,
+    "entry_name": "t1_action",
+    "options": 0,
+    "priority": 1,
+    "stack_size": 1024
+  },
+  {
+    "label": "Thread",
+    "id": "t2",
     "branch": 0,
     "usually_taken": 0,
     "loop": 0,
@@ -100,44 +151,32 @@
     "after_scheduler": 1,
     "unique": 1,
     "is_control": 1,
-    "file": "../../ara-zephyr-apps/appl/thread_metric/src/tm_basic_processing_test.c",
-    "line": 85,
+    "file": "../../ara-zephyr-apps/appl/OSPERT_2022/src/main.c",
+    "line": 49,
     "specialization_level": "",
     "type": "instance",
     "delay": 0,
-    "entry_name": "tm_basic_processing_thread_0_entry",
+    "entry_name": "t2_action",
     "options": 0,
-    "priority": 10,
+    "priority": 2,
     "stack_size": 1024
   },
   {
     "source": "__main",
-    "target": "test_thread_0",
+    "target": "t2",
     "label": "k_thread_create",
     "type": "create"
   },
   {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_sleep",
+    "source": "t1",
+    "target": "q1",
+    "label": "k_queue_append",
     "type": "interaction"
   },
   {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_thread_resume",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_thread_suspend",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_wakeup",
+    "source": "t2",
+    "target": "q1",
+    "label": "k_queue_get",
     "type": "interaction"
   }
 ]

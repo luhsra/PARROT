@@ -1,6 +1,22 @@
 [
   {
     "label": "IRQ",
+    "id": "IRQCONNECT_tm_interrupt_handler",
+    "branch": 0,
+    "usually_taken": 1,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 0,
+    "unique": 1,
+    "is_control": 1,
+    "file": "",
+    "line": 0,
+    "specialization_level": "",
+    "type": "instance",
+    "symbol": null
+  },
+  {
+    "label": "IRQ",
     "id": "IRQ_sys_clock_announce",
     "branch": 0,
     "usually_taken": 1,
@@ -68,7 +84,7 @@
     "entry_name": "main",
     "options": 0,
     "priority": 0,
-    "stack_size": 1024
+    "stack_size": 2048
   },
   {
     "label": "Thread",
@@ -88,7 +104,7 @@
     "entry_name": "idle",
     "options": 0,
     "priority": 15,
-    "stack_size": 256
+    "stack_size": 512
   },
   {
     "label": "Thread",
@@ -100,14 +116,14 @@
     "after_scheduler": 1,
     "unique": 1,
     "is_control": 1,
-    "file": "../../ara-zephyr-apps/appl/thread_metric/src/tm_preemptive_scheduling_test.c",
+    "file": "../../ara-zephyr-apps/appl/thread_metric/src/tm_interrupt_preemption_processing_test.c",
     "line": 85,
     "specialization_level": "",
     "type": "instance",
     "delay": 0,
-    "entry_name": "tm_preemptive_thread_0_entry",
+    "entry_name": "tm_interrupt_preemption_thread_0_entry",
     "options": 0,
-    "priority": 10,
+    "priority": 3,
     "stack_size": 1024
   },
   {
@@ -120,75 +136,34 @@
     "after_scheduler": 1,
     "unique": 1,
     "is_control": 1,
-    "file": "../../ara-zephyr-apps/appl/thread_metric/src/tm_preemptive_scheduling_test.c",
+    "file": "../../ara-zephyr-apps/appl/thread_metric/src/tm_interrupt_preemption_processing_test.c",
     "line": 88,
     "specialization_level": "",
     "type": "instance",
     "delay": 0,
-    "entry_name": "tm_preemptive_thread_1_entry",
+    "entry_name": "tm_interrupt_preemption_thread_1_entry",
     "options": 0,
-    "priority": 9,
+    "priority": 10,
     "stack_size": 1024
   },
   {
-    "label": "Thread",
-    "id": "test_thread_2",
+    "label": "ISR",
+    "id": "tm_cause_interrupt.__isr_tm_interrupt_handler_irq_1",
     "branch": 0,
     "usually_taken": 0,
     "loop": 0,
     "recursive": 0,
-    "after_scheduler": 1,
+    "after_scheduler": 0,
     "unique": 1,
     "is_control": 1,
-    "file": "../../ara-zephyr-apps/appl/thread_metric/src/tm_preemptive_scheduling_test.c",
-    "line": 91,
+    "file": "../../ara-zephyr-apps/appl/thread_metric/src/tm_porting_layer_zephyr.c",
+    "line": 74,
     "specialization_level": "",
     "type": "instance",
-    "delay": 0,
-    "entry_name": "tm_preemptive_thread_2_entry",
-    "options": 0,
-    "priority": 8,
-    "stack_size": 1024
-  },
-  {
-    "label": "Thread",
-    "id": "test_thread_3",
-    "branch": 0,
-    "usually_taken": 0,
-    "loop": 0,
-    "recursive": 0,
-    "after_scheduler": 1,
-    "unique": 1,
-    "is_control": 1,
-    "file": "../../ara-zephyr-apps/appl/thread_metric/src/tm_preemptive_scheduling_test.c",
-    "line": 94,
-    "specialization_level": "",
-    "type": "instance",
-    "delay": 0,
-    "entry_name": "tm_preemptive_thread_3_entry",
-    "options": 0,
-    "priority": 7,
-    "stack_size": 1024
-  },
-  {
-    "label": "Thread",
-    "id": "test_thread_4",
-    "branch": 0,
-    "usually_taken": 0,
-    "loop": 0,
-    "recursive": 0,
-    "after_scheduler": 1,
-    "unique": 1,
-    "is_control": 1,
-    "file": "../../ara-zephyr-apps/appl/thread_metric/src/tm_preemptive_scheduling_test.c",
-    "line": 97,
-    "specialization_level": "",
-    "type": "instance",
-    "delay": 0,
-    "entry_name": "tm_preemptive_thread_4_entry",
-    "options": 0,
-    "priority": 6,
-    "stack_size": 1024
+    "entry_name": "tm_interrupt_handler",
+    "flags": 0,
+    "irq_number": 42,
+    "priority": null
   },
   {
     "source": "__main",
@@ -199,24 +174,6 @@
   {
     "source": "__main",
     "target": "test_thread_1",
-    "label": "k_thread_create",
-    "type": "create"
-  },
-  {
-    "source": "__main",
-    "target": "test_thread_2",
-    "label": "k_thread_create",
-    "type": "create"
-  },
-  {
-    "source": "__main",
-    "target": "test_thread_3",
-    "label": "k_thread_create",
-    "type": "create"
-  },
-  {
-    "source": "__main",
-    "target": "test_thread_4",
     "label": "k_thread_create",
     "type": "create"
   },
@@ -233,99 +190,27 @@
     "type": "interaction"
   },
   {
+    "source": "tm_cause_interrupt.__isr_tm_interrupt_handler_irq_1",
+    "target": "tm_cause_interrupt.__isr_tm_interrupt_handler_irq_1",
+    "label": "k_thread_resume",
+    "type": "interaction"
+  },
+  {
+    "source": "__main",
+    "target": "__main",
+    "label": "k_thread_suspend",
+    "type": "interaction"
+  },
+  {
+    "source": "__main",
+    "target": "__main",
+    "label": "k_thread_suspend",
+    "type": "interaction"
+  },
+  {
     "source": "test_thread_0",
     "target": "test_thread_0",
-    "label": "k_thread_resume",
-    "type": "interaction"
-  },
-  {
-    "source": "test_thread_1",
-    "target": "test_thread_1",
-    "label": "k_thread_resume",
-    "type": "interaction"
-  },
-  {
-    "source": "test_thread_2",
-    "target": "test_thread_2",
-    "label": "k_thread_resume",
-    "type": "interaction"
-  },
-  {
-    "source": "test_thread_3",
-    "target": "test_thread_3",
-    "label": "k_thread_resume",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "__main",
     "label": "k_thread_suspend",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_thread_suspend",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_thread_suspend",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_thread_suspend",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_thread_suspend",
-    "type": "interaction"
-  },
-  {
-    "source": "test_thread_1",
-    "target": "test_thread_1",
-    "label": "k_thread_suspend",
-    "type": "interaction"
-  },
-  {
-    "source": "test_thread_2",
-    "target": "test_thread_2",
-    "label": "k_thread_suspend",
-    "type": "interaction"
-  },
-  {
-    "source": "test_thread_3",
-    "target": "test_thread_3",
-    "label": "k_thread_suspend",
-    "type": "interaction"
-  },
-  {
-    "source": "test_thread_4",
-    "target": "test_thread_4",
-    "label": "k_thread_suspend",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_wakeup",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_wakeup",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_wakeup",
     "type": "interaction"
   },
   {

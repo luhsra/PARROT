@@ -16,6 +16,22 @@
     "symbol": null
   },
   {
+    "label": "IRQ",
+    "id": "IRQ_z_time_slicing",
+    "branch": 0,
+    "usually_taken": 1,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 0,
+    "unique": 1,
+    "is_control": 1,
+    "file": "",
+    "line": 0,
+    "specialization_level": "",
+    "type": "instance",
+    "symbol": null
+  },
+  {
     "label": "ISR",
     "id": "ISR_sys_clock_announce",
     "branch": 0,
@@ -48,7 +64,7 @@
     "line": 0,
     "specialization_level": "",
     "type": "instance",
-    "heap_size": 0
+    "heap_size": 4096
   },
   {
     "label": "Thread",
@@ -68,7 +84,7 @@
     "entry_name": "main",
     "options": 0,
     "priority": 0,
-    "stack_size": 1024
+    "stack_size": 2048
   },
   {
     "label": "Thread",
@@ -88,56 +104,66 @@
     "entry_name": "idle",
     "options": 0,
     "priority": 15,
-    "stack_size": 256
+    "stack_size": 512
   },
   {
     "label": "Thread",
-    "id": "test_thread_0",
+    "id": "thread_a",
+    "branch": 0,
+    "usually_taken": 0,
+    "loop": 0,
+    "recursive": 0,
+    "after_scheduler": 0,
+    "unique": 1,
+    "is_control": 1,
+    "file": "../../ara-zephyr-apps/appl/dyn_pipe/src/main.c",
+    "line": 26,
+    "specialization_level": "",
+    "type": "instance",
+    "delay": 0,
+    "entry_name": "do_stuff",
+    "options": 0,
+    "priority": 7,
+    "stack_size": 1024
+  },
+  {
+    "label": "Pipe",
+    "id": "work",
     "branch": 0,
     "usually_taken": 0,
     "loop": 0,
     "recursive": 0,
     "after_scheduler": 1,
     "unique": 1,
-    "is_control": 1,
-    "file": "../../ara-zephyr-apps/appl/thread_metric/src/tm_basic_processing_test.c",
-    "line": 85,
+    "is_control": 0,
+    "file": "../../ara-zephyr-apps/appl/dyn_pipe/src/main.c",
+    "line": 31,
     "specialization_level": "",
     "type": "instance",
-    "delay": 0,
-    "entry_name": "tm_basic_processing_thread_0_entry",
-    "options": 0,
-    "priority": 10,
-    "stack_size": 1024
+    "size": 256
   },
   {
     "source": "__main",
-    "target": "test_thread_0",
-    "label": "k_thread_create",
+    "target": "work",
+    "label": "k_pipe_alloc_init",
     "type": "create"
   },
   {
     "source": "__main",
     "target": "__main",
-    "label": "k_sleep",
+    "label": "k_current_get",
+    "type": "interaction"
+  },
+  {
+    "source": "thread_a",
+    "target": "work",
+    "label": "k_pipe_get",
     "type": "interaction"
   },
   {
     "source": "__main",
-    "target": "__main",
-    "label": "k_thread_resume",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_thread_suspend",
-    "type": "interaction"
-  },
-  {
-    "source": "__main",
-    "target": "__main",
-    "label": "k_wakeup",
+    "target": "work",
+    "label": "k_pipe_put",
     "type": "interaction"
   }
 ]
