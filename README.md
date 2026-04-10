@@ -98,7 +98,7 @@ In order to use tests, their correct meson options must be set.
 ```
 📦 Parrot
 ├── posix (62 tests) ~60s per test
-└── (wip) zephyr (110 = 55 for posix, 55 for arm)
+└── zephyr (37 for posix, 37 for arm disabled)
 📦 ARA
 ├── hypersse_xen (36) ~5s per test
 └── (wip) automotive_benchmark (wip)

@@ -7,10 +7,10 @@ build:
     - export GIT_CONFIG_GLOBAL=$PWD/ci_gitconfig
     - git config --global --add url."https://gitlab-ci-token:${CI_JOB_TOKEN}@${CI_SERVER_HOST}/".insteadOf "ssh://git@scm.sra.uni-hannover.de"
     - git config --global --add url."https://gitlab-ci-token:${CI_JOB_TOKEN}@${CI_SERVER_HOST}/".insteadOf "https://scm.sra.uni-hannover.de"
-    - meson setup build --reconfigure  -Denable_posix=true -Denable_arm=true -Dbuild_posix_apps=true -Dbuild_hypersse_xen=true -Dbuild_zephyr_apps=true
+    - meson setup build --native-file native-debian.ini -Denable_posix=true -Denable_arm=true -Dbuild_posix_apps=true -Dbuild_hypersse_xen=true -Dbuild_zephyr_apps=true
     - cd build
     - meson compile |& tee build_all.log
-    - meson test --suite parrot --suite ara-xen-eval --timeout-multiplier 3 |& tee test.log
+    - eson test --suite posix --suite zephyr --suite hypersse_xen --timeout-multiplier 3 |& tee test.log
   artifacts:
     when: always
     paths:
