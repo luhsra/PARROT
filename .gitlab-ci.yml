@@ -10,7 +10,7 @@ build:
     - meson setup build --native-file native-debian.ini -Denable_posix=true -Denable_arm=true -Denable_riscv=true -Dbuild_posix_apps=true -Dbuild_zephyr_apps=true -Dbuild_hypersse_xen=true -Dbuild_generator_tests=true
     - cd build
     - meson compile |& tee build_all.log
-    - meson test --suite posix --suite zephyr --suite hypersse_xen --suite autosar_generator --timeout-multiplier 3 |& tee test.log
+    - meson test --suite posix --suite zephyr --suite hypersse_xen --suite autosar_generator |& tee test.log
   artifacts:
     when: always
     paths:

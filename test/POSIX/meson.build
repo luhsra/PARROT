@@ -70,7 +70,8 @@ foreach app : posix_apps
         args: [instance_graph_test, graphs / app['name'] + '.json', app['ll'].full_path(), 'POSIX', files('settings/posix_default.json')],
         env: [test_env],
         depends: [ara_py, app['ll']],
-        suite: 'posix'
+        suite: 'posix',
+        timeout: 90
     )
 
     # Linux profile tests for thread related test applications
@@ -80,7 +81,8 @@ foreach app : posix_apps
             args: [instance_graph_test, graphs / app['name'] + '_linux.json', app['ll'].full_path(), 'POSIX', files('settings/system_profile_linux.json')],
             env: [test_env],
             depends: [ara_py, app['ll']],
-            suite: 'posix'
+            suite: 'posix',
+            timeout: 90
         )
     endif
 

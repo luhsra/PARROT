@@ -98,7 +98,7 @@ In order to use tests, their correct meson options must be set. Also set the req
 ```
 📦 Parrot
 ├── posix/build_posix_apps (62 tests) ~60s per test
-└── zephyr/build_zephyr_apps (74 tests: 37 for posix, 37 for riscv, 37 for arm disabled)
+└── zephyr/build_zephyr_apps (74 tests: 37 for posix, 37 for riscv disabled, 37 for arm disabled)
 📦 ARA
 ├── hypersse_xen/build_hypersse_xen (36 tests) ~5s per test
 ├── (wip) automotive_benchmark (wip)
@@ -140,7 +140,7 @@ docker build -t scm.sra.uni-hannover.de:5050/research/parrot .
 
 
 ## Required Versions
-- python >= 3.13.5
+- python 3.11.5 or 3.13.5
 - graph-tool == 2.98
 - llvm == 14
 - meson >= 1.10.0

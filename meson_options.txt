@@ -39,6 +39,7 @@ option('enable_irx', type: 'boolean', value: true, description: 'IRX LLVM Interp
 ## Infrastructure
 option('rpi_host', type: 'string', value: 'lab-pc67', description: 'SSH host for PC that it connected via serial to the Raspberry Pi measurement PC.')
 option('tftp_host', type: 'string', value: 'lab-pc00', description: 'TFTP host for remote target tests')
+option('no_qemu', type: 'boolean', value: false, description: 'Autosar/Riscv apps from the generator need this flag depending on if they are run in qemu or on hardware (rpi4/beagle_bord).')
 
 
 ## Other options
