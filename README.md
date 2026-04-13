@@ -98,7 +98,7 @@ In order to use tests, their correct meson options must be set. Also set the req
 ```
 📦 Parrot
 ├── posix/build_posix_apps (62 tests) ~60s per test
-└── zephyr/build_zephyr_apps (74 tests: 37 for posix, 37 for riscv disabled, 37 for arm disabled)
+└── zephyr/build_zephyr_apps (37 for posix, 37 for riscv disabled, 37 for arm disabled)
 📦 ARA
 ├── hypersse_xen/build_hypersse_xen (36 tests) ~5s per test
 ├── (wip) automotive_benchmark (wip)
@@ -106,8 +106,8 @@ In order to use tests, their correct meson options must be set. Also set the req
 │       ├── automtoive_benchmark_ara_ricv
 │       ├── automtoive_benchmark_pi
 │       └── automtoive_benchmark_beagle
-└── autosar_generator/build_generator_tests (165 tests)
-        ├── autosar_generator_posix(84) (with some disabled)
+└── autosar_generator/build_generator_tests (133 tests)
+        ├── autosar_generator_posix (52) (with some disabled)
         ├── autosar_generator_pi4 (81) (with some disabled)
         └── not working [autosar_generator_riscv (86) (with some disabled)]
 ```
