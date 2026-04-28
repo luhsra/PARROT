@@ -100,7 +100,7 @@ In order to use tests, their correct meson options must be set. Also set the req
 ├── posix/build_posix_apps (62 tests) ~60s per test
 └── zephyr/build_zephyr_apps (37 for posix, 37 for riscv disabled, 37 for arm disabled)
 📦 ARA
-├── hypersse_xen/build_hypersse_xen (36 tests) ~5s per test
+├── hypersse_xen/build_hypersse_xen (40 tests) ~5s per test
 ├── (wip) automotive_benchmark (wip)
 │       ├── automtoive_benchmark_ara_arm
 │       ├── automtoive_benchmark_ara_ricv

@@ -126,7 +126,7 @@ for i in "${!graphs[@]}"; do
             if $do_cp; then
                 trimmed="${most_recent%.*}"
                 dot -Tsvg "$most_recent" > "$trimmed.svg"
-                cp $trimmed.* "$target"
+                cp "$trimmed".{dot,svg} "$target"
                 echo "Copied to $target"
             else
                 xdot "$most_recent" > /dev/null 2>&1 &
