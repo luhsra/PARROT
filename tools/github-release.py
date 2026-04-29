@@ -33,6 +33,7 @@ class Rewrite:
 class WrapRewrite:
     wrap_file: Path
     rw: Rewrite
+    tag: str
 
     def __str__(self):
         return f"{self.wrap_file.name}: Replace {self.rw.scm} with {self.rw.gh}."
@@ -116,7 +117,7 @@ def rewrite_wrap(wrap_file: WrapRewrite):
         if line.startswith('url'):
             outp.append(f"url = {wrap_file.rw.get_gh()}")
         elif line.startswith('revision'):
-            outp.append('revision = github')
+            outp.append(f"revision = {wrap_file.tag} \n")
         else:
             outp.append(line)
     with open(wrap_file.wrap_file, 'w') as f:
@@ -203,7 +204,7 @@ def reset_github_branch(repo_path):
     ], RepoBranch(path=repo_path, branch=previous)
 
 
-def prepare_wrap_rewrite(wrap_file):
+def prepare_wrap_rewrite(wrap_file, tag):
     wrap = read_wrap(wrap_file)
     for line in wrap:
         if line.startswith("url"):
@@ -211,7 +212,7 @@ def prepare_wrap_rewrite(wrap_file):
                 if ma.scm_matches(line.split('=')[1].strip()):
                     return [
                         Nop(f"Rewrite {wrap_file}"),
-                        WrapRewrite(wrap_file=wrap_file, rw=ma),
+                        WrapRewrite(wrap_file=wrap_file, rw=ma, tag=tag),
                         Cmd(cmd=["git", "add", wrap_file.name], cwd=wrap_file.parent),
                         Cmd(
                             cmd=[
@@ -297,7 +298,7 @@ def main():
         cmds += new_cmds
         previous_branches.append(previous_branch)
     for wrap in wraps:
-        cmds += prepare_wrap_rewrite(wrap)
+        cmds += prepare_wrap_rewrite(wrap, args.tag)
     for repo in repos:
         cmds += prepare_push(repo, args.tag)
     for repo in previous_branches:
