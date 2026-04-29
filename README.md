@@ -98,7 +98,7 @@ In order to use tests, their correct meson options must be set. Also set the req
 ```
 📦 Parrot
 ├── posix/build_posix_apps (62 tests) ~60s per test
-└── zephyr/build_zephyr_apps (37 for posix, 37 for riscv disabled, 37 for arm disabled)
+└── zephyr/build_zephyr_apps (35 for posix, 2 for posix disabled, 37 for riscv disabled, 37 for arm disabled)
 📦 ARA
 ├── hypersse_xen/build_hypersse_xen (40 tests) ~5s per test
 ├── (wip) automotive_benchmark (wip)

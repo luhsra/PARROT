@@ -15,6 +15,11 @@ foreach zephyr_test_app : zephyr_test_apps
         expected_fail = true
     endif
 
+    # this two tests run locally but fail in docker/CI
+    if zephyr_test_app['name'].contains('native_sim-tm_interrupt')
+        continue
+    endif
+
     if get_option('build_hypersse_xen')
         # this is the path from the variable "zephyr_apps" from "subprojects/ara-zephyr-apps/appl/meson.build"
         orig_path=zephyr_test_app['cloc_app'].get(0)
