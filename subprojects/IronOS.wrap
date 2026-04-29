@@ -1,5 +1,6 @@
 [wrap-git]
 url = https://github.com/luhsra/IronOS.git
-revision = github
+revision = ospert25 
+
 depth = 1
 clone-recursive = true
