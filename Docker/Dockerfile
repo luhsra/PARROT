@@ -45,4 +45,14 @@ RUN wget https://downloads.skewed.de/skewed-keyring/skewed-keyring_1.3_all_$(lsb
     /etc/apt/sources.list.d/skewed.list\
 	&& apt update && apt-get install -qq python3-graph-tool
 
-CMD ["bash"]
+# install typst for rendering eval results
+RUN wget https://github.com/typst/typst/releases/download/v0.14.2/typst-x86_64-unknown-linux-musl.tar.xz \
+  && tar xvf typst-x86_64-unknown-linux-musl.tar.xz \
+  && cp typst-x86_64-unknown-linux-musl/typst /usr/local/bin/typst
+
+# pre-download parrot and configure (for artifact releases)
+#RUN git clone --depth 1 https://github.com/luhsra/parrot --branch ecrts26 \
+#	&& cd parrot \
+#	&& meson setup build --native-file native-debian.ini -Denable_posix=true -Denable_arm=true -Dbuild_hypersse_xen=true
+#
+#LABEL description="PARROT analysis framework"
