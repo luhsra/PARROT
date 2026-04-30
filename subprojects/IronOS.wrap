@@ -1,5 +1,6 @@
 [wrap-git]
-url = ssh://git@scm.sra.uni-hannover.de/research/parrot-projects/IronOS.git
-revision = ara
+url = https://github.com/luhsra/IronOS.git
+revision = ecrts26 
+
 depth = 1
 clone-recursive = true
